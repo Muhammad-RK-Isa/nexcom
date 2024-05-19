@@ -1,0 +1,35 @@
+import { relations } from "drizzle-orm";
+import { pgEnum, pgTable, timestamp, varchar } from "drizzle-orm/pg-core";
+
+import { accounts } from "./accounts";
+import { z } from "zod";
+import { generateId } from "~/lib/utils";
+
+export const pgUserRolesEnum = pgEnum("userRole", [
+  "viewer",
+  "customer",
+  "admin",
+]);
+
+export const UserRole = z.enum(pgUserRolesEnum.enumValues);
+
+export const users = pgTable("user", {
+  id: varchar("id", { length: 255 })
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => generateId()),
+  name: varchar("name", { length: 255 }),
+  email: varchar("email", { length: 255 }).notNull(),
+  emailVerified: timestamp("emailVerified", { mode: "date" }),
+  image: varchar("image", { length: 255 }),
+  role: pgUserRolesEnum("role").default("customer").notNull(),
+  hashedPassword: varchar("hashed_password"),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "date", precision: 3 }).$onUpdate(
+    () => new Date(),
+  ),
+});
+
+export const usersRelations = relations(users, ({ many }) => ({
+  accounts: many(accounts),
+}));
