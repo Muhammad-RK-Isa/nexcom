@@ -1,4 +1,3 @@
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { getServerSession, type NextAuthOptions } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -6,10 +5,10 @@ import GoogleProvider from "next-auth/providers/google";
 import { compare } from "bcrypt-ts";
 
 import { env } from "~/env";
-import { db } from "~/server/db";
-import { getUserByEmail, getUserById } from "~/server/data/user";
+import { getUserByEmail } from "~/server/data/user";
 import { Paths } from "~/lib/constants";
 import { signInSchema } from "~/schemas";
+import { drizzleAdapter } from "./adapter";
 
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
@@ -34,10 +33,8 @@ export const authOptions: NextAuthOptions = {
 
       return session;
     },
-    jwt: async ({ token }) => {
+    jwt: async ({ token, user }) => {
       if (!token.sub) return token;
-
-      const user = await getUserById(token.sub);
 
       if (!user) return token;
 
@@ -46,7 +43,7 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
   },
-  adapter: DrizzleAdapter(db) as Adapter,
+  adapter: drizzleAdapter as Adapter,
   providers: [
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,

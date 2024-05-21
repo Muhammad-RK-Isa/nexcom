@@ -1,3 +1,4 @@
+import { type SQL } from "drizzle-orm";
 import { type z } from "zod";
 
 import type {
@@ -13,6 +14,35 @@ import type { UserRole, users } from "~/server/db/schema";
 export interface SearchParams {
   [key: string]: string | string[] | undefined;
 }
+
+export interface Option {
+  label: string;
+  value: string;
+  icon?: React.ComponentType<{ className?: string }>;
+  withCount?: boolean;
+}
+
+export interface DataTableFilterField<TData> {
+  label: string;
+  value: keyof TData;
+  placeholder?: string;
+  options?: Option[];
+}
+
+export interface DataTableFilterOption<TData> {
+  id: string;
+  label: string;
+  value: keyof TData;
+  options: Option[];
+  filterValues?: string[];
+  filterOperator?: string;
+  isMulti?: boolean;
+}
+
+export type DrizzleWhere<T> =
+  | SQL<unknown>
+  | ((aliases: T) => SQL<T> | undefined)
+  | undefined;
 
 export type UserRole = z.infer<typeof UserRole>;
 

@@ -13,7 +13,7 @@ const StorefrontHomepage = () => {
 
   return (
     <div className="flex flex-col gap-y-6 px-12 pt-40 text-center text-4xl font-semibold">
-      Welcome to Next Commerce
+      Welcome to Nextcom
       <p className="break-all text-sm font-normal">{JSON.stringify(user)}</p>
       {!user ? (
         <Link

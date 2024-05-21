@@ -36,9 +36,7 @@ export default async function VerifyEmailPage({
         </CardDescription>
       </CardHeader>
       <CardContent className="flex w-full items-center justify-center">
-        <React.Suspense>
-          {/* <VerifyCode email={email} /> */}
-        </React.Suspense>
+        <React.Suspense>{/* <VerifyCode email={email} /> */}</React.Suspense>
       </CardContent>
     </Card>
   );

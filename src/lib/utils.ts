@@ -19,8 +19,8 @@ export function generateOrderId() {
   return `od${uuid.slice(0, 8).toUpperCase()}-${timeString}`;
 }
 
-export function generateId() {
-  return uuidv4();
+export function generateId({ prefix }: { prefix?: string } = {}) {
+  return `${prefix ? prefix + "_" : null}${uuidv4()}`;
 }
 
 export function standardizeBDPhoneNumber(phoneNumber: string): string {
