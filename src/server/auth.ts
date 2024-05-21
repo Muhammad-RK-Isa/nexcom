@@ -9,6 +9,9 @@ import { getUserByEmail } from "~/server/data/user";
 import { Paths } from "~/lib/constants";
 import { signInSchema } from "~/schemas";
 import { drizzleAdapter } from "./adapter";
+import { db } from "./db";
+import { users } from "./db/schema";
+import { eq } from "drizzle-orm";
 
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
@@ -16,6 +19,17 @@ import { drizzleAdapter } from "./adapter";
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
+  events: {
+    linkAccount: async ({ user, profile }) => {
+      await db
+        .update(users)
+        .set({
+          emailVerified: new Date(),
+          image: profile.image,
+        })
+        .where(eq(users.id, user.id));
+    },
+  },
   callbacks: {
     session: async ({ session, token }) => {
       if (token.sub && session.user) {

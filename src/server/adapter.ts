@@ -15,6 +15,32 @@ export const drizzleAdapter: Adapter = {
       .returning()
       .then((res) => res[0] ?? data);
   },
+  async getUser(data) {
+    return await db
+      .select()
+      .from(users)
+      .where(eq(users.id, data))
+      .then((res) => res[0] ?? null);
+  },
+  async getUserByEmail(data) {
+    return await db
+      .select()
+      .from(users)
+      .where(eq(users.email, data))
+      .then((res) => res[0] ?? null);
+  },
+  async updateUser(data) {
+    if (!data.id) {
+      throw new Error("No user id.");
+    }
+
+    return await db
+      .update(users)
+      .set(data)
+      .where(eq(users.id, data.id))
+      .returning()
+      .then((res) => res[0]!);
+  },
   async getUserByAccount(account: AdapterAccount) {
     const dbAccount =
       (await db

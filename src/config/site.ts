@@ -3,12 +3,12 @@ import { env } from "~/env";
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Table",
+  name: "Nexcom",
   description:
-    "Shadcn table component with server side sorting, pagination, and filtering",
+    "An e-commerce project built using TypeScript, Next.js, TailwindCSS, Shadcn-UI, Drizzle-ORM and Next-Auth.js.",
   url:
     env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://table.sadmn.com",
-  links: { github: "https://github.com/sadmann7/shadcn-table" },
+      : "https://nexcom.muhammadisa.com",
+  links: { github: "https://github.com/muhammad-rk-isa/nexcom" },
 };

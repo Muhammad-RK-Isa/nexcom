@@ -17,7 +17,7 @@ export const users = pgTable("user", {
   id: varchar("id", { length: 255 })
     .notNull()
     .primaryKey()
-    .$defaultFn(() => generateId()),
+    .$defaultFn(() => generateId({ prefix: "user" })),
   name: varchar("name", { length: 255 }),
   email: varchar("email", { length: 255 }).notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),

@@ -23,6 +23,7 @@ import { createUserSchema } from "~/schemas";
 import type { CreateUserInput } from "~/types";
 import { api } from "~/trpc/react";
 import { Paths } from "~/lib/constants";
+import { toast } from "sonner";
 
 export const SignUpForm = () => {
   const searchParams = useSearchParams();
@@ -50,7 +51,10 @@ export const SignUpForm = () => {
     await createUser.mutateAsync(
       { ...values },
       {
-        onSuccess: () => router.push(Paths.SignIn),
+        onSuccess: () => {
+          toast.success("Account created. Please, sign in to continue.");
+          router.push(Paths.SignIn);
+        },
       },
     );
   };
