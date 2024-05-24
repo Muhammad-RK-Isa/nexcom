@@ -22,7 +22,7 @@ export const adminNavLinks: AdminNavLinks[] = [
   },
   {
     title: "Products",
-    icon: Icons.box,
+    icon: Icons.package,
     path: "/admin/products",
     active: true,
   },

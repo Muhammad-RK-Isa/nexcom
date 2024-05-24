@@ -1,19 +1,18 @@
-"use client";
-
-import { signOut } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
-import { Button, buttonVariants } from "~/components/ui/button";
-import { Paths } from "~/lib/constants";
-import { useClientCurrentUser } from "~/lib/hooks/use-client-current-user";
-import { cn } from "~/lib/utils";
 
-const StorefrontHomepage = () => {
-  const user = useClientCurrentUser();
+import { buttonVariants } from "~/components/ui/button";
+import { SignOut } from "./_components/sign-out";
+import { APP_TITLE, Paths } from "~/lib/constants";
+import { cn } from "~/lib/utils";
+import { currentUser } from "~/lib/auth/utils";
+
+const StorefrontHomepage = async () => {
+  const user = await currentUser();
 
   return (
     <div className="flex flex-col gap-y-6 px-12 pt-40 text-center text-4xl font-semibold">
-      Welcome to Nextcom
+      Welcome to {APP_TITLE}
       <p className="break-all text-sm font-normal">{JSON.stringify(user)}</p>
       {!user ? (
         <Link
@@ -23,13 +22,9 @@ const StorefrontHomepage = () => {
           Sign in
         </Link>
       ) : (
-        <Button
-          onClick={() => signOut()}
-          variant={"outline"}
-          className="mx-auto w-max"
-        >
-          Sign out
-        </Button>
+        <React.Suspense>
+          <SignOut />
+        </React.Suspense>
       )}
     </div>
   );

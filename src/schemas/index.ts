@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { createInsertSchema } from "drizzle-zod";
+import { pgProductStatuses, products } from "~/server/db/schema";
 
 export const createUserSchema = z
   .object({
@@ -45,4 +47,14 @@ export const verifyEmailSchema = otpSchema.extend({
 
 export const resendEmailVerificationCodeSchema = z.object({
   email: z.string().email(),
+});
+
+// Product schema
+
+export const getProductSchema = z.object({
+  id: z.string(),
+});
+
+export const createProductSchema = createInsertSchema(products).extend({
+  tags: z.string().array(),
 });

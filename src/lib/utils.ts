@@ -20,7 +20,7 @@ export function generateOrderId() {
 }
 
 export function generateId({ prefix }: { prefix?: string } = {}) {
-  return `${prefix ? prefix + "_" : ""}${uuidv4()}`.toUpperCase();
+  return `${prefix ? prefix + "_" : ""}${uuidv4().toUpperCase()}`;
 }
 
 export function standardizeBDPhoneNumber(phoneNumber: string): string {

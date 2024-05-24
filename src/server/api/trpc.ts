@@ -13,6 +13,7 @@ import { ZodError } from "zod";
 
 import { getServerAuthSession } from "~/server/auth";
 import { db } from "~/server/db";
+import { UserRole } from "../db/schema";
 
 /**
  * 1. CONTEXT
@@ -97,6 +98,30 @@ export const publicProcedure = t.procedure;
  */
 export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
   if (!ctx.session || !ctx.session.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  return next({
+    ctx: {
+      // infers the `session` as non-nullable
+      session: { ...ctx.session, user: ctx.session.user },
+    },
+  });
+});
+
+/**
+ * Admin (authorized) procedure
+ *
+ * If you want a query or mutation to ONLY be accessible to users with admin privillages, use this. It verifies
+ * the session is valid and guarantees `ctx.session.user` is not null and `ctx.session.user.role` is same as `UserRoles.Values.admin`.
+ *
+ * @see https://trpc.io/docs/procedures
+ */
+export const adminProcedure = t.procedure.use(({ ctx, next }) => {
+  if (
+    !ctx.session ||
+    !ctx.session.user ||
+    ctx.session.user.role !== UserRole.Values.admin
+  ) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
   return next({
