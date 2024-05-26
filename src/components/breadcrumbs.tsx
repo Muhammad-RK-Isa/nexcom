@@ -20,30 +20,35 @@ export const Breadcrumbs = () => {
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        {segments.map((segment, idx) => (
-          <React.Fragment key={idx}>
-            <BreadcrumbItem>
-              {segment === segments.at(-1) ? (
-                <BreadcrumbPage className="capitalize">
-                  {segment}
-                </BreadcrumbPage>
-              ) : (
-                <BreadcrumbLink asChild>
-                  <Link
-                    className="capitalize"
-                    href={`/${segments.slice(0, idx + 1).join("/")}`}
-                    aria-label={`Go to ${segment}`}
-                  >
-                    {segment}
-                  </Link>
-                </BreadcrumbLink>
-              )}
-            </BreadcrumbItem>
-            {segment !== segments.at(-1) ? (
-              <BreadcrumbSeparator key={idx} />
-            ) : null}
-          </React.Fragment>
-        ))}
+        {segments.map((segment, idx) => {
+          const newSegment = segment.startsWith("product_")
+            ? "Edit product"
+            : segment;
+          return (
+            <React.Fragment key={idx}>
+              <BreadcrumbItem>
+                {segment === segments.at(-1) ? (
+                  <BreadcrumbPage className="capitalize">
+                    {newSegment}
+                  </BreadcrumbPage>
+                ) : (
+                  <BreadcrumbLink asChild>
+                    <Link
+                      className="capitalize"
+                      href={`/${segments.slice(0, idx + 1).join("/")}`}
+                      aria-label={`Go to ${newSegment}`}
+                    >
+                      {newSegment}
+                    </Link>
+                  </BreadcrumbLink>
+                )}
+              </BreadcrumbItem>
+              {segment !== segments.at(-1) ? (
+                <BreadcrumbSeparator key={idx} />
+              ) : null}
+            </React.Fragment>
+          );
+        })}
       </BreadcrumbList>
     </Breadcrumb>
   );

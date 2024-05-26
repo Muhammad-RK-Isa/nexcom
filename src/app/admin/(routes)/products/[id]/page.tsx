@@ -1,17 +1,19 @@
 import React from "react";
 
 import { api } from "~/trpc/server";
+import { ProductFormMain } from "./_components/product-form-main";
+import { notFound } from "next/navigation";
 
 const ProductPage = async ({ params: { id } }: { params: { id: string } }) => {
-  const product = await api.product.get({ id });
+  const product =
+    id === "new" ? undefined : await api.products.getProductById({ id });
+
+  if (!product && id !== "new") return notFound();
 
   return (
-    <div>
-      ProductPage
-      <br />
-      <br />
-      <p className="break-all">Product: {JSON.stringify(product) ?? "N/A"}</p>
-    </div>
+    <React.Suspense>
+      <ProductFormMain product={product} />
+    </React.Suspense>
   );
 };
 

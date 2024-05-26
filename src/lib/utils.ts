@@ -20,7 +20,7 @@ export function generateOrderId() {
 }
 
 export function generateId({ prefix }: { prefix?: string } = {}) {
-  return `${prefix ? prefix + "_" : ""}${uuidv4().toUpperCase()}`;
+  return `${prefix ? prefix + "_" : ""}${uuidv4()}`;
 }
 
 export function standardizeBDPhoneNumber(phoneNumber: string): string {
@@ -129,15 +129,11 @@ export function slugify(str: string) {
     .toLowerCase()
     .replace(/ /g, "-")
     .replace(/[^\w-]+/g, "")
-    .replace(/--+/g, "-");
+    .replace(/-$/, "");
 }
 
 export function unslugify(str: string) {
   return str.replace(/-/g, " ");
-}
-
-export function toVariantTitle(color: string, size: string) {
-  return;
 }
 
 export function toTitleCase(str: string) {
@@ -190,8 +186,6 @@ export function isMacOs() {
 
 export const onlyUnique = (value: unknown, index: number, self: unknown[]) =>
   self.indexOf(value) === index;
-
-const opts: (string | undefined)[] = ["Color", "Size", "Length"];
 
 export function formatOptions(options: (string | undefined)[]): string {
   const filteredOptions = options.filter(

@@ -45,7 +45,7 @@ export const SignUpForm = () => {
     },
   });
 
-  const createUser = api.user.create.useMutation();
+  const createUser = api.users.create.useMutation();
 
   const onSubmit = async (values: CreateUserInput) => {
     await createUser.mutateAsync(

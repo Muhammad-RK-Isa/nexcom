@@ -8,7 +8,7 @@ import {
 } from "~/server/api/trpc";
 import { users } from "~/server/db/schema";
 
-export const userRouter = createTRPCRouter({
+export const usersRouter = createTRPCRouter({
   create: publicProcedure
     .input(createUserSchema)
     .mutation(async ({ ctx, input }) => {

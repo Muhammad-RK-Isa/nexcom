@@ -7,11 +7,10 @@ import { Button, type ButtonProps } from "~/components/ui/button";
 const SubmitButton = forwardRef<
   HTMLButtonElement,
   ButtonProps & { loadingText?: string }
->(({ className, children, loadingText, ...props }, ref) => {
+>(({ className, children, loadingText, ...props }) => {
   const { pending } = useFormStatus();
   return (
     <Button
-      ref={ref}
       {...props}
       type="submit"
       loading={pending}

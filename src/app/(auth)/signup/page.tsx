@@ -20,7 +20,7 @@ const SignInPage = () => {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="pb-6">
-        <CardTitle>Welcome to {APP_TITLE}</CardTitle>
+        <CardTitle className="text-xl">Welcome to {APP_TITLE}</CardTitle>
         <CardDescription>Sign up to continue</CardDescription>
       </CardHeader>
       <CardContent>

@@ -2,10 +2,10 @@ import Link from "next/link";
 import React from "react";
 
 import { buttonVariants } from "~/components/ui/button";
-import { SignOut } from "./_components/sign-out";
+import { currentUser } from "~/lib/auth/utils";
 import { APP_TITLE, Paths } from "~/lib/constants";
 import { cn } from "~/lib/utils";
-import { currentUser } from "~/lib/auth/utils";
+import { SignOut } from "./_components/sign-out";
 
 const StorefrontHomepage = async () => {
   const user = await currentUser();
