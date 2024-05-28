@@ -1,4 +1,6 @@
-import { MixIcon, SquareIcon } from "@radix-ui/react-icons";
+import { MixIcon } from "@radix-ui/react-icons";
+
+import { Icons } from "~/components/icons";
 
 export type DataTableConfig = typeof dataTableConfig;
 
@@ -42,7 +44,7 @@ export const dataTableConfig = {
     {
       label: "Floating bar",
       value: "floatingBar" as const,
-      icon: SquareIcon,
+      icon: Icons.settings,
       tooltipTitle: "Toggle floating bar",
       tooltipDescription: "A floating bar that sticks to the top of the table.",
     },

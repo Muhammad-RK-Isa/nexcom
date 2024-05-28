@@ -15,6 +15,7 @@ import type {
   ProductId,
   UpdateProductInput,
   UpdateProductStatusInput,
+  UpdateProductsStatusInput,
 } from "~/types";
 
 export const createProduct = async (product: CreateProductInput) => {
@@ -70,35 +71,25 @@ export const updateProductStatus = async ({
   }
 };
 
-export const updateProductsStatus = async (
-  inputs: UpdateProductStatusInput[],
-) => {
-  if (inputs.length < 1)
+export const updateProductsStatus = async ({
+  status,
+  productIds,
+}: UpdateProductsStatusInput) => {
+  if (productIds.length < 1)
     throw new Error(
       "At least one product must be selected to perform this action",
     );
   try {
-    const sqlChunks: SQLChunk[] = [];
-    const ids: string[] = [];
-
-    sqlChunks.push(sql`(case`);
-
-    for (const input of inputs) {
-      sqlChunks.push(
-        sql`when ${products.id} = ${input.id} then ${input.status}`,
-      );
-      ids.push(input.id);
-    }
-
-    sqlChunks.push(sql`end)`);
-
-    const finalSql: SQL = sql.join(sqlChunks, sql.raw(" "));
-
     const updatedProducts = await db.transaction(async (tx) => {
       const result = await tx
         .update(products)
-        .set({ status: finalSql })
-        .where(inArray(products.id, ids));
+        .set({ status })
+        .where(
+          inArray(
+            products.id,
+            productIds.map(({ id }) => id),
+          ),
+        );
       return result;
     });
     return updatedProducts;

@@ -17,7 +17,7 @@ import { getStatusIcon } from "../_lib/utils";
 import { getColumns } from "./products-table-columns";
 import { ProductsTableFloatingBar } from "./products-table-floating-bar";
 import { useProductsTable } from "./products-table-provider";
-import { TasksTableToolbarActions } from "./products-table-toolbar-actions";
+import { ProductsTableToolbarActions } from "./products-table-toolbar-actions";
 
 interface ProductsTableProps {
   tableProducts: CompleteTableProducts;
@@ -82,11 +82,11 @@ export function ProductsTable({ tableProducts }: ProductsTableProps) {
     >
       {featureFlags.includes("advancedFilter") ? (
         <DataTableAdvancedToolbar table={table} filterFields={filterFields}>
-          <TasksTableToolbarActions table={table} />
+          <ProductsTableToolbarActions table={table} />
         </DataTableAdvancedToolbar>
       ) : (
         <DataTableToolbar table={table} filterFields={filterFields}>
-          <TasksTableToolbarActions table={table} />
+          <ProductsTableToolbarActions table={table} />
         </DataTableToolbar>
       )}
     </DataTable>

@@ -4,11 +4,6 @@ import * as React from "react";
 
 import { dataTableConfig, type DataTableConfig } from "~/config/data-table";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
 
 type FeatureFlagValue = DataTableConfig["featureFlags"][number]["value"];
 
@@ -33,9 +28,9 @@ export function useProductsTable() {
 }
 
 export function ProductsTableProvider({ children }: React.PropsWithChildren) {
-  const [featureFlags, setFeatureFlags] = React.useState<FeatureFlagValue[]>(
-    [],
-  );
+  const [featureFlags, setFeatureFlags] = React.useState<FeatureFlagValue[]>([
+    "floatingBar",
+  ]);
 
   return (
     <ProductsTableContext.Provider
@@ -44,42 +39,28 @@ export function ProductsTableProvider({ children }: React.PropsWithChildren) {
         setFeatureFlags,
       }}
     >
-      <div className="w-full overflow-x-auto">
+      <div className="mb-2 w-full overflow-x-auto">
         <ToggleGroup
           type="multiple"
-          variant="outline"
+          variant="primary"
           size="sm"
           value={featureFlags}
           onValueChange={(value: FeatureFlagValue[]) => setFeatureFlags(value)}
-          className="w-fit"
+          className="w-fit gap-2.5"
         >
           {dataTableConfig.featureFlags.map((flag) => (
-            <Tooltip key={flag.value} delayDuration={250}>
+            <React.Fragment key={flag.value}>
               <ToggleGroupItem
                 value={flag.value}
-                className="whitespace-nowrap px-3 text-xs"
-                asChild
+                className="whitespace-nowrap text-xs"
               >
-                <TooltipTrigger>
-                  <flag.icon
-                    className="mr-2 size-3.5 shrink-0"
-                    aria-hidden="true"
-                  />
-                  {flag.label}
-                </TooltipTrigger>
+                <flag.icon
+                  className="mr-2 size-3.5 shrink-0"
+                  aria-hidden="true"
+                />
+                {flag.label}
               </ToggleGroupItem>
-              <TooltipContent
-                align="start"
-                side="bottom"
-                sideOffset={6}
-                className="flex max-w-60 flex-col space-y-1.5 border bg-background py-2 font-semibold text-foreground"
-              >
-                <div>{flag.tooltipTitle}</div>
-                <div className="text-xs text-muted-foreground">
-                  {flag.tooltipDescription}
-                </div>
-              </TooltipContent>
-            </Tooltip>
+            </React.Fragment>
           ))}
         </ToggleGroup>
       </div>

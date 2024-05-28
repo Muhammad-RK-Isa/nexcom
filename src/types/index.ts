@@ -1,6 +1,9 @@
 import { type SQL } from "drizzle-orm";
 import { type z } from "zod";
-import { type getTableProducts, type getProducts } from "~/lib/api/products/queries";
+import {
+  type getTableProducts,
+  type getProducts,
+} from "~/lib/api/products/queries";
 
 import type {
   createUserSchema,
@@ -14,6 +17,7 @@ import type {
   signInSchema,
   updateProductSchema,
   updateProductStatusSchema,
+  updateProductsStatusSchema,
 } from "~/schemas";
 import type { UserRole, products, users } from "~/server/db/schema";
 
@@ -71,6 +75,9 @@ export type CreateProductInput = z.infer<typeof insertProductSchema>;
 export type UpdateProductInput = z.infer<typeof updateProductSchema>;
 export type UpdateProductStatusInput = z.infer<
   typeof updateProductStatusSchema
+>;
+export type UpdateProductsStatusInput = z.infer<
+  typeof updateProductsStatusSchema
 >;
 
 // This type infers the return from getProducts() - meaning it will include any joins

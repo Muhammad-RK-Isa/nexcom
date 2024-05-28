@@ -1,12 +1,5 @@
 import * as React from "react";
 
-import {
-  CheckCircledIcon,
-  Cross2Icon,
-  DownloadIcon,
-  ReloadIcon,
-  TrashIcon,
-} from "@radix-ui/react-icons";
 import { SelectTrigger } from "@radix-ui/react-select";
 import { type Table } from "@tanstack/react-table";
 import { toast } from "sonner";
@@ -29,6 +22,18 @@ import { Kbd } from "~/components/kbd";
 import type { TableProduct } from "~/types";
 import { productStatuses } from "~/schemas";
 import { api } from "~/trpc/react";
+import { useRouter } from "next-nprogress-bar";
+import { Icons } from "~/components/icons";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "~/components/ui/alert-dialog";
 
 interface ProductsTableFloatingBarProps {
   table: Table<TableProduct>;
@@ -39,12 +44,21 @@ export function ProductsTableFloatingBar({
 }: ProductsTableFloatingBarProps) {
   const rows = table.getFilteredSelectedRowModel().rows;
 
+  const router = useRouter();
+
+  const [showDeleteProductAlertDialog, setShowDeleteProductAlertDialog] =
+    React.useState(false);
   const [isExporting, startExport] = React.useTransition();
 
   const { mutate: updateProductsStatus, isPending: isUpdating } =
     api.products.updateProductsStatus.useMutation({
       onSuccess: () => {
-        toast.success("Products updated");
+        const message =
+          rows.length > 1
+            ? `${rows.length} products updated`
+            : "One product updated";
+        toast.success(message);
+        router.refresh();
       },
       onError: (err) => {
         toast.error(err.message);
@@ -60,6 +74,8 @@ export function ProductsTableFloatingBar({
             : "One product deleted";
         toast.success(message);
         table.toggleAllRowsSelected(false);
+        setShowDeleteProductAlertDialog(false);
+        router.refresh();
       },
     });
 
@@ -92,7 +108,7 @@ export function ProductsTableFloatingBar({
                   className="size-5 hover:border"
                   onClick={() => table.toggleAllRowsSelected(false)}
                 >
-                  <Cross2Icon
+                  <Icons.multiply
                     className="size-3.5 shrink-0"
                     aria-hidden="true"
                   />
@@ -110,9 +126,10 @@ export function ProductsTableFloatingBar({
           <div className="flex items-center gap-1.5">
             <Select
               onValueChange={(value: TableProduct["status"]) => {
-                updateProductsStatus(
-                  rows.map((row) => ({ id: row.original.id, status: value })),
-                );
+                updateProductsStatus({
+                  productIds: rows.map((row) => ({ id: row.original.id })),
+                  status: value,
+                });
               }}
             >
               <Tooltip delayDuration={250}>
@@ -125,12 +142,12 @@ export function ProductsTableFloatingBar({
                       disabled={isUpdating}
                     >
                       {isUpdating ? (
-                        <ReloadIcon
-                          className="size-3.5 animate-spin"
+                        <Icons.spinner
+                          className="size-3.5"
                           aria-hidden="true"
                         />
                       ) : (
-                        <CheckCircledIcon
+                        <Icons.checkCircle
                           className="size-3.5"
                           aria-hidden="true"
                         />
@@ -167,18 +184,16 @@ export function ProductsTableFloatingBar({
                       exportTableToCSV(table, {
                         excludeColumns: ["select", "actions"],
                         onlySelected: true,
+                        filename: "products",
                       });
                     });
                   }}
                   disabled={isExporting}
                 >
                   {isExporting ? (
-                    <ReloadIcon
-                      className="size-3.5 animate-spin"
-                      aria-hidden="true"
-                    />
+                    <Icons.spinner className="size-3.5" aria-hidden="true" />
                   ) : (
-                    <DownloadIcon className="size-3.5" aria-hidden="true" />
+                    <Icons.download className="size-3.5" aria-hidden="true" />
                   )}
                 </Button>
               </TooltipTrigger>
@@ -188,24 +203,49 @@ export function ProductsTableFloatingBar({
             </Tooltip>
             <Tooltip delayDuration={250}>
               <TooltipTrigger asChild>
-                <Button
-                  variant="secondary"
-                  size="icon"
-                  className="size-7 border"
-                  onClick={() =>
-                    deleteProducts(rows.map((row) => ({ id: row.original.id })))
-                  }
-                  disabled={isDeleting}
+                <AlertDialog
+                  open={showDeleteProductAlertDialog}
+                  onOpenChange={setShowDeleteProductAlertDialog}
                 >
-                  {isDeleting ? (
-                    <ReloadIcon
-                      className="size-3.5 animate-spin"
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    <TrashIcon className="size-3.5" aria-hidden="true" />
-                  )}
-                </Button>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant="secondary"
+                      size="icon"
+                      className="size-7 border"
+                      disabled={isDeleting}
+                    >
+                      <Icons.trash className="size-3.5" aria-hidden="true" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you absolutely sure?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently
+                        delete{" "}
+                        <span className="font-medium">{rows.length}</span>
+                        {rows.length === 1 ? " product" : " products"}.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter className="gap-2 sm:space-x-0">
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <Button
+                        variant="destructive"
+                        onClick={() =>
+                          deleteProducts(
+                            rows.map((row) => ({ id: row.original.id })),
+                          )
+                        }
+                        loading={isDeleting}
+                        disabled={isDeleting}
+                      >
+                        Delete
+                      </Button>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </TooltipTrigger>
               <TooltipContent className=" border bg-accent font-semibold text-foreground dark:bg-zinc-900">
                 <p>Delete Products</p>

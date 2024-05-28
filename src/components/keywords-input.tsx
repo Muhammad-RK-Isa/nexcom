@@ -95,7 +95,7 @@ const KeywordsInput: React.FC<KeywordsInputProps> = ({
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
           onBlur={(e) => handleBlur(e)}
-          className="peer mx-1 flex-1 text-sm outline-none"
+          className="peer mx-1 flex-1 bg-transparent text-sm outline-none"
           placeholder={placeholder ?? "Type keyword and press Enter..."}
         />
       </div>

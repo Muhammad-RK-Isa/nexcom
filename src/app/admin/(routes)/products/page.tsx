@@ -1,7 +1,6 @@
 import React from "react";
 
 import { ProductsTableProvider } from "./_components/products-table-provider";
-import { DateRangePicker } from "~/components/date-range-picker";
 import type { SearchParams } from "~/types";
 import { searchProductParamsSchema } from "~/schemas";
 import { DataTableSkeleton } from "~/components/skeletons/data-table-skeleton";
@@ -19,24 +18,26 @@ const ProductsPage: React.FC<ProductsPageProps> = async ({ searchParams }) => {
 
   return (
     <ProductsTableProvider>
-      <DateRangePicker
-        triggerSize="sm"
-        triggerClassName="ml-auto w-56 sm:w-60"
-        align="end"
-        dateRange={
-          search.from && search.to
-            ? { from: new Date(search.from), to: new Date(search.to) }
-            : undefined
-        }
-      />
       <React.Suspense
         fallback={
           <DataTableSkeleton
-            columnCount={5}
+            columnCount={8}
             searchableColumnCount={1}
             filterableColumnCount={2}
-            cellWidths={["10rem", "40rem", "12rem", "12rem", "8rem"]}
+            cellWidths={[
+              "2.5rem",
+              "30rem",
+              "7rem",
+              "7rem",
+              "7rem",
+              "7rem",
+              "9rem",
+              "9rem",
+              "9rem",
+              "4rem",
+            ]}
             shrinkZero
+            showToolbarToggles
           />
         }
       >

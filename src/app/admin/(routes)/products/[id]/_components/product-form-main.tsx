@@ -6,11 +6,11 @@ import Link from "next/link";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+
 import { Icons } from "~/components/icons";
-import KeywordsInput from "~/components/keywords-input";
 import { Badge } from "~/components/ui/badge";
 import { Button, buttonVariants } from "~/components/ui/button";
-
+import KeywordsInput from "~/components/keywords-input";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Checkbox } from "~/components/ui/checkbox";
 import {
@@ -27,7 +27,6 @@ import {
   HoverCardTrigger,
 } from "~/components/ui/hover-card";
 import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -50,6 +49,7 @@ import type {
   CreateProductInput,
   UpdateProductInput,
 } from "~/types";
+import { getStatusIcon } from "../../_lib/utils";
 
 interface ProductFormMainProps {
   product?: CompleteProduct;
@@ -133,36 +133,22 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
             <Icons.chevronLeft className="size-4" />
             <span className="sr-only">Back</span>
           </Link>
-          <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
+          <h1 className="max-w-44 truncate text-xl font-semibold tracking-tight md:max-w-72 lg:max-w-[60%]">
             {product?.title ?? "Add Product"}
           </h1>
           {editing ? (
-            <React.Fragment>
-              <Badge
-                variant={
-                  product.inventoryQuantity > 0 ? "outline" : "destructive"
-                }
-                className="ml-auto sm:ml-0"
-              >
-                {product.inventoryQuantity > 0 ? "In stock" : "Out of stock"}
-              </Badge>
-              <Badge
-                variant={
-                  product.status === productStatuses.Values.active
-                    ? "default"
-                    : product.status === productStatuses.Values.draft
-                      ? "destructive"
-                      : "default"
-                }
-                className={cn(
-                  "capitalize",
-                  product.status === productStatuses.Values.active &&
-                    "bg-blue-500 dark:bg-blue-700 dark:text-primary",
-                )}
-              >
-                {product.status}
-              </Badge>
-            </React.Fragment>
+            <Badge
+              variant={
+                product.status === productStatuses.Values.active
+                  ? "secondary"
+                  : product.status === productStatuses.Values.draft
+                    ? "outline"
+                    : "secondary"
+              }
+              className="capitalize"
+            >
+              {product.status}
+            </Badge>
           ) : null}
           <div className="hidden items-center gap-2 md:ml-auto md:flex">
             <Button
@@ -263,6 +249,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                             </span>
                             <Input
                               {...field}
+                              type="number"
                               inputMode="numeric"
                               placeholder="0.00"
                               className="pl-8"
@@ -308,6 +295,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                             <Input
                               {...field}
                               type="number"
+                              inputMode="numeric"
                               placeholder="0.00"
                               className="pl-8"
                             />
@@ -371,6 +359,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                         <div className="grid grid-cols-2 gap-6">
                           <Input {...field} type="number" />
                         </div>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -383,141 +372,177 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
               </CardHeader>
               <CardContent>
                 <div className="grid gap-6 sm:grid-cols-2">
-                  <div className="flex items-center space-x-4">
-                    <FormField
-                      name="weight"
-                      control={form.control}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Weight</FormLabel>
-                          <Input {...field} type="number" />
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      name="weightUnit"
-                      control={form.control}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Unit</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            {...field}
-                            value={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select a unit" />
-                              </SelectTrigger>
-                            </FormControl>
+                  <div className="flex flex-col gap-2.5">
+                    <div className="flex items-center space-x-4">
+                      <FormField
+                        name="weight"
+                        control={form.control}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Weight</FormLabel>
+                            <Input
+                              {...field}
+                              type="number"
+                              inputMode="numeric"
+                            />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        name="weightUnit"
+                        control={form.control}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Unit</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              {...field}
+                              value={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select a unit" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {Object.values(weightUnits.Values).map(
+                                  (u, idx) => (
+                                    <SelectItem key={idx} value={u}>
+                                      {u}
+                                    </SelectItem>
+                                  ),
+                                )}
+                              </SelectContent>
+                            </Select>
                             <FormMessage />
-                            <SelectContent>
-                              {Object.values(weightUnits.Values).map(
-                                (u, idx) => (
-                                  <SelectItem key={idx} value={u}>
-                                    {u}
-                                  </SelectItem>
-                                ),
-                              )}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    {form.getFieldState("weight").error ||
+                    form.getFieldState("weightUnit").error ? (
+                      <p className="text-[0.8rem] font-medium text-destructive">
+                        {form.getFieldState("weight").error?.message}
+                        <br />
+                        {form.getFieldState("weightUnit").error?.message}
+                      </p>
+                    ) : null}
                   </div>
-                  <div className="flex items-center space-x-4">
-                    <FormField
-                      name="height"
-                      control={form.control}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Height</FormLabel>
-                          <Input
-                            {...field}
-                            type="number"
-                            value={field.value ?? NaN}
-                          />
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      name="heightUnit"
-                      control={form.control}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Unit</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            {...field}
-                            value={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select a unit" />
-                              </SelectTrigger>
-                            </FormControl>
+                  <div className="gap2.5 flex flex-col">
+                    <div className="flex items-center space-x-4">
+                      <FormField
+                        name="height"
+                        control={form.control}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Height</FormLabel>
+                            <Input
+                              {...field}
+                              type="number"
+                              value={field.value ?? NaN}
+                            />
                             <FormMessage />
-                            <SelectContent>
-                              {Object.values(sizeUnits.Values).map((u, idx) => (
-                                <SelectItem key={idx} value={u}>
-                                  {u}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        name="heightUnit"
+                        control={form.control}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Unit</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              {...field}
+                              value={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select a unit" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <FormMessage />
+                              <SelectContent>
+                                {Object.values(sizeUnits.Values).map(
+                                  (u, idx) => (
+                                    <SelectItem key={idx} value={u}>
+                                      {u}
+                                    </SelectItem>
+                                  ),
+                                )}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    {form.getFieldState("height").error ||
+                    form.getFieldState("heightUnit").error ? (
+                      <p className="text-[0.8rem] font-medium text-destructive">
+                        {form.getFieldState("weight").error?.message}
+                        <br />
+                        {form.getFieldState("weightUnit").error?.message}
+                      </p>
+                    ) : null}
                   </div>
-                  <div className="flex items-center space-x-4">
-                    <FormField
-                      name="length"
-                      control={form.control}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Length</FormLabel>
-                          <Input
-                            {...field}
-                            type="number"
-                            value={field.value ?? NaN}
-                          />
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      name="lengthUnit"
-                      control={form.control}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Unit</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            {...field}
-                            value={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select a unit" />
-                              </SelectTrigger>
-                            </FormControl>
+                  <div className="flex flex-col gap-2.5">
+                    <div className="flex items-center space-x-4">
+                      <FormField
+                        name="length"
+                        control={form.control}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Length</FormLabel>
+                            <Input
+                              {...field}
+                              type="number"
+                              value={field.value ?? NaN}
+                            />
                             <FormMessage />
-                            <SelectContent>
-                              {Object.values(sizeUnits.Values).map((u, idx) => (
-                                <SelectItem key={idx} value={u}>
-                                  {u}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        name="lengthUnit"
+                        control={form.control}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Unit</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              {...field}
+                              value={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select a unit" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <FormMessage />
+                              <SelectContent>
+                                {Object.values(sizeUnits.Values).map(
+                                  (u, idx) => (
+                                    <SelectItem key={idx} value={u}>
+                                      {u}
+                                    </SelectItem>
+                                  ),
+                                )}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    {form.getFieldState("height").error ||
+                    form.getFieldState("heightUnit").error ? (
+                      <p className="text-[0.8rem] font-medium text-destructive">
+                        {form.getFieldState("length").error?.message}
+                        <br />
+                        {form.getFieldState("lengthUnit").error?.message}
+                      </p>
+                    ) : null}
                   </div>
                 </div>
               </CardContent>
@@ -548,15 +573,17 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                         </FormControl>
                         <SelectContent>
                           {Object.values(productStatuses.Values).map(
-                            (status, idx) => (
-                              <SelectItem
-                                key={idx}
-                                value={status}
-                                className="capitalize"
-                              >
-                                {status}
-                              </SelectItem>
-                            ),
+                            (status, idx) => {
+                              const Icon = getStatusIcon(status);
+                              return (
+                                <SelectItem key={idx} value={status}>
+                                  <div className="flex items-center">
+                                    <Icon className="mr-2 size-4 text-muted-foreground" />
+                                    <span className="capitalize">{status}</span>
+                                  </div>
+                                </SelectItem>
+                              );
+                            },
                           )}
                         </SelectContent>
                       </Select>

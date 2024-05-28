@@ -10,7 +10,7 @@ const AdminLayout = ({ children }: React.PropsWithChildren) => {
         <AdminSidebar />
       </React.Suspense>
       <div className="relative flex flex-col sm:gap-4 sm:pb-4 sm:pl-14">
-        <div className="sticky top-0 z-30 flex w-full flex-col py-4">
+        <div className="sticky top-0 z-30 flex w-full flex-col bg-muted/40 pt-0 backdrop-blur-sm md:py-4">
           <AdminHeader />
         </div>
         <main className="flex-1 p-4 sm:px-6 sm:py-0">{children}</main>

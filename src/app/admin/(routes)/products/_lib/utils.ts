@@ -10,7 +10,7 @@ import type { TableProduct } from "~/types";
 export function getStatusIcon(status: TableProduct["status"]) {
   const statusIcons = {
     [productStatuses.Values.active]: Icons.checkCircle,
-    [productStatuses.Values.draft]: Icons.multiply,
+    [productStatuses.Values.draft]: Icons.multiplyCircle,
   };
 
   return statusIcons[status];

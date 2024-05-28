@@ -1,8 +1,7 @@
 "use client";
 
-import * as React from "react";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { type ColumnDef } from "@tanstack/react-table";
+import * as React from "react";
 
 import { DataTableColumnHeader } from "~/components/data-table/data-table-column-header";
 import { Button } from "~/components/ui/button";
@@ -24,14 +23,15 @@ import {
 
 import { formatDate } from "~/lib/utils";
 
+import { useRouter } from "next-nprogress-bar";
+import { toast } from "sonner";
+import { Icons } from "~/components/icons";
+import { Badge } from "~/components/ui/badge";
 import { productStatuses } from "~/schemas";
+import { api } from "~/trpc/react";
 import { type TableProduct } from "~/types";
 import { getStatusIcon } from "../_lib/utils";
-import { DeleteProductsDialog } from "./delete-products-dialog";
-import { useRouter } from "next-nprogress-bar";
-import { api } from "~/trpc/react";
-import { Icons } from "~/components/icons";
-import { toast } from "sonner";
+import { DeleteProductsAlertDialog } from "./delete-products-alert-dialog";
 
 export function getColumns(): ColumnDef<TableProduct>[] {
   return [
@@ -64,6 +64,11 @@ export function getColumns(): ColumnDef<TableProduct>[] {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Title" />
       ),
+      cell: ({ cell }) => (
+        <div className="max-w-96 truncate font-medium">
+          {cell.getValue() as string}
+        </div>
+      ),
     },
     {
       accessorKey: "status",
@@ -76,13 +81,13 @@ export function getColumns(): ColumnDef<TableProduct>[] {
         const Icon = getStatusIcon(status);
 
         return (
-          <div className="flex w-[6.25rem] items-center">
-            <Icon
-              className="mr-2 size-4 text-muted-foreground"
-              aria-hidden="true"
-            />
+          <Badge
+            variant={status === "active" ? "secondary" : "outline"}
+            className="flex w-max items-center py-1"
+          >
+            <Icon className="mr-1.5 size-3.5" aria-hidden="true" />
             <span className="capitalize">{status}</span>
-          </div>
+          </Badge>
         );
       },
       filterFn: (row, id, value) => {
@@ -99,6 +104,31 @@ export function getColumns(): ColumnDef<TableProduct>[] {
       accessorKey: "mrp",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="MRP" />
+      ),
+    },
+    {
+      accessorKey: "inventoryQuantity",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Stock" />
+      ),
+      cell: ({ cell }) => {
+        const stockQuantity = cell.getValue() as number;
+        return (
+          <Badge variant={stockQuantity > 0 ? "secondary" : "outline"}>
+            {stockQuantity > 0 ? `${stockQuantity} in stock` : "Out of stock"}
+          </Badge>
+        );
+      },
+    },
+    {
+      accessorKey: "allowBackorder",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Backorder" />
+      ),
+      cell: ({ cell }) => (
+        <Badge variant={(cell.getValue() as Boolean) ? "secondary" : "outline"}>
+          {(cell.getValue() as Boolean) ? "Allowed" : "Not allowed"}
+        </Badge>
       ),
     },
     {
@@ -120,10 +150,14 @@ export function getColumns(): ColumnDef<TableProduct>[] {
       cell: function Cell({ row }) {
         const router = useRouter();
 
+        const [showDeleteProductAlertDialog, setShowDeleteProductAlertDialog] =
+          React.useState(false);
+
         const { mutate: updateProductStatus, isPending: isUpdating } =
           api.products.updateProductStatus.useMutation({
             onSuccess: () => {
               toast.success("Product status changed");
+              setShowDeleteProductAlertDialog(false);
               router.refresh();
             },
             onError: (err) => {
@@ -131,14 +165,11 @@ export function getColumns(): ColumnDef<TableProduct>[] {
             },
           });
 
-        const [showDeleteTaskDialog, setShowDeleteTaskDialog] =
-          React.useState(false);
-
         return (
           <React.Fragment>
-            <DeleteProductsDialog
-              open={showDeleteTaskDialog}
-              onOpenChange={setShowDeleteTaskDialog}
+            <DeleteProductsAlertDialog
+              open={showDeleteProductAlertDialog}
+              onOpenChange={setShowDeleteProductAlertDialog}
               products={[row.original]}
               showTrigger={false}
               onSuccess={() => row.toggleSelected(false)}
@@ -196,10 +227,9 @@ export function getColumns(): ColumnDef<TableProduct>[] {
                 </DropdownMenuSub>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  onSelect={() => setShowDeleteTaskDialog(true)}
+                  onSelect={() => setShowDeleteProductAlertDialog(true)}
                 >
                   Delete
-                  <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

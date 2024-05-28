@@ -3,25 +3,34 @@
 import { DownloadIcon } from "@radix-ui/react-icons";
 import { type Table } from "@tanstack/react-table";
 
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { DateRangePicker } from "~/components/date-range-picker";
+import { Icons } from "~/components/icons";
 import { Button, buttonVariants } from "~/components/ui/button";
 import { exportTableToCSV } from "~/lib/export";
-import { DeleteProductsDialog } from "./delete-products-dialog";
-import type { TableProduct } from "~/types";
-import Link from "next/link";
 import { cn } from "~/lib/utils";
-import { Icons } from "~/components/icons";
+import type { TableProduct } from "~/types";
+import { DeleteProductsAlertDialog } from "./delete-products-alert-dialog";
 
-interface TasksTableToolbarActionsProps {
+interface ProductsTableToolbarActionsProps {
   table: Table<TableProduct>;
 }
 
-export function TasksTableToolbarActions({
+export function ProductsTableToolbarActions({
   table,
-}: TasksTableToolbarActionsProps) {
+}: ProductsTableToolbarActionsProps) {
+  const searchParams = useSearchParams();
+
+  const search = {
+    from: searchParams.get("from"),
+    to: searchParams.get("to"),
+  };
+
   return (
     <div className="flex items-center gap-2">
       {table.getFilteredSelectedRowModel().rows.length > 0 ? (
-        <DeleteProductsDialog
+        <DeleteProductsAlertDialog
           products={table
             .getFilteredSelectedRowModel()
             .rows.map((row) => row.original)}
@@ -40,7 +49,7 @@ export function TasksTableToolbarActions({
         size="sm"
         onClick={() =>
           exportTableToCSV(table, {
-            filename: "tasks",
+            filename: "products",
             excludeColumns: ["select", "actions"],
           })
         }
@@ -48,10 +57,16 @@ export function TasksTableToolbarActions({
         <DownloadIcon className="mr-2 size-4" aria-hidden="true" />
         Export
       </Button>
-      {/**
-       * Other actions can be added here.
-       * For example, import, view, etc.
-       */}
+      <DateRangePicker
+        triggerSize="sm"
+        triggerClassName="ml-auto w-56 sm:w-60"
+        align="end"
+        dateRange={
+          search.from && search.to
+            ? { from: new Date(search.from), to: new Date(search.to) }
+            : undefined
+        }
+      />
     </div>
   );
 }
