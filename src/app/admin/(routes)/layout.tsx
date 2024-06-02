@@ -5,15 +5,15 @@ import { AdminSidebar } from "./_components/sidebar";
 
 const AdminLayout = ({ children }: React.PropsWithChildren) => {
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
+    <div className="relative grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <React.Suspense>
         <AdminSidebar />
       </React.Suspense>
-      <div className="relative flex flex-col sm:gap-4 sm:pb-4 sm:pl-14">
-        <div className="sticky top-0 z-30 flex w-full flex-col bg-muted/40 pt-0 backdrop-blur-sm md:py-4">
+      <div className="grid grid-cols-1">
+        <div className="flex flex-col">
           <AdminHeader />
+          <main className="p-4 lg:p-6">{children}</main>
         </div>
-        <main className="flex-1 p-4 sm:px-6 sm:py-0">{children}</main>
       </div>
     </div>
   );

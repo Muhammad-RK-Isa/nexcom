@@ -8,6 +8,7 @@ import { cn } from "~/lib/utils";
 
 const poppins = Poppins({
   subsets: ["latin"],
+  preload: true,
   weight: ["200", "300", "400", "500", "600", "700", "800"],
   variable: "--font-poppins",
 });

@@ -28,7 +28,7 @@ export const AdminMobileSidebar = () => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button size="icon" variant="outline" className="sm:hidden">
+        <Button size="icon" variant="outline" className="md:hidden">
           <Icons.panelLeft className="size-5" />
           <span className="sr-only">Toggle Menu</span>
         </Button>

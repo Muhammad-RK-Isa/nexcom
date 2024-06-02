@@ -1,12 +1,17 @@
+import { and, asc, count, desc, eq, gte, lte, or, type SQL } from "drizzle-orm";
 import { filterColumn } from "~/lib/filter-column";
-import { and, gte, lte, or, eq, type SQL, asc, desc, count } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { products } from "~/server/db/schema";
+import {
+  productOptionValues,
+  productOptions,
+  productVariants,
+  products,
+} from "~/server/db/schema";
 import type {
-  TableProduct,
   DrizzleWhere,
   ProductId,
+  TableProduct,
   TableProductsParams,
 } from "~/types";
 
@@ -16,8 +21,24 @@ export const getProducts = async () => {
 };
 
 export const getProductById = async ({ id }: ProductId) => {
-  const [row] = await db.select().from(products).where(eq(products.id, id));
-  return row;
+  const [row] = await db
+    .select()
+    .from(products)
+    .leftJoin(productVariants, eq(products.id, productVariants.productId))
+    .leftJoin(productOptions, eq(products.id, productOptions.productId))
+    .rightJoin(
+      productOptionValues,
+      eq(productOptions.id, productOptionValues.optionId),
+    )
+    .where(eq(products.id, id));
+
+  console.log(row);
+
+  return {
+    ...row?.products,
+    product_variants: row?.product_variants,
+    product_options: row?.product_options,
+  };
 };
 
 export async function getTableProducts(input: TableProductsParams) {
@@ -98,20 +119,5 @@ export async function getTableProducts(input: TableProductsParams) {
     return { data, pageCount };
   } catch (err) {
     return { data: [], pageCount: 0 };
-  }
-}
-
-export async function getTaskCountByStatus() {
-  try {
-    return await db
-      .select({
-        status: products.status,
-        count: count(),
-      })
-      .from(products)
-      .groupBy(products.status)
-      .execute();
-  } catch (err) {
-    return [];
   }
 }

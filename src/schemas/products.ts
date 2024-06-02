@@ -1,5 +1,6 @@
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
+import { generateId } from "~/lib/utils";
 
 import {
   pgProductStatuses,
@@ -21,24 +22,81 @@ export const baseSchema = createSelectSchema(products)
       .min(3, { message: "Please give a title for the product" }),
     description: z.string().nullable(),
     vendor: z.string().optional().nullable(),
-    price: z.coerce.number({ message: "Please enter the price" }),
-    mrp: z.coerce.number({ message: "Please enter the MRP" }),
-    inventoryQuantity: z.coerce.number({
-      message: "Please enter the quantity",
-    }),
+    price: z.coerce
+      .number({ message: "Please enter the price" })
+      .nonnegative({ message: "Price cannot be negative" }),
+    mrp: z.coerce
+      .number({ message: "Please enter the MRP" })
+      .nonnegative({ message: "MRP cannot be negative" }),
+    inventoryQuantity: z.coerce
+      .number({
+        message: "Please enter the quantity",
+      })
+      .nonnegative({ message: "Quantity cannot be negative" }),
     tags: z.string().array().optional(),
-    weight: z.coerce.number({
-      message: "Please enter the weight of the product",
-    }),
-    length: z.coerce.number().nullable(),
-    height: z.coerce.number().nullable(),
+    weight: z.coerce
+      .number({
+        message: "Please enter the weight of the product",
+      })
+      .nonnegative({ message: "Weight cannot be negative" }),
+    length: z.coerce
+      .number()
+      .nonnegative({ message: "Length cannot be negative" })
+      .nullable()
+      .optional(),
+    height: z.coerce
+      .number()
+      .nonnegative({ message: "Height cannot be negative" })
+      .nullable()
+      .optional(),
   })
   .omit({
     createdAt: true,
     updatedAt: true,
   });
 
-export const updateProductSchema = baseSchema;
+export const optionValueSchema = z.object({
+  id: z.string().default(generateId({ prefix: "optval" })),
+  value: z.string().min(1, { message: "Option value cannot be empty" }),
+  rank: z.number().nonnegative(),
+  optionId: z.string(),
+});
+
+export const productOptionSchema = z.object({
+  id: z
+    .string()
+    .default(generateId({ prefix: "opt" }))
+    .optional(),
+  title: z.string().min(1, { message: "Option title cannot be empty" }),
+  rank: z.number().nonnegative(),
+  values: z
+    .array(optionValueSchema)
+    .min(1, { message: "At least one value is required" }),
+});
+
+export const productVariantSchema = z.object({
+  id: z
+    .string()
+    .default(generateId({ prefix: "variant" }))
+    .optional(),
+  price: z.coerce
+    .number()
+    .nonnegative({ message: "Price must be a positive number" })
+    .default(0),
+  inventoryQuantity: z.coerce
+    .number()
+    .nonnegative({ message: "Inventory must be a positive number" })
+    .default(0),
+  productId: z.string().optional(),
+  productImageId: z.string().optional(),
+  optionValues: z.array(optionValueSchema).default([]).optional(),
+});
+
+export const updateProductSchema = baseSchema.extend({
+  product_options: z.array(productOptionSchema).optional().default([]),
+  product_variants: z.array(productVariantSchema).optional().default([]),
+});
+
 export const updateProductStatusSchema = baseSchema.pick({
   id: true,
   status: true,

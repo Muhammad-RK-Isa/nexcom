@@ -50,6 +50,7 @@ import type {
   UpdateProductInput,
 } from "~/types";
 import { getStatusIcon } from "../../_lib/utils";
+import { ProductVariantsForm } from "./product-variants-form";
 
 interface ProductFormMainProps {
   product?: CompleteProduct;
@@ -76,6 +77,8 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
       heightUnit: "m",
       lengthUnit: "m",
       status: "active",
+      product_options: [],
+      product_variants: [],
     },
   });
 
@@ -87,6 +90,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
       },
       onError: (err) => {
         toast.error(err.message);
+        console.table(err);
       },
     });
 
@@ -439,7 +443,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                             <Input
                               {...field}
                               type="number"
-                              value={field.value ?? NaN}
+                              value={field.value ?? ""}
                             />
                             <FormMessage />
                           </FormItem>
@@ -497,7 +501,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                             <Input
                               {...field}
                               type="number"
-                              value={field.value ?? NaN}
+                              value={field.value ?? ""}
                             />
                             <FormMessage />
                           </FormItem>
@@ -547,6 +551,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                 </div>
               </CardContent>
             </Card>
+            <ProductVariantsForm />
           </div>
           <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
             <Card>

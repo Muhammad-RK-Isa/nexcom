@@ -12,7 +12,8 @@ const ProductPage = async ({ params: { id } }: { params: { id: string } }) => {
 
   return (
     <React.Suspense>
-      <ProductFormMain product={product} />
+      {/* <ProductFormMain product={product} /> */}
+      <>Nothing to show here</>
     </React.Suspense>
   );
 };

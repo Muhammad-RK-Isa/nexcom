@@ -36,10 +36,7 @@ export function DataTable<TData>({
   ...props
 }: DataTableProps<TData>) {
   return (
-    <div
-      className={cn("w-full space-y-2.5 overflow-auto", className)}
-      {...props}
-    >
+    <div className={cn("w-full space-y-2.5", className)} {...props}>
       {children}
       <div className="rounded-md border bg-card">
         <Table>

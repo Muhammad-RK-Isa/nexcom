@@ -1,90 +1,49 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
-import Image from "next/image";
-
 import { useRouter } from "next-nprogress-bar";
-import { Icons } from "~/components/icons";
-import { Button } from "~/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
-import { APP_TITLE } from "~/lib/constants";
+
+import { APP_TITLE, Paths } from "~/lib/constants";
 import { cn } from "~/lib/utils";
 import { adminNavLinks } from "../_lib/utils";
 import { ThemeSelect } from "~/components/theme-select";
-
-import NextLight from "~/../public/nextjs-icon-light-background.svg";
-import NextDark from "~/../public/nextjs-icon-dark-background.svg";
 
 export const AdminSidebar = () => {
   const pathname = usePathname();
   const router = useRouter();
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
-      <nav className="flex h-full flex-col items-center gap-2 px-2 sm:py-4">
-        <Link
-          href="#"
-          className="group relative mb-1 flex size-6 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
-        >
-          <Image
-            src={NextLight}
-            fill
-            alt="Next.js logo light"
-            className="dark:hidden"
-          />
-          <Image
-            src={NextDark}
-            fill
-            alt="Next.js logo dark"
-            className="hidden dark:block"
-          />
-          <span className="sr-only">{APP_TITLE}</span>
-        </Link>
-        {adminNavLinks.map(({ title, icon: Icon, path, active }, idx) => (
-          <Tooltip key={idx}>
-            <TooltipTrigger asChild>
-              <Button
-                size={"icon"}
-                variant={"link"}
-                disabled={!active}
-                onClick={() => router.push(path)}
-                className={cn(
-                  "rounded-full text-muted-foreground transition-colors hover:text-primary",
-                  path === pathname && "bg-accent text-primary",
-                )}
-              >
-                <Icon className="size-5" />
-                <span className="sr-only">{title}</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right">{title}</TooltipContent>
-          </Tooltip>
-        ))}
-        <div className="mt-auto flex flex-col items-center gap-4">
-          <ThemeSelect
-            className="flex-col space-x-0 space-y-1"
-            tooltipSide="right"
-          />
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link
-                href="#"
-                className="flex items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-              >
-                <Icons.settings className="size-5" />
-                <span className="sr-only">Settings</span>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent side="right">Settings</TooltipContent>
-          </Tooltip>
-        </div>
-      </nav>
+    <aside className="sticky left-0 top-0 hidden h-full max-h-screen flex-col gap-2 border-r bg-muted/40 md:flex">
+      <Link
+        href={Paths.Storefront}
+        className="flex h-14 items-center gap-2 border-b px-4 text-xl font-semibold uppercase lg:h-[60px] lg:px-7"
+      >
+        <span className="text-clip bg-primary/60 bg-[linear-gradient(90deg,transparent_25%,rgba(255,255,255,.5)_50%,transparent_75%,transparent_100%)] bg-[length:250%_250%,100%_100%] bg-clip-text bg-no-repeat text-transparent transition-[background-position_0s_ease] hover:animate-shine dark:bg-primary/40">
+          {APP_TITLE}
+        </span>
+      </Link>
+      <div className="flex flex-1 flex-col py-3">
+        <nav className="grid items-start gap-1 px-2 text-sm font-medium lg:px-4">
+          {adminNavLinks.map(({ title, icon: Icon, path, active }, idx) => (
+            <button
+              key={idx}
+              disabled={!active}
+              onClick={() => router.push(path)}
+              className={cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all",
+                path === pathname && "bg-muted text-primary",
+                active ? "hover:bg-muted hover:text-primary" : "opacity-50",
+              )}
+            >
+              <Icon className="size-4" />
+              {title}{" "}
+            </button>
+          ))}
+        </nav>
+        <ThemeSelect className="mt-auto p-4" />
+      </div>
     </aside>
   );
 };

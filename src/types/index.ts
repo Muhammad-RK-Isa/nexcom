@@ -1,16 +1,19 @@
 import { type SQL } from "drizzle-orm";
 import { type z } from "zod";
 import {
-  type getTableProducts,
   type getProducts,
+  type getTableProducts,
 } from "~/lib/api/products/queries";
 
 import type {
   createUserSchema,
   forgotPasswordSchema,
   insertProductSchema,
+  optionValueSchema,
   otpSchema,
   productIdSchema,
+  productOptionSchema,
+  productVariantSchema,
   resendEmailVerificationCodeSchema,
   resetPasswordSchema,
   searchProductParamsSchema,
@@ -79,6 +82,9 @@ export type UpdateProductStatusInput = z.infer<
 export type UpdateProductsStatusInput = z.infer<
   typeof updateProductsStatusSchema
 >;
+export type ProductOption = z.infer<typeof productOptionSchema>;
+export type ProductVariant = z.infer<typeof productVariantSchema>;
+export type ProductOptionValue = z.infer<typeof optionValueSchema>;
 
 // This type infers the return from getProducts() - meaning it will include any joins
 export type CompleteProduct = Awaited<ReturnType<typeof getProducts>>[number];

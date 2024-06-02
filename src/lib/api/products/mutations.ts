@@ -1,15 +1,12 @@
-import {
-  type SQLChunk,
-  and,
-  eq,
-  inArray,
-  ne,
-  sql,
-  type SQL,
-} from "drizzle-orm";
+import { and, eq, inArray, ne } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { products } from "~/server/db/schema";
+import {
+  productOptionValues,
+  productOptions,
+  productVariants,
+  products,
+} from "~/server/db/schema";
 import type {
   CreateProductInput,
   ProductId,
@@ -26,7 +23,58 @@ export const createProduct = async (product: CreateProductInput) => {
       .where(eq(products.title, product.title));
     if (existingRow) throw new Error("Existing product");
 
-    const [p] = await db.insert(products).values(product).returning();
+    const p = await db.transaction(async (tx) => {
+      const [p] = await tx.insert(products).values(product).returning();
+
+      if (p) {
+        const opts = product.product_options.map(async (option) => {
+          return await tx
+            .insert(productOptions)
+            .values({
+              title: option.title,
+              id: option.id,
+              rank: option.rank,
+              productId: p.id,
+            })
+            .returning();
+        });
+
+        await Promise.all(
+          product.product_variants.map(async (variant) => {
+            const [v] = await tx
+              .insert(productVariants)
+              .values({
+                id: variant.id,
+                price: variant.price,
+                inventoryQuantity: variant.inventoryQuantity,
+                productImageId: variant.productImageId,
+                productId: p.id,
+              })
+              .returning();
+
+            if (v) {
+              const insertedOptionValuesSet: Set<string> = new Set();
+              await Promise.all(
+                variant.optionValues?.map(async (optVal) => {
+                  if (!insertedOptionValuesSet.has(optVal.id)) {
+                    console.log("ISERTING OPTION VALUE:", optVal);
+                    await tx.insert(productOptionValues).values({
+                      ...optVal,
+                      variantId: v.id,
+                    });
+                    insertedOptionValuesSet.add(optVal.id);
+                  }
+                }) || [],
+              );
+            }
+          }),
+        );
+
+        await Promise.all(opts);
+
+        return p;
+      }
+    });
     return { product: p };
   } catch (err) {
     throw err;
