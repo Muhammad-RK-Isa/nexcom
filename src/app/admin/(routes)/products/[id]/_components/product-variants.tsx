@@ -44,9 +44,9 @@ export const ProductVariants = () => {
                     return (
                       <div
                         key={variantIndex}
-                        className="grid grid-cols-4 gap-2 p-6"
+                        className="grid gap-4 p-6 md:grid-cols-4"
                       >
-                        <div className="col-span-2 flex flex-wrap items-center gap-2">
+                        <div className="col-span-2 flex flex-wrap items-center gap-1.5">
                           {optionValues?.map(({ value }, idx) => {
                             if (value)
                               return (

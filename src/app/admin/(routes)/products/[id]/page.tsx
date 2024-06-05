@@ -11,7 +11,7 @@ const ProductPage = async ({ params: { id } }: { params: { id: string } }) => {
   if (!product && id !== "new") return notFound();
 
   return (
-    <div className="-m-4 p-4 bg-grid-small-black/[0.1] dark:bg-grid-small-white/[0.3] lg:-m-6 lg:p-6">
+    <div className="-m-4 bg-fixed p-4 bg-grid-small-black/[0.1] dark:bg-grid-small-white/[0.2] lg:-m-6 lg:p-6">
       <React.Suspense>
         <ProductFormMain product={product} />
       </React.Suspense>

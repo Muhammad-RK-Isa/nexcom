@@ -23,6 +23,7 @@ interface ProductOptionProps {
   optionIndex: number;
   optionId: string;
   updateVariants: () => void;
+  defaultExpanded?: boolean;
 }
 
 export const ProductOption: React.FC<ProductOptionProps> = ({
@@ -30,8 +31,9 @@ export const ProductOption: React.FC<ProductOptionProps> = ({
   optionIndex,
   optionId,
   updateVariants,
+  defaultExpanded = false,
 }) => {
-  const [isExpanded, setIsExpanded] = React.useState(true);
+  const [isExpanded, setIsExpanded] = React.useState(defaultExpanded);
 
   const form = useFormContext<UpdateProductInput>();
   const { options } = form.watch();
@@ -53,7 +55,7 @@ export const ProductOption: React.FC<ProductOptionProps> = ({
     <SortableItem value={optionId} asChild>
       <div
         className={cn(
-          "flex gap-4 bg-background p-6 pl-4",
+          "flex gap-4 overflow-auto bg-background p-6 pl-4",
           isExpanded && "pb-8",
         )}
       >
@@ -68,8 +70,8 @@ export const ProductOption: React.FC<ProductOptionProps> = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Option name</FormLabel>
-                  <div className="flex items-center gap-2.5">
-                    <FormControl>
+                  <FormControl>
+                    <div className="relative">
                       <Input
                         {...field}
                         placeholder="e.g. Size, Color"
@@ -79,28 +81,29 @@ export const ProductOption: React.FC<ProductOptionProps> = ({
                           form.clearErrors(`options.${optionIndex}.title`);
                         }}
                       />
-                    </FormControl>
-                    <Button
-                      type="button"
-                      variant={"outline"}
-                      size={"icon"}
-                      onClick={() => {
-                        const newOpts = options.filter(
-                          (o) => o.id !== optionId,
-                        );
-                        const newVars = generateVariants({
-                          options: newOpts,
-                          existingVariants: variantFields,
-                        });
-                        replaceVariants(newVars);
-                        form.setValue("options", newOpts);
-                      }}
-                      aria-hidden="true"
-                    >
-                      <Icons.trash className="size-4" />
-                      <span className="sr-only">Remove option</span>
-                    </Button>
-                  </div>
+                      <Button
+                        type="button"
+                        variant={"tone"}
+                        size={"icon"}
+                        onClick={() => {
+                          const newOpts = options.filter(
+                            (o) => o.id !== optionId,
+                          );
+                          const newVars = generateVariants({
+                            options: newOpts,
+                            existingVariants: variantFields,
+                          });
+                          replaceVariants(newVars);
+                          form.setValue("options", newOpts);
+                        }}
+                        className="absolute right-0 top-0"
+                        aria-hidden="true"
+                      >
+                        <Icons.trash className="size-4" />
+                        <span className="sr-only">Remove option</span>
+                      </Button>
+                    </div>
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -116,8 +119,8 @@ export const ProductOption: React.FC<ProductOptionProps> = ({
         ) : (
           <div className="flex w-full items-center">
             <div className="flex flex-col gap-2">
-              <p className="text-sm font-medium">{option?.title}</p>
-              <div className="col-span-2 flex flex-wrap items-center gap-2">
+              <p className="font-medium">{option?.title}</p>
+              <div className="col-span-2 flex flex-wrap items-center gap-1.5">
                 {option?.values.map(({ value }, idx) => {
                   if (value)
                     return (

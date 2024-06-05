@@ -57,7 +57,7 @@ export const ProductOptionValues: React.FC<ProductOptionValuesProps> = ({
         form.trigger(`options.${optionIdx}.values`);
       }}
     >
-      <div className="-ml-3 grid gap-2">
+      <div className="-ml-11 grid gap-2 md:-ml-8">
         <Label className="mb-2 ml-11">Option values</Label>
         {options
           .find((o) => o.id === optionId)
@@ -78,8 +78,8 @@ export const ProductOptionValues: React.FC<ProductOptionValuesProps> = ({
                     name={`options.${optionIdx}.values.${k}.value`}
                     render={({ field }) => (
                       <FormItem className="w-full">
-                        <div className="flex items-center gap-2">
-                          <FormControl>
+                        <FormControl>
+                          <div className="relative">
                             <Input
                               {...field}
                               className="bg-background"
@@ -91,25 +91,26 @@ export const ProductOptionValues: React.FC<ProductOptionValuesProps> = ({
                                 updateVariants();
                               }}
                             />
-                          </FormControl>
-                          {optionValues.length > 1 ? (
-                            <Button
-                              type={"button"}
-                              variant={"outline"}
-                              size={"icon"}
-                              onClick={() => {
-                                remove(k);
-                                updateVariants();
-                              }}
-                              aria-hidden="true"
-                            >
-                              <Icons.trash className="size-4" />
-                              <span className="sr-only">
-                                Remove option value
-                              </span>
-                            </Button>
-                          ) : null}
-                        </div>
+                            {optionValues.length > 1 ? (
+                              <Button
+                                type={"button"}
+                                variant={"tone"}
+                                size={"icon"}
+                                onClick={() => {
+                                  remove(k);
+                                  updateVariants();
+                                }}
+                                className="absolute right-0 top-0"
+                                aria-hidden="true"
+                              >
+                                <Icons.trash className="size-4" />
+                                <span className="sr-only">
+                                  Remove option value
+                                </span>
+                              </Button>
+                            ) : null}
+                          </div>
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}

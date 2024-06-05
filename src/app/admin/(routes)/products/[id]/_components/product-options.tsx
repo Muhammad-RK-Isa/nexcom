@@ -56,6 +56,7 @@ export const ProductOptions = () => {
                 optionIndex={idx}
                 optionId={option.id}
                 updateVariants={() => updateVariants()}
+                defaultExpanded={!option.title}
               />
             ))}
           </div>
