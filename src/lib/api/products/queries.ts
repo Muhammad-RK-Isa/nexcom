@@ -1,13 +1,8 @@
-import { and, asc, count, desc, eq, gte, lte, or, type SQL } from "drizzle-orm";
+import { and, asc, count, desc, gte, lte, or, type SQL } from "drizzle-orm";
 import { filterColumn } from "~/lib/filter-column";
 
 import { db } from "~/server/db";
-import {
-  productOptionValues,
-  productOptions,
-  productVariants,
-  products,
-} from "~/server/db/schema";
+import { products } from "~/server/db/schema";
 import type {
   DrizzleWhere,
   ProductId,
@@ -21,23 +16,36 @@ export const getProducts = async () => {
 };
 
 export const getProductById = async ({ id }: ProductId) => {
-  const [row] = await db
-    .select()
-    .from(products)
-    .leftJoin(productVariants, eq(products.id, productVariants.productId))
-    .leftJoin(productOptions, eq(products.id, productOptions.productId))
-    .rightJoin(
-      productOptionValues,
-      eq(productOptions.id, productOptionValues.optionId),
-    )
-    .where(eq(products.id, id));
+  const product = await db.query.products.findFirst({
+    where: (t, { eq }) => eq(t.id, id),
+    with: {
+      options: {
+        with: {
+          values: true,
+        },
+      },
+      variants: {
+        with: {
+          variantsOptionValues: {
+            with: {
+              optionValue: true,
+            },
+          },
+        },
+      },
+    },
+  });
 
-  console.log(row);
+  const variants = product?.variants.map((variant) => ({
+    ...variant,
+    optionValues: product?.variants
+      ?.find((v) => v.id === variant.id)
+      ?.variantsOptionValues.map((vOptVals) => vOptVals.optionValue),
+  }));
 
   return {
-    ...row?.products,
-    product_variants: row?.product_variants,
-    product_options: row?.product_options,
+    ...product,
+    variants,
   };
 };
 

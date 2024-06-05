@@ -1,11 +1,11 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next-nprogress-bar";
-import Link from "next/link";
 import React from "react";
-import { useForm } from "react-hook-form";
+import Link from "next/link";
 import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next-nprogress-bar";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Icons } from "~/components/icons";
 import { Badge } from "~/components/ui/badge";
@@ -50,7 +50,7 @@ import type {
   UpdateProductInput,
 } from "~/types";
 import { getStatusIcon } from "../../_lib/utils";
-import { ProductVariantsForm } from "./product-variants-form";
+import { ProductVariants } from "./product-variants";
 
 interface ProductFormMainProps {
   product?: CompleteProduct;
@@ -77,8 +77,8 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
       heightUnit: "m",
       lengthUnit: "m",
       status: "active",
-      product_options: [],
-      product_variants: [],
+      options: [],
+      variants: [],
     },
   });
 
@@ -322,7 +322,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                     name="manageInventory"
                     control={form.control}
                     render={({ field }) => (
-                      <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border pl-4 shadow-input hover:bg-accent hover:text-accent-foreground">
+                      <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border pl-4 shadow-sm transition-all hover:bg-accent hover:text-accent-foreground">
                         <FormControl>
                           <Checkbox
                             checked={field.value}
@@ -340,7 +340,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                     name="allowBackorder"
                     control={form.control}
                     render={({ field }) => (
-                      <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border pl-4 shadow-input hover:bg-accent hover:text-accent-foreground">
+                      <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border pl-4 shadow-sm transition-all hover:bg-accent hover:text-accent-foreground">
                         <FormControl>
                           <Checkbox
                             checked={field.value}
@@ -551,7 +551,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                 </div>
               </CardContent>
             </Card>
-            <ProductVariantsForm />
+            <ProductVariants />
           </div>
           <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
             <Card>

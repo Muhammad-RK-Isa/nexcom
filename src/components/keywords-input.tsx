@@ -74,7 +74,7 @@ const KeywordsInput: React.FC<KeywordsInputProps> = ({
   return (
     <div className="flex min-h-9 w-full flex-wrap items-center rounded-md border border-input px-2 py-2 text-sm shadow-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-ring">
       <div
-        className="flex w-full flex-wrap overflow-y-auto"
+        className="flex w-full flex-wrap gap-1.5 overflow-y-auto"
         style={{ maxHeight: "300px" }}
       >
         {keywords.map((keyword, index) => (
@@ -82,10 +82,10 @@ const KeywordsInput: React.FC<KeywordsInputProps> = ({
             type="button"
             key={index}
             onClick={() => removeKeyword(index)}
-            className="m-1 flex items-center rounded-md bg-primary px-2 py-1 text-xs text-primary-foreground"
+            className="flex items-center rounded-sm border border-input bg-muted/40 px-2 py-1 text-xs"
           >
             {keyword}
-            <Icons.multiply className="ml-2 size-3.5 cursor-pointer text-primary-foreground" />
+            <Icons.multiply className="ml-2 size-3.5 cursor-pointer text-muted-foreground" />
           </button>
         ))}
         <input

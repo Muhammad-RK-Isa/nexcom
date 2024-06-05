@@ -63,10 +63,7 @@ export const optionValueSchema = z.object({
 });
 
 export const productOptionSchema = z.object({
-  id: z
-    .string()
-    .default(generateId({ prefix: "opt" }))
-    .optional(),
+  id: z.string().default(generateId({ prefix: "opt" })),
   title: z.string().min(1, { message: "Option title cannot be empty" }),
   rank: z.number().nonnegative(),
   values: z
@@ -88,13 +85,14 @@ export const productVariantSchema = z.object({
     .nonnegative({ message: "Inventory must be a positive number" })
     .default(0),
   productId: z.string().optional(),
-  productImageId: z.string().optional(),
+  productImageId: z.string().nullable().optional(),
   optionValues: z.array(optionValueSchema).default([]).optional(),
+  createdAt: z.date().nullable().optional(),
 });
 
 export const updateProductSchema = baseSchema.extend({
-  product_options: z.array(productOptionSchema).optional().default([]),
-  product_variants: z.array(productVariantSchema).optional().default([]),
+  options: z.array(productOptionSchema).optional().default([]),
+  variants: z.array(productVariantSchema).optional().default([]),
 });
 
 export const updateProductStatusSchema = baseSchema.pick({

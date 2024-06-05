@@ -6,6 +6,7 @@ import {
   productOptions,
   productVariants,
   products,
+  variantsOptionValues,
 } from "~/server/db/schema";
 import type {
   CreateProductInput,
@@ -24,57 +25,58 @@ export const createProduct = async (product: CreateProductInput) => {
     if (existingRow) throw new Error("Existing product");
 
     const p = await db.transaction(async (tx) => {
-      const [p] = await tx.insert(products).values(product).returning();
+      const [productRecord] = await tx
+        .insert(products)
+        .values(product)
+        .returning();
 
-      if (p) {
-        const opts = product.product_options.map(async (option) => {
-          return await tx
+      if (productRecord) {
+        for (const option of product.options) {
+          const [newOption] = await tx
             .insert(productOptions)
             .values({
               title: option.title,
               id: option.id,
               rank: option.rank,
-              productId: p.id,
+              productId: productRecord.id,
             })
             .returning();
-        });
 
-        await Promise.all(
-          product.product_variants.map(async (variant) => {
-            const [v] = await tx
-              .insert(productVariants)
-              .values({
-                id: variant.id,
-                price: variant.price,
-                inventoryQuantity: variant.inventoryQuantity,
-                productImageId: variant.productImageId,
-                productId: p.id,
-              })
-              .returning();
-
-            if (v) {
-              const insertedOptionValuesSet: Set<string> = new Set();
-              await Promise.all(
-                variant.optionValues?.map(async (optVal) => {
-                  if (!insertedOptionValuesSet.has(optVal.id)) {
-                    console.log("ISERTING OPTION VALUE:", optVal);
-                    await tx.insert(productOptionValues).values({
-                      ...optVal,
-                      variantId: v.id,
-                    });
-                    insertedOptionValuesSet.add(optVal.id);
-                  }
-                }) || [],
-              );
+          if (newOption)
+            for (const value of option.values) {
+              await tx.insert(productOptionValues).values({
+                ...value,
+                optionId: newOption.id,
+              });
             }
-          }),
-        );
+        }
 
-        await Promise.all(opts);
+        for (const variant of product.variants) {
+          const [variantRecord] = await tx
+            .insert(productVariants)
+            .values({
+              id: variant.id,
+              price: variant.price,
+              inventoryQuantity: variant.inventoryQuantity,
+              productImageId: variant.productImageId,
+              productId: productRecord.id,
+            })
+            .returning();
 
-        return p;
+          if (variantRecord && variant.optionValues) {
+            for (const optionValue of variant.optionValues) {
+              await tx.insert(variantsOptionValues).values({
+                variantId: variantRecord.id,
+                optionValueId: optionValue.id,
+              });
+            }
+          }
+        }
+        return productRecord;
       }
+      throw new Error("Product insertion failed");
     });
+
     return { product: p };
   } catch (err) {
     throw err;

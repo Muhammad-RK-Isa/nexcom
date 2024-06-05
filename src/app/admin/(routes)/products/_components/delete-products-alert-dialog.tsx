@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import { useRouter } from "next-nprogress-bar";
 
 import { type TableProduct } from "~/types";
-import { ReloadIcon } from "@radix-ui/react-icons";
 import { type Row } from "@tanstack/react-table";
 import { Button, buttonVariants } from "~/components/ui/button";
 import {

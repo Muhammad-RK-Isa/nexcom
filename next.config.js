@@ -5,12 +5,6 @@
 await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
-const config = {
-  experimental: {
-    reactCompiler: {
-      compilationMode: "annotation",
-    },
-  },
-};
+const config = {};
 
 export default config;

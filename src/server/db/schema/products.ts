@@ -12,8 +12,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { generateId } from "~/lib/utils";
-import { productOptions } from "./product-options";
-import { productVariants } from "./product-variants";
+import { productOptions, productVariants } from ".";
 
 export const pgProductStatuses = pgEnum("productStatuses", ["active", "draft"]);
 export const pgWeightUnits = pgEnum("weightUnit", ["kg", "g", "lb", "oz"]);
@@ -46,8 +45,11 @@ export const products = pgTable(
     weightUnit: pgWeightUnits("weightUnit").notNull().default("kg"),
     heightUnit: pgSizeUnits("heightUnit").notNull().default("m"),
     lengthUnit: pgSizeUnits("lengthUnit").notNull().default("m"),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
-    updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
+    createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", {
+      mode: "date",
+      precision: 3,
+    }).$onUpdate(() => new Date()),
   },
   (t) => ({
     slugIdx: index("slug_index").on(t.slug),
@@ -55,6 +57,6 @@ export const products = pgTable(
 );
 
 export const productsRelations = relations(products, ({ many }) => ({
-  variants: many(productVariants),
   options: many(productOptions),
+  variants: many(productVariants),
 }));

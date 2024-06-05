@@ -9,7 +9,7 @@ import {
 
 import { generateId } from "~/lib/utils";
 import { productOptions } from "./product-options";
-import { productVariants } from "./product-variants";
+import { variantsOptionValues } from "./variants-option-values";
 
 export const productOptionValues = pgTable("option_values", {
   id: varchar("id", { length: 255 })
@@ -18,14 +18,13 @@ export const productOptionValues = pgTable("option_values", {
     .$defaultFn(() => generateId({ prefix: "optval" })),
   value: text("value").notNull(),
   rank: integer("rank").notNull().default(1),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
+  createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "date", precision: 3 }).$onUpdate(
+    () => new Date(),
+  ),
   optionId: varchar("option_id", { length: 255 })
     .notNull()
     .references(() => productOptions.id, { onDelete: "cascade" }),
-  variantId: varchar("variant_id", { length: 255 })
-    .notNull()
-    .references(() => productVariants.id, { onDelete: "cascade" }),
 });
 
 export const productOptionValuesRelations = relations(
@@ -35,6 +34,6 @@ export const productOptionValuesRelations = relations(
       fields: [productOptionValues.optionId],
       references: [productOptions.id],
     }),
-    variant: many(productVariants),
+    variantsOptionValues: many(variantsOptionValues),
   }),
 );

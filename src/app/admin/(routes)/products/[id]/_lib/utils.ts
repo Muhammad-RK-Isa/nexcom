@@ -30,7 +30,6 @@ export const generateVariants = ({
   ): VariantCombo[][] => {
     if (opts.length === 0) return [prefix];
     const [first, ...rest] = opts;
-
     return first!.values.flatMap((value) =>
       combinations(rest, [
         ...prefix,
@@ -61,7 +60,7 @@ export const generateVariants = ({
     );
 
     return {
-      id: generateId({ prefix: "variant" }),
+      id: ev?.id ?? generateId({ prefix: "variant" }),
       price: ev?.price ?? price ?? 0,
       inventoryQuantity: ev?.inventoryQuantity ?? inventoryQuantity ?? 0,
       optionValues,

@@ -18,8 +18,11 @@ export const productOptions = pgTable("product_options", {
     .$defaultFn(() => generateId({ prefix: "opt" })),
   title: text("title").notNull(),
   rank: integer("rank").notNull().default(1),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
+
+  createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "date", precision: 3 }).$onUpdate(
+    () => new Date(),
+  ),
   productId: varchar("product_id", { length: 255 })
     .notNull()
     .references(() => products.id, { onDelete: "cascade" }),

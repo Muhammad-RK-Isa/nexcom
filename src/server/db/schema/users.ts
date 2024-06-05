@@ -6,9 +6,9 @@ import {
   uniqueIndex,
   varchar,
 } from "drizzle-orm/pg-core";
+import { z } from "zod";
 
 import { accounts } from "./accounts";
-import { z } from "zod";
 import { generateId } from "~/lib/utils";
 
 export const pgUserRolesEnum = pgEnum("userRole", [

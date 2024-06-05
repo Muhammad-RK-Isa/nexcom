@@ -155,7 +155,7 @@ export function ProductsTableFloatingBar({
                     </Button>
                   </TooltipTrigger>
                 </SelectTrigger>
-                <TooltipContent className=" border bg-accent font-semibold text-foreground dark:bg-zinc-900">
+                <TooltipContent className="border bg-accent font-semibold text-foreground dark:bg-zinc-900">
                   <p>Update status</p>
                 </TooltipContent>
               </Tooltip>
@@ -197,7 +197,7 @@ export function ProductsTableFloatingBar({
                   )}
                 </Button>
               </TooltipTrigger>
-              <TooltipContent className=" border bg-accent font-semibold text-foreground dark:bg-zinc-900">
+              <TooltipContent className="border bg-accent font-semibold text-foreground dark:bg-zinc-900">
                 <p>Export Products</p>
               </TooltipContent>
             </Tooltip>
@@ -247,7 +247,7 @@ export function ProductsTableFloatingBar({
                   </AlertDialogContent>
                 </AlertDialog>
               </TooltipTrigger>
-              <TooltipContent className=" border bg-accent font-semibold text-foreground dark:bg-zinc-900">
+              <TooltipContent className="border bg-accent font-semibold text-foreground dark:bg-zinc-900">
                 <p>Delete Products</p>
               </TooltipContent>
             </Tooltip>

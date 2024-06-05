@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   index,
   integer,
@@ -9,7 +10,6 @@ import {
 import { type AdapterAccount } from "next-auth/adapters";
 
 import { users } from "./users";
-import { relations } from "drizzle-orm";
 
 export const accounts = pgTable(
   "account",
@@ -30,11 +30,11 @@ export const accounts = pgTable(
     id_token: text("id_token"),
     session_state: varchar("session_state", { length: 255 }),
   },
-  (account) => ({
+  (t) => ({
     compoundKey: primaryKey({
-      columns: [account.provider, account.providerAccountId],
+      columns: [t.provider, t.providerAccountId],
     }),
-    userIdIdx: index("account_userId_idx").on(account.userId),
+    userIdIdx: index("account_userId_idx").on(t.userId),
   }),
 );
 
