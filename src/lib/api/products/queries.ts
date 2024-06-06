@@ -36,6 +36,8 @@ export const getProductById = async ({ id }: ProductId) => {
     },
   });
 
+  if (!product) return null;
+
   const variants = product?.variants.map((variant) => ({
     ...variant,
     optionValues: product?.variants
@@ -43,9 +45,29 @@ export const getProductById = async ({ id }: ProductId) => {
       ?.variantsOptionValues.map((vOptVals) => vOptVals.optionValue),
   }));
 
+  const options = product?.options
+    .sort((a, b) => a.rank - b.rank)
+    .map((opt) => ({
+      ...opt,
+      values: opt.values.sort((a, b) => a.rank - b.rank),
+    }));
+
   return {
     ...product,
+    weight: {
+      value: product?.weight,
+      unit: product?.weightUnit,
+    },
+    length: {
+      value: product?.length ?? null,
+      unit: product?.lengthUnit,
+    },
+    height: {
+      value: product?.height ?? null,
+      unit: product?.heightUnit,
+    },
     variants,
+    options,
   };
 };
 

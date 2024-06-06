@@ -34,20 +34,31 @@ export const baseSchema = createSelectSchema(products)
       })
       .nonnegative({ message: "Quantity cannot be negative" }),
     tags: z.string().array().optional(),
-    weight: z.coerce
-      .number({
-        message: "Please enter the weight of the product",
+    weight: z.object({
+      value: z.coerce
+        .number({ message: "Please enter the weight" })
+        .nonnegative({ message: "Weight cannot be negative" }),
+      unit: weightUnits,
+    }),
+    length: z
+      .object({
+        value: z.coerce
+          .number()
+          .nonnegative({ message: "Length cannot be negative" })
+          .nullable()
+          .optional(),
+        unit: sizeUnits,
       })
-      .nonnegative({ message: "Weight cannot be negative" }),
-    length: z.coerce
-      .number()
-      .nonnegative({ message: "Length cannot be negative" })
-      .nullable()
       .optional(),
-    height: z.coerce
-      .number()
-      .nonnegative({ message: "Height cannot be negative" })
-      .nullable()
+    height: z
+      .object({
+        value: z.coerce
+          .number()
+          .nonnegative({ message: "Height cannot be negative" })
+          .nullable()
+          .optional(),
+        unit: sizeUnits,
+      })
       .optional(),
   })
   .omit({

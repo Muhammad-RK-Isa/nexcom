@@ -65,21 +65,33 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
 
   const form = useForm<UpdateProductInput>({
     resolver: zodResolver(insertProductSchema),
-    defaultValues: product ?? {
-      title: "",
-      slug: "",
-      description: "",
-      manageInventory: true,
-      allowBackorder: false,
-      height: null,
-      length: null,
-      weightUnit: "kg",
-      heightUnit: "m",
-      lengthUnit: "m",
-      status: "active",
-      options: [],
-      variants: [],
-    },
+    defaultValues: product
+      ? {
+          ...product,
+          options: product.options?.sort((a, b) => a.rank - b.rank),
+        }
+      : {
+          title: "",
+          slug: "",
+          description: "",
+          manageInventory: true,
+          allowBackorder: false,
+          weight: {
+            value: undefined,
+            unit: "kg",
+          },
+          length: {
+            value: null,
+            unit: "m",
+          },
+          height: {
+            value: null,
+            unit: "m",
+          },
+          status: "active",
+          options: [],
+          variants: [],
+        },
   });
 
   const { mutate: createProduct, isPending: isCreating } =
@@ -239,16 +251,16 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                 <CardTitle>Pricing</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid gap-6 sm:grid-cols-2">
+                <div className="flex w-full flex-col justify-between gap-6 md:flex-row">
                   <FormField
                     name="price"
                     control={form.control}
                     render={({ field }) => (
-                      <FormItem className="grid gap-2.5 space-y-0">
+                      <FormItem className="grid flex-1 gap-2.5 space-y-0">
                         <FormLabel>Price</FormLabel>
                         <FormControl>
-                          <div className="relative">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm">
+                          <div className="relative h-9">
+                            <span className="absolute left-0 top-0 grid size-9 place-content-center text-sm">
                               {"৳"}
                             </span>
                             <Input
@@ -268,7 +280,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                     name="mrp"
                     control={form.control}
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="grid flex-1 gap-2.5 space-y-0">
                         <FormLabel className="flex items-center justify-between">
                           MRP
                           <HoverCard openDelay={100}>
@@ -292,8 +304,8 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                           </HoverCard>
                         </FormLabel>
                         <FormControl>
-                          <div className="relative">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm">
+                          <div className="relative h-9">
+                            <span className="absolute left-0 top-0 grid size-9 place-content-center text-sm">
                               {"৳"}
                             </span>
                             <Input
@@ -379,7 +391,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                   <div className="flex flex-col gap-2.5">
                     <div className="flex items-center space-x-4">
                       <FormField
-                        name="weight"
+                        name={"weight.value"}
                         control={form.control}
                         render={({ field }) => (
                           <FormItem>
@@ -393,7 +405,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                         )}
                       />
                       <FormField
-                        name="weightUnit"
+                        name="weight.unit"
                         control={form.control}
                         render={({ field }) => (
                           <FormItem>
@@ -423,19 +435,18 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                         )}
                       />
                     </div>
-                    {form.getFieldState("weight").error ||
-                    form.getFieldState("weightUnit").error ? (
+                    {form.getFieldState("weight").error ? (
                       <p className="text-[0.8rem] font-medium text-destructive">
-                        {form.getFieldState("weight").error?.message}
+                        {form.getFieldState("weight.value").error?.message}
                         <br />
-                        {form.getFieldState("weightUnit").error?.message}
+                        {form.getFieldState("weight.unit").error?.message}
                       </p>
                     ) : null}
                   </div>
                   <div className="gap2.5 flex flex-col">
                     <div className="flex items-center space-x-4">
                       <FormField
-                        name="height"
+                        name="height.value"
                         control={form.control}
                         render={({ field }) => (
                           <FormItem>
@@ -450,7 +461,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                         )}
                       />
                       <FormField
-                        name="heightUnit"
+                        name="height.unit"
                         control={form.control}
                         render={({ field }) => (
                           <FormItem>
@@ -481,19 +492,18 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                         )}
                       />
                     </div>
-                    {form.getFieldState("height").error ||
-                    form.getFieldState("heightUnit").error ? (
+                    {form.getFieldState("height").error ? (
                       <p className="text-[0.8rem] font-medium text-destructive">
-                        {form.getFieldState("weight").error?.message}
+                        {form.getFieldState("height.value").error?.message}
                         <br />
-                        {form.getFieldState("weightUnit").error?.message}
+                        {form.getFieldState("height.unit").error?.message}
                       </p>
                     ) : null}
                   </div>
                   <div className="flex flex-col gap-2.5">
                     <div className="flex items-center space-x-4">
                       <FormField
-                        name="length"
+                        name="length.value"
                         control={form.control}
                         render={({ field }) => (
                           <FormItem>
@@ -508,7 +518,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                         )}
                       />
                       <FormField
-                        name="lengthUnit"
+                        name="length.unit"
                         control={form.control}
                         render={({ field }) => (
                           <FormItem>
@@ -539,12 +549,11 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                         )}
                       />
                     </div>
-                    {form.getFieldState("height").error ||
-                    form.getFieldState("heightUnit").error ? (
+                    {form.getFieldState("length").error ? (
                       <p className="text-[0.8rem] font-medium text-destructive">
-                        {form.getFieldState("length").error?.message}
+                        {form.getFieldState("length.value").error?.message}
                         <br />
-                        {form.getFieldState("lengthUnit").error?.message}
+                        {form.getFieldState("length.unit").error?.message}
                       </p>
                     ) : null}
                   </div>

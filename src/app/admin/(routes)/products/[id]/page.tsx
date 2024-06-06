@@ -7,7 +7,7 @@ import { ProductFormSkeleton } from "./_components/product-form-skeleton";
 
 const ProductPage = async ({ params: { id } }: { params: { id: string } }) => {
   const product =
-    id === "new" ? undefined : await api.products.getProductById({ id });
+    id === "new" ? null : await api.products.getProductById({ id });
 
   if (!product && id !== "new") return notFound();
 
