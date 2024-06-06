@@ -3,6 +3,7 @@ import React from "react";
 import { api } from "~/trpc/server";
 import { ProductFormMain } from "./_components/product-form-main";
 import { notFound } from "next/navigation";
+import { ProductFormSkeleton } from "./_components/product-form-skeleton";
 
 const ProductPage = async ({ params: { id } }: { params: { id: string } }) => {
   const product =
@@ -11,8 +12,8 @@ const ProductPage = async ({ params: { id } }: { params: { id: string } }) => {
   if (!product && id !== "new") return notFound();
 
   return (
-    <div className="-m-4 bg-fixed p-4 bg-grid-small-black/[0.1] dark:bg-grid-small-white/[0.2] lg:-m-6 lg:p-6">
-      <React.Suspense>
+    <div className="-m-4 bg-fixed p-4 lg:-m-6 lg:p-6">
+      <React.Suspense fallback={<ProductFormSkeleton />}>
         <ProductFormMain product={product} />
       </React.Suspense>
     </div>

@@ -1,6 +1,6 @@
 const AuthLayout = ({ children }: React.PropsWithChildren) => {
   return (
-    <div className="relative grid bg-fixed bg-grid-small-black/[0.2] dark:bg-grid-small-white/[0.5]">
+    <div className="relative grid bg-fixed bg-grid-small-black/[0.2] dark:bg-grid-small-white/[0.2]">
       <div className="z-10 grid min-h-screen place-items-center p-4">
         {children}
       </div>

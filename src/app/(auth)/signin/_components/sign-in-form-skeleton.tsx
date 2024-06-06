@@ -5,8 +5,8 @@ import { Skeleton } from "~/components/ui/skeleton";
 export const SignInFormSkeleton = () => {
   return (
     <div className="w-full space-y-4">
-      <InputLableSkeleton />
-      <InputLableSkeleton />
+      <InputLableSkeleton variant={"extended"} />
+      <InputLableSkeleton variant={"extended"} />
       <div className="flex items-center justify-between">
         <Skeleton className="h-5 w-1/2" />
         <Skeleton className="h-5 w-1/3" />
