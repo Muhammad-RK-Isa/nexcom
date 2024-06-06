@@ -199,6 +199,10 @@ export const updateProduct = async (product: UpdateProductInput) => {
           ),
         );
 
+        await tx
+          .delete(productVariants)
+          .where(eq(productVariants.productId, productRecord.id));
+
         for (const option of product.options) {
           const [newOption] = await tx
             .insert(productOptions)
@@ -218,13 +222,6 @@ export const updateProduct = async (product: UpdateProductInput) => {
               });
             }
         }
-
-        await tx.delete(productVariants).where(
-          inArray(
-            productVariants.productId,
-            productRecord.variants.map(({ id }) => id),
-          ),
-        );
 
         for (const variant of product.variants) {
           const [variantRecord] = await tx

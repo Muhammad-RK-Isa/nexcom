@@ -89,12 +89,12 @@ export const ProductOption: React.FC<ProductOptionProps> = ({
                           const newOpts = options.filter(
                             (o) => o.id !== optionId,
                           );
+                          form.setValue("options", newOpts);
                           const newVars = generateVariants({
                             options: newOpts,
                             existingVariants: variantFields,
                           });
                           replaceVariants(newVars);
-                          form.setValue("options", newOpts);
                         }}
                         className="absolute right-0 top-0"
                         aria-hidden="true"

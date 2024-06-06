@@ -74,6 +74,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
           title: "",
           slug: "",
           description: "",
+          inventoryQuantity: 0,
           manageInventory: true,
           allowBackorder: false,
           weight: {
@@ -81,11 +82,11 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
             unit: "kg",
           },
           length: {
-            value: null,
+            value: undefined,
             unit: "m",
           },
           height: {
-            value: null,
+            value: undefined,
             unit: "m",
           },
           status: "active",
@@ -348,37 +349,41 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    name="allowBackorder"
-                    control={form.control}
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border pl-4 shadow-sm transition-all hover:bg-accent hover:text-accent-foreground">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <FormLabel className="w-full p-4 pl-0">
-                          Continue selling when out of stock
-                          <FormMessage />
-                        </FormLabel>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    name="inventoryQuantity"
-                    control={form.control}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Quantity</FormLabel>
-                        <div className="grid grid-cols-2 gap-6">
-                          <Input {...field} type="number" />
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  {form.getValues("manageInventory") ? (
+                    <>
+                      <FormField
+                        name="allowBackorder"
+                        control={form.control}
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border pl-4 shadow-sm transition-all hover:bg-accent hover:text-accent-foreground">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormLabel className="w-full p-4 pl-0">
+                              Continue selling when out of stock
+                              <FormMessage />
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        name="inventoryQuantity"
+                        control={form.control}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Quantity</FormLabel>
+                            <div className="grid grid-cols-2 gap-6">
+                              <Input {...field} type="number" />
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </>
+                  ) : null}
                 </div>
               </CardContent>
             </Card>
@@ -454,6 +459,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                             <Input
                               {...field}
                               type="number"
+                              inputMode="numeric"
                               value={field.value ?? ""}
                             />
                             <FormMessage />

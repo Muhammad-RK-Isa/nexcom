@@ -49,6 +49,7 @@ export const baseSchema = createSelectSchema(products)
           .optional(),
         unit: sizeUnits,
       })
+      .nullable()
       .optional(),
     height: z
       .object({
@@ -59,11 +60,15 @@ export const baseSchema = createSelectSchema(products)
           .optional(),
         unit: sizeUnits,
       })
+      .nullable()
       .optional(),
   })
   .omit({
     createdAt: true,
     updatedAt: true,
+    weightUnit: true,
+    heightUnit: true,
+    lengthUnit: true,
   });
 
 export const optionValueSchema = z.object({
