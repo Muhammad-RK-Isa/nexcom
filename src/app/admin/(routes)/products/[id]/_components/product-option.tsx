@@ -1,5 +1,5 @@
 import React from "react";
-import { type Control, useFieldArray, useFormContext } from "react-hook-form";
+import { type Control, useFormContext } from "react-hook-form";
 
 import { Icons } from "~/components/icons";
 import { Button } from "~/components/ui/button";
@@ -36,11 +36,7 @@ export const ProductOption: React.FC<ProductOptionProps> = ({
   const [isExpanded, setIsExpanded] = React.useState(defaultExpanded);
 
   const form = useFormContext<UpdateProductInput>();
-  const { options } = form.watch();
-  const { replace: replaceVariants, fields: variantFields } = useFieldArray({
-    control,
-    name: "variants",
-  });
+  const { options, variants } = form.watch();
 
   const option = options.find((o) => o.id === optionId);
 
@@ -52,7 +48,11 @@ export const ProductOption: React.FC<ProductOptionProps> = ({
   };
 
   return (
-    <SortableItem value={optionId} asChild>
+    <SortableItem
+      value={optionId}
+      onDragStart={() => setIsExpanded(false)}
+      asChild
+    >
       <div
         className={cn(
           "flex gap-4 overflow-auto bg-background p-6 pl-4",
@@ -92,9 +92,9 @@ export const ProductOption: React.FC<ProductOptionProps> = ({
                           form.setValue("options", newOpts);
                           const newVars = generateVariants({
                             options: newOpts,
-                            existingVariants: variantFields,
+                            existingVariants: variants,
                           });
-                          replaceVariants(newVars);
+                          form.setValue("variants", newVars);
                         }}
                         className="absolute right-0 top-0"
                         aria-hidden="true"

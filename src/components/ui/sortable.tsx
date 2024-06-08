@@ -205,10 +205,12 @@ function useSortableItem() {
 interface SortableItemProps extends SlotProps {
   value: UniqueIdentifier;
   asChild?: boolean;
+  onDragStart?: () => void;
+  onDragEnd?: () => void;
 }
 
 const SortableItem = React.forwardRef<HTMLDivElement, SortableItemProps>(
-  ({ asChild, className, value, ...props }, ref) => {
+  ({ asChild, onDragStart, className, value, ...props }, ref) => {
     const {
       attributes,
       listeners,
@@ -232,6 +234,10 @@ const SortableItem = React.forwardRef<HTMLDivElement, SortableItemProps>(
     };
 
     const Comp = asChild ? Slot : "div";
+
+    React.useEffect(() => {
+      if (isDragging) onDragStart?.();
+    }, [isDragging, onDragStart]);
 
     return (
       <SortableItemContext.Provider value={context}>

@@ -19,7 +19,7 @@ import {
   FormLabel,
 } from "~/components/ui/form";
 import { DEFAULT_LOGIN_REDIRECT } from "~/routes";
-import { createUserSchema } from "~/schemas";
+import { createUserSchema } from "~/server/db/schema";
 import type { CreateUserInput } from "~/types";
 import { api } from "~/trpc/react";
 import { Paths } from "~/lib/constants";

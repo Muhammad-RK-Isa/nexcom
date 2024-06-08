@@ -1,5 +1,7 @@
 import { type SQL } from "drizzle-orm";
+import type { ClientUploadedFileData } from "uploadthing/types";
 import { type z } from "zod";
+import type { getImageById, getTableImages } from "~/lib/api/images/queries";
 import {
   type getProductById,
   type getTableProducts,
@@ -8,24 +10,38 @@ import {
 import type {
   createUserSchema,
   forgotPasswordSchema,
+  otpSchema,
+  resendEmailVerificationCodeSchema,
+  resetPasswordSchema,
+  signInSchema,
+} from "~/server/db/schema/users";
+import type {
   insertProductSchema,
   optionValueSchema,
-  otpSchema,
   productIdSchema,
   productOptionSchema,
   productVariantSchema,
-  resendEmailVerificationCodeSchema,
-  resetPasswordSchema,
   searchProductParamsSchema,
-  signInSchema,
   updateProductSchema,
   updateProductStatusSchema,
   updateProductsStatusSchema,
-} from "~/schemas";
-import type { UserRole, products, users } from "~/server/db/schema";
+  imageIdSchema,
+  insertImageSchema,
+  searchImageParamsSchema,
+} from "~/server/db/schema";
+
+import type { UserRole, images, products, users } from "~/server/db/schema";
 
 export interface SearchParams {
   [key: string]: string | string[] | undefined;
+}
+
+export interface UploadedFile<T = unknown> extends ClientUploadedFileData<T> {}
+
+export interface StoredFile {
+  id: string;
+  name: string;
+  url: string;
 }
 
 export interface Option {
@@ -94,3 +110,14 @@ export type CompleteTableProducts = Awaited<
 export type TableProduct = typeof products.$inferSelect;
 
 export type TableProductsParams = z.infer<typeof searchProductParamsSchema>;
+
+// Types: Image
+export type ImageId = z.infer<typeof imageIdSchema>;
+export type CreateImageInput = z.infer<typeof insertImageSchema>;
+
+// This type infers the return from getImages() - meaning it will include any joins
+export type CompleteImage = Awaited<ReturnType<typeof getImageById>>;
+export type CompleteTableImages = Awaited<ReturnType<typeof getTableImages>>;
+export type TableImage = typeof images.$inferSelect;
+
+export type TableImageParams = z.infer<typeof searchImageParamsSchema>;

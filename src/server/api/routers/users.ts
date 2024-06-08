@@ -1,6 +1,6 @@
 import { genSaltSync, hashSync } from "bcrypt-ts";
 
-import { createUserSchema } from "~/schemas";
+import { createUserSchema } from "~/server/db/schema/users";
 import {
   createTRPCRouter,
   protectedProcedure,

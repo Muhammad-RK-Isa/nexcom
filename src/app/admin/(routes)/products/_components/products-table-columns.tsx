@@ -26,7 +26,7 @@ import { useRouter } from "next-nprogress-bar";
 import { toast } from "sonner";
 import { Icons } from "~/components/icons";
 import { Badge } from "~/components/ui/badge";
-import { productStatuses } from "~/schemas";
+import { productStatuses } from "~/server/db/schema";
 import { api } from "~/trpc/react";
 import { type TableProduct } from "~/types";
 import { getStatusIcon } from "../_lib/utils";

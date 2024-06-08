@@ -1,3 +1,5 @@
+import "server-only";
+
 import { and, eq, inArray, ne } from "drizzle-orm";
 
 import { db } from "~/server/db";
@@ -6,6 +8,7 @@ import {
   productOptions,
   productVariants,
   products,
+  productsImages,
   variantsOptionValues,
 } from "~/server/db/schema";
 import type {
@@ -40,6 +43,17 @@ export const createProduct = async (product: CreateProductInput) => {
         .returning();
 
       if (productRecord) {
+        product.images?.map(
+          async (image) =>
+            await tx.insert(productsImages).values({
+              imageId: image.id,
+              productId: productRecord.id,
+              isThumbnail:
+                product.images?.findIndex((i) => i.id === image.id) === 0,
+              rank: product.images?.findIndex((i) => i.id === image.id),
+            }),
+        );
+
         for (const option of product.options) {
           const [newOption] = await tx
             .insert(productOptions)
@@ -121,6 +135,18 @@ export const updateProduct = async (product: UpdateProductInput) => {
           options: true,
           variants: true,
         },
+      });
+      product.images?.map(async (image) => {
+        await tx
+          .delete(productsImages)
+          .where(eq(productsImages.productId, product.id));
+        await tx.insert(productsImages).values({
+          imageId: image.id,
+          productId: product.id,
+          isThumbnail:
+            product.images?.findIndex((i) => i.id === image.id) === 0,
+          rank: product.images?.findIndex((i) => i.id === image.id),
+        });
       });
 
       const optionValueRecords = await tx.query.productOptionValues.findMany({

@@ -1,8 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
-import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import { v1 as uuidv1, v4 as uuidv4 } from "uuid";
-import * as z from "zod";
 
 import { env } from "~/env";
 
@@ -161,21 +159,6 @@ export function isArrayOfFile(files: unknown): files is File[] {
 
 export function absoluteUrl(path: string) {
   return `${env.NEXT_PUBLIC_APP_URL}${path}`;
-}
-
-export function handleErrorMessage(err: unknown) {
-  if (err instanceof z.ZodError) {
-    const errors = err.issues.map((issue) => {
-      return issue.message;
-    });
-    return toast.error(errors.join("\n"));
-  } else if (err instanceof Error) {
-    return toast.error(err.message);
-  } else if (typeof err === "string") {
-    toast.error(err);
-  } else {
-    return toast.error("Something went wrong, please try again later.");
-  }
 }
 
 export function isMacOs() {

@@ -7,7 +7,7 @@ import { compare } from "bcrypt-ts";
 import { env } from "~/env";
 import { getUserByEmail } from "~/server/data/user";
 import { Paths } from "~/lib/constants";
-import { signInSchema } from "~/schemas";
+import { signInSchema } from "~/server/db/schema";
 import { drizzleAdapter } from "./adapter";
 import { db } from "./db";
 import { users } from "./db/schema";

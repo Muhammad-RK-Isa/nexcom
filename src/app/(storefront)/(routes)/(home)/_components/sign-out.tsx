@@ -3,7 +3,7 @@
 import React from "react";
 import { signOut } from "next-auth/react";
 
-import { Button } from "~/components/ui/button";
+import { buttonVariants } from "~/components/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,11 +15,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
+import { cn } from "~/lib/utils";
 
 export const SignOut = () => {
   return (
     <AlertDialog>
-      <AlertDialogTrigger>Sign out</AlertDialogTrigger>
+      <AlertDialogTrigger className={cn(buttonVariants({ variant: "link" }))}>
+        Sign out
+      </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
@@ -30,12 +33,13 @@ export const SignOut = () => {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction asChild>
-            <Button onClick={() => signOut()} variant={"destructive"}>
-              Confirm
-            </Button>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            className={cn(buttonVariants({ variant: "destructive" }))}
+            onClick={() => signOut()}
+          >
+            Confirm
           </AlertDialogAction>
-          <AlertDialogCancel>Close</AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

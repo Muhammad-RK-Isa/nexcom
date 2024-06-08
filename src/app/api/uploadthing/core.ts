@@ -5,7 +5,7 @@ import { currentUser } from "~/lib/auth/utils";
 const f = createUploadthing();
 
 export const ourFileRouter = {
-  authenticatedRoute: f({ image: { maxFileSize: "4MB" } })
+  authenticatedRoute: f({ image: { maxFileSize: "4MB", maxFileCount: 4 } })
     .middleware(async () => {
       const user = await currentUser();
       if (!user) throw new UploadThingError("Unauthenticated");
@@ -15,7 +15,7 @@ export const ourFileRouter = {
       console.log("✅ Upload completed");
       console.log("🔗 File url", file.url);
     }),
-  authorizedRoute: f({ image: { maxFileSize: "32MB" } })
+  authorizedRoute: f({ image: { maxFileSize: "8MB", maxFileCount: 32 } })
     .middleware(async () => {
       const user = await currentUser();
       if (!user) throw new UploadThingError("Unauthenticated");

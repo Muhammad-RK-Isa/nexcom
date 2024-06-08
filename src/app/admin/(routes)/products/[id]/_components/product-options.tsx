@@ -35,7 +35,7 @@ export const ProductOptions = () => {
   }, [inventoryQuantity, options, variantFields, replaceVariants, price]);
 
   return (
-    <div className="grid divide-y overflow-hidden rounded-md border">
+    <div className="grid divide-y rounded-md border">
       {options.length > 0 ? (
         <Sortable
           value={options}
@@ -45,10 +45,9 @@ export const ProductOptions = () => {
               rank: opts.findIndex((o) => o.id === option.id) + 1,
             }));
             form.setValue("options", newOptions);
-            updateVariants();
           }}
         >
-          <div className="grid divide-y">
+          <div className="grid divide-y overflow-hidden rounded-t-md">
             {options.map((option, idx) => (
               <ProductOption
                 key={option.id}
@@ -65,7 +64,7 @@ export const ProductOptions = () => {
       <Button
         type="button"
         variant={"link"}
-        className="rounded-none bg-muted/40 py-6"
+        className="rounded-t-none bg-muted/40 py-6"
         onClick={() => {
           const newOptionId = generateId({ prefix: "opt" });
           addOption({

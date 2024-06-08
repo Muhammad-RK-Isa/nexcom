@@ -19,7 +19,7 @@ import {
   updateProductSchema,
   updateProductStatusSchema,
   updateProductsStatusSchema,
-} from "~/schemas";
+} from "~/server/db/schema/products";
 import { adminProcedure, createTRPCRouter } from "~/server/api/trpc";
 
 export const productsRouter = createTRPCRouter({

@@ -42,7 +42,7 @@ import {
   productStatuses,
   sizeUnits,
   weightUnits,
-} from "~/schemas";
+} from "~/server/db/schema";
 import { api } from "~/trpc/react";
 import type {
   CompleteProduct,
@@ -51,6 +51,8 @@ import type {
 } from "~/types";
 import { getStatusIcon } from "../../_lib/utils";
 import { ProductVariants } from "./product-variants";
+import { ImageSelectModal } from "~/components/image-select-modal";
+import { Files } from "~/components/files";
 
 interface ProductFormMainProps {
   product?: CompleteProduct;
@@ -62,6 +64,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
   const editing = !!product?.id;
 
   const router = useRouter();
+  const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
 
   const form = useForm<UpdateProductInput>({
     resolver: zodResolver(insertProductSchema),
@@ -69,6 +72,13 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
       ? {
           ...product,
           options: product.options?.sort((a, b) => a.rank - b.rank),
+          images: product.images
+            ?.sort((a, b) => a.rank - b.rank)
+            .flatMap(({ id, name, url }) => ({
+              id,
+              name,
+              url,
+            })),
         }
       : {
           title: "",
@@ -92,6 +102,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
           status: "active",
           options: [],
           variants: [],
+          images: [],
         },
   });
 
@@ -244,6 +255,38 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                       </FormItem>
                     )}
                   />
+                  <FormField
+                    control={form.control}
+                    name="images"
+                    render={({ field }) => (
+                      <div className="space-y-6">
+                        <FormItem>
+                          <FormLabel>Images</FormLabel>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              type="button"
+                              onClick={() => setIsImageModalOpen(true)}
+                              className="w-full"
+                            >
+                              Select Images
+                            </Button>
+                          </FormControl>
+                          <FormMessage />
+                          {field.value && field.value.length > 0 ? (
+                            <Files files={field.value} />
+                          ) : null}
+                          <ImageSelectModal
+                            value={field.value ?? []}
+                            open={isImageModalOpen}
+                            onOpenChange={setIsImageModalOpen}
+                            onValueChange={field.onChange}
+                          />
+                        </FormItem>
+                      </div>
+                    )}
+                  />
                 </div>
               </CardContent>
             </Card>
@@ -342,9 +385,28 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                             onCheckedChange={field.onChange}
                           />
                         </FormControl>
-                        <FormLabel className="w-full p-4 pl-0">
+                        <FormLabel className="flex w-full items-center p-4 pl-0">
                           Manage inventory
                           <FormMessage />
+                          <HoverCard openDelay={100}>
+                            <HoverCardTrigger
+                              className={cn(
+                                buttonVariants({
+                                  variant: "secondary",
+                                  size: "icon",
+                                  className:
+                                    "ml-auto size-4 rounded-full text-xs text-muted-foreground",
+                                }),
+                              )}
+                            >
+                              {"?"}
+                            </HoverCardTrigger>
+                            <HoverCardContent className="text-xs">
+                              If checked the inventory will be managed
+                              automatically when a order is fulfilled or
+                              cancelled.
+                            </HoverCardContent>
+                          </HoverCard>
                         </FormLabel>
                       </FormItem>
                     )}
@@ -394,7 +456,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
               <CardContent>
                 <div className="grid gap-6 sm:grid-cols-2">
                   <div className="flex flex-col gap-2.5">
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-2.5">
                       <FormField
                         name={"weight.value"}
                         control={form.control}
@@ -449,7 +511,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                     ) : null}
                   </div>
                   <div className="gap2.5 flex flex-col">
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-2.5">
                       <FormField
                         name="height.value"
                         control={form.control}
@@ -507,7 +569,7 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
                     ) : null}
                   </div>
                   <div className="flex flex-col gap-2.5">
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-2.5">
                       <FormField
                         name="length.value"
                         control={form.control}
@@ -652,6 +714,9 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
               </CardContent>
             </Card>
           </div>
+          {form.formState.isValidating && (
+            <p className="text-lg">Validating...</p>
+          )}
         </div>
         <div className="ml-auto flex items-center gap-2 md:hidden">
           <Button

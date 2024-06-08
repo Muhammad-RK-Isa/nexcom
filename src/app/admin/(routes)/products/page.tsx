@@ -2,7 +2,7 @@ import React from "react";
 
 import { ProductsTableProvider } from "./_components/products-table-provider";
 import type { SearchParams } from "~/types";
-import { searchProductParamsSchema } from "~/schemas";
+import { searchProductParamsSchema } from "~/server/db/schema";
 import { DataTableSkeleton } from "~/components/skeletons/data-table-skeleton";
 import { ProductsTable } from "./_components/products-table";
 import { api } from "~/trpc/server";

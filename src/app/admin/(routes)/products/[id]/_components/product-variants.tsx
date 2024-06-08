@@ -68,6 +68,9 @@ export const ProductVariants = () => {
                               <FormControl>
                                 <Input
                                   {...field}
+                                  value={form.getValues(
+                                    `variants.${variantIndex}.price`,
+                                  )}
                                   type="number"
                                   inputMode="numeric"
                                   placeholder="Enter price"
@@ -89,6 +92,9 @@ export const ProductVariants = () => {
                               <FormControl>
                                 <Input
                                   {...field}
+                                  value={form.getValues(
+                                    `variants.${variantIndex}.inventoryQuantity`,
+                                  )}
                                   type="number"
                                   className={cn(
                                     "bg-background",

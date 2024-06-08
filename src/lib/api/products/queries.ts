@@ -1,3 +1,5 @@
+import "server-only";
+
 import { and, asc, count, desc, gte, lte, or, type SQL } from "drizzle-orm";
 import { filterColumn } from "~/lib/filter-column";
 
@@ -33,6 +35,11 @@ export const getProductById = async ({ id }: ProductId) => {
           },
         },
       },
+      productImages: {
+        with: {
+          image: true,
+        },
+      },
     },
   });
 
@@ -52,6 +59,12 @@ export const getProductById = async ({ id }: ProductId) => {
       values: opt.values.sort((a, b) => a.rank - b.rank),
     }));
 
+  const images = product?.productImages.map(({ image, rank, isThumbnail }) => ({
+    rank,
+    isThumbnail,
+    ...image,
+  }));
+
   return {
     ...product,
     weight: {
@@ -68,6 +81,7 @@ export const getProductById = async ({ id }: ProductId) => {
     },
     variants,
     options,
+    images,
   };
 };
 

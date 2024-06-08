@@ -20,7 +20,7 @@ import {
   FormLabel,
 } from "~/components/ui/form";
 import { DEFAULT_LOGIN_REDIRECT } from "~/routes";
-import { signInSchema } from "~/schemas";
+import { signInSchema } from "~/server/db/schema";
 import type { SignInInput } from "~/types";
 
 export const SignInForm = () => {

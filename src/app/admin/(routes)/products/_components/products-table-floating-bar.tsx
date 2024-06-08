@@ -20,7 +20,7 @@ import {
 } from "~/components/ui/tooltip";
 import { Kbd } from "~/components/kbd";
 import type { TableProduct } from "~/types";
-import { productStatuses } from "~/schemas";
+import { productStatuses } from "~/server/db/schema";
 import { api } from "~/trpc/react";
 import { useRouter } from "next-nprogress-bar";
 import { Icons } from "~/components/icons";
