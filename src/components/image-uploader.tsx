@@ -11,11 +11,8 @@ import { toast } from "sonner";
 import { Icons } from "~/components/icons";
 import { Button } from "~/components/ui/button";
 import { Progress } from "~/components/ui/progress";
-import { ScrollArea } from "~/components/ui/scroll-area";
-import { getErrorMessage } from "~/lib/handle-error";
 import { useControllableState } from "~/lib/hooks/use-controllable-state";
 import { cn, formatBytes } from "~/lib/utils";
-import { FileUploadStatus } from "./file-upload-status";
 
 interface ImageUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -114,13 +111,11 @@ export function ImageUploader(props: ImageUploaderProps) {
     value: valueProp,
     onValueChange,
     onUpload,
-    progresses,
     accept = { "image/*": [] },
     maxSize = 1024 * 1024 * 4,
     maxFiles = 1,
     multiple = false,
     disabled = false,
-    showProgress = true,
     className,
     ...dropzoneProps
   } = props;
@@ -179,12 +174,12 @@ export function ImageUploader(props: ImageUploaderProps) {
     [files, maxFiles, multiple, onUpload, setFiles],
   );
 
-  function onRemove(index: number) {
-    if (!files) return;
-    const newFiles = files.filter((_, i) => i !== index);
-    setFiles(newFiles);
-    onValueChange?.(newFiles);
-  }
+  // function onRemove(index: number) {
+  //   if (!files) return;
+  //   const newFiles = files.filter((_, i) => i !== index);
+  //   setFiles(newFiles);
+  //   onValueChange?.(newFiles);
+  // }
 
   // Revoke preview url when component unmounts
   React.useEffect(() => {
@@ -216,7 +211,7 @@ export function ImageUploader(props: ImageUploaderProps) {
             {...getRootProps()}
             className={cn(
               "group relative grid h-52 w-full cursor-pointer place-items-center rounded-lg border-2 border-dashed border-muted-foreground/25 px-5 py-2.5 text-center transition hover:bg-muted/25",
-              "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+              "focus-visible:border-primary focus-visible:outline-none",
               isDragActive &&
                 "animate-rotate-border border-muted-foreground/50",
               isDisabled && "pointer-events-none opacity-60",

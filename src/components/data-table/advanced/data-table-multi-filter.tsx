@@ -1,9 +1,3 @@
-import {
-  CopyIcon,
-  DotsHorizontalIcon,
-  TextAlignCenterIcon,
-  TrashIcon,
-} from "@radix-ui/react-icons";
 import type { Table } from "@tanstack/react-table";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
@@ -35,6 +29,7 @@ import { dataTableConfig, type DataTableConfig } from "~/config/data-table";
 import { useDebounce } from "~/lib/hooks/use-debounce";
 
 import { DataTableFacetedFilter } from "../data-table-faceted-filter";
+import { Icons } from "~/components/icons";
 
 interface DataTableMultiFilterProps<TData> {
   table: Table<TData>;
@@ -66,7 +61,7 @@ export function DataTableMultiFilter<TData>({
           size="sm"
           className="h-7 truncate rounded-full"
         >
-          <TextAlignCenterIcon className="mr-2 size-3" aria-hidden="true" />
+          <Icons.alignCenter className="mr-2 size-3" aria-hidden="true" />
           {options.length} rule
         </Button>
       </PopoverTrigger>
@@ -327,7 +322,7 @@ export function MultiFilterRow<TData>({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="size-8 shrink-0">
-            <DotsHorizontalIcon className="size-4" aria-hidden="true" />
+            <Icons.ellipsisHorizontal className="size-4" aria-hidden="true" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
@@ -338,7 +333,7 @@ export function MultiFilterRow<TData>({
               );
             }}
           >
-            <TrashIcon className="mr-2 size-4" aria-hidden="true" />
+            <Icons.trash className="mr-2 size-4" aria-hidden="true" />
             Remove
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -357,7 +352,7 @@ export function MultiFilterRow<TData>({
               ]);
             }}
           >
-            <CopyIcon className="mr-2 size-4" aria-hidden="true" />
+            <Icons.copy className="mr-2 size-4" aria-hidden="true" />
             Duplicate
           </DropdownMenuItem>
         </DropdownMenuContent>

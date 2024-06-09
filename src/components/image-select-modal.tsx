@@ -91,33 +91,48 @@ export const ImageSelectModal: React.FC<ImageSelectModalProps> = ({
           Select Images
         </DialogTrigger>
       ) : null}
-      <DialogContent className="flex min-h-[80vh] max-w-screen-lg flex-col space-y-4 md:max-w-screen-lg lg:max-w-screen-lg">
-        <DialogHeader>
-          <DialogTitle>Select Images</DialogTitle>
-        </DialogHeader>
-        <div className="relative flex h-full flex-1 flex-col gap-4">
-          <ImageUploader
-            maxFiles={32}
-            maxSize={8 * 1024 * 1024}
-            progresses={progresses}
-            disabled={isUploading}
-            onUpload={uploadFiles}
-            className="h-40 text-sm"
-          />
-          <Images
-            files={uploadedFiles}
-            selectedImages={selectedImages}
-            setSelectedImages={setSelectedImages}
-          />
-          <div className="-mx-6 mt-auto flex items-center justify-center space-x-2 border-t px-6 pt-4">
+      <DialogContent className="flex flex-col gap-4 p-0 sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg">
+        <div className="flex flex-col space-y-4 p-4 lg:p-6">
+          <DialogHeader>
+            <DialogTitle>Select Images</DialogTitle>
+          </DialogHeader>
+        </div>
+        <div className="flex h-full flex-1 flex-col gap-4">
+          <div className="flex flex-col space-y-4 p-4 lg:p-6">
+            <ImageUploader
+              maxFiles={32}
+              maxSize={8 * 1024 * 1024}
+              progresses={progresses}
+              disabled={isUploading}
+              onUpload={uploadFiles}
+              className="h-40 text-sm"
+            />
+            <Images
+              files={uploadedFiles}
+              selectedImages={selectedImages}
+              setSelectedImages={setSelectedImages}
+            />
+          </div>
+          <div className="mt-auto flex w-full items-center space-x-2 border-t p-4 lg:p-6">
+            {selectedImages.length > 0 ? (
+              <Button
+                onClick={() => setSelectedImages([])}
+                variant="ghost"
+                size="sm"
+                className="mr-auto"
+              >
+                Unselect {selectedImages.length}{" "}
+                {selectedImages.length > 1 ? "images" : "image"}
+              </Button>
+            ) : null}
             <Button
               type="button"
               variant="outline"
               size={"sm"}
-              className="ml-auto"
               onClick={() => {
                 onOpenChange(false);
               }}
+              className="ml-auto"
             >
               Cancel
             </Button>
@@ -169,7 +184,7 @@ export function Images({
               {files.map((file) => (
                 <div
                   key={file.id}
-                  className="group flex flex-col space-y-2 rounded-md border bg-secondary p-4 transition-colors hover:bg-secondary/80 dark:bg-secondary/40"
+                  className="group flex flex-col items-center space-y-2 rounded-md border bg-secondary p-4 transition-colors hover:bg-secondary/80 dark:bg-secondary/40"
                   onClick={() => handleSelect(file)}
                 >
                   <div className="relative size-28 rounded-md shadow-sm drop-shadow-sm">
@@ -185,15 +200,15 @@ export function Images({
                       checked={!!selectedImages.find((f) => f.id === file.id)}
                       onChange={() => handleSelect(file)}
                       className={cn(
-                        "absolute left-2 top-2 z-20 data-[state=checked]:bg-background data-[state=checked]:text-foreground dark:border-background",
+                        "absolute left-2 top-2 z-20 dark:border-background data-[state=checked]:dark:bg-background data-[state=checked]:dark:text-foreground",
                         selectedImages.find((f) => f.id === file.id)
                           ? "opacity-100"
                           : "opacity-0 group-hover:opacity-100",
                       )}
                     />
-                    <div className="absolute inset-y-0 z-10 size-full rounded-md bg-[#09090b] bg-opacity-0 transition-all duration-150 group-hover:bg-opacity-40" />
+                    <div className="absolute inset-y-0 z-10 size-full rounded-md bg-[#09090b] bg-opacity-0 transition-all duration-150 group-hover:md:bg-opacity-40" />
                   </div>
-                  <div className="line-clamp-2 break-all text-center text-xs">
+                  <div className="line-clamp-2 cursor-default break-all text-center text-xs">
                     {file.name}
                   </div>
                 </div>

@@ -46,6 +46,9 @@ export const ProductOptions = () => {
             }));
             form.setValue("options", newOptions);
           }}
+          overlay={
+            <div className="h-[102px] w-full rounded-md border bg-secondary/40 shadow-sm drop-shadow-sm backdrop-blur-sm" />
+          }
         >
           <div className="grid divide-y overflow-hidden rounded-t-md">
             {options.map((option, idx) => (

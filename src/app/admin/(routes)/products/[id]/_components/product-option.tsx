@@ -48,11 +48,7 @@ export const ProductOption: React.FC<ProductOptionProps> = ({
   };
 
   return (
-    <SortableItem
-      value={optionId}
-      onDragStart={() => setIsExpanded(false)}
-      asChild
-    >
+    <SortableItem value={optionId} asChild>
       <div
         className={cn(
           "flex gap-4 overflow-auto bg-background p-6 pl-4",

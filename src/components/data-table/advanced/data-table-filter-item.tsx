@@ -1,4 +1,3 @@
-import { TrashIcon } from "@radix-ui/react-icons";
 import type { Table } from "@tanstack/react-table";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
@@ -24,6 +23,7 @@ import { useDebounce } from "~/lib/hooks/use-debounce";
 import { cn } from "~/lib/utils";
 
 import { DataTableAdvancedFacetedFilter } from "./data-table-advanced-faceted-filter";
+import { Icons } from "~/components/icons";
 
 interface DataTableFilterItemProps<TData> {
   table: Table<TData>;
@@ -192,7 +192,7 @@ export function DataTableFilterItem<TData>({
               router.push(`${pathname}?${newSearchParams}`);
             }}
           >
-            <TrashIcon className="size-4" aria-hidden="true" />
+            <Icons.trash className="size-4" aria-hidden="true" />
           </Button>
         </div>
         {selectedOption.options.length > 0 ? (
