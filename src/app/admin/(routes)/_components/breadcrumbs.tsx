@@ -23,7 +23,10 @@ export const Breadcrumbs = () => {
         {segments.map((segment, idx) => {
           const newSegment = segment.startsWith("product_")
             ? "Edit product"
-            : segment;
+            : segment.startsWith("admin")
+              ? null
+              : segment;
+          if (!newSegment) return null;
           return (
             <React.Fragment key={idx}>
               <BreadcrumbItem>

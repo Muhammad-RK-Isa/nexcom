@@ -8,9 +8,9 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { generateId } from "~/lib/utils";
-import { products } from "./products";
-import { productsImages } from "./products-images";
 import { variantsOptionValues } from "./variants-option-values";
+import { products } from "./products";
+import { images } from "./images";
 
 export const productVariants = pgTable("product_variants", {
   id: varchar("id", { length: 255 })
@@ -24,12 +24,9 @@ export const productVariants = pgTable("product_variants", {
   productId: varchar("product_id", { length: 255 })
     .notNull()
     .references(() => products.id, { onDelete: "cascade" }),
-  productImageId: varchar("product_image_id", { length: 255 }).references(
-    () => products.id,
-    {
-      onDelete: "set null",
-    },
-  ),
+  imageId: varchar("image_id", { length: 255 }).references(() => images.id, {
+    onDelete: "set null",
+  }),
 });
 
 export const variantsRelations = relations(
@@ -39,9 +36,9 @@ export const variantsRelations = relations(
       fields: [productVariants.productId],
       references: [products.id],
     }),
-    productImage: one(productsImages, {
-      fields: [productVariants.productImageId],
-      references: [productsImages.id],
+    image: one(images, {
+      fields: [productVariants.imageId],
+      references: [images.id],
     }),
     variantsOptionValues: many(variantsOptionValues),
   }),

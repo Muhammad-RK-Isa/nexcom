@@ -8,6 +8,21 @@ import {
 } from "~/lib/api/products/queries";
 
 import type {
+  imageIdSchema,
+  imageSchema,
+  insertImageSchema,
+  insertProductSchema,
+  optionValueSchema,
+  productIdSchema,
+  productOptionSchema,
+  productVariantSchema,
+  searchImageParamsSchema,
+  searchProductParamsSchema,
+  updateProductSchema,
+  updateProductStatusSchema,
+  updateProductsStatusSchema,
+} from "~/schema";
+import type {
   createUserSchema,
   forgotPasswordSchema,
   otpSchema,
@@ -15,20 +30,6 @@ import type {
   resetPasswordSchema,
   signInSchema,
 } from "~/server/db/schema/users";
-import type {
-  insertProductSchema,
-  optionValueSchema,
-  productIdSchema,
-  productOptionSchema,
-  productVariantSchema,
-  searchProductParamsSchema,
-  updateProductSchema,
-  updateProductStatusSchema,
-  updateProductsStatusSchema,
-  imageIdSchema,
-  insertImageSchema,
-  searchImageParamsSchema,
-} from "~/server/db/schema";
 
 import type { UserRole, images, products, users } from "~/server/db/schema";
 
@@ -38,11 +39,7 @@ export interface SearchParams {
 
 export interface UploadedFile<T = unknown> extends ClientUploadedFileData<T> {}
 
-export interface StoredFile {
-  id: string;
-  name: string;
-  url: string;
-}
+export type Image = z.infer<typeof imageSchema>;
 
 export interface Option {
   label: string;

@@ -8,6 +8,9 @@ import { Input } from "~/components/ui/input";
 import { cn } from "~/lib/utils";
 import { Badge } from "~/components/ui/badge";
 import { ProductOptions } from "./product-options";
+import { ImageSelectModal } from "~/components/image-select-modal";
+import Image from "next/image";
+import { Icons } from "~/components/icons";
 
 export const ProductVariants = () => {
   const form = useFormContext<UpdateProductInput>();
@@ -44,8 +47,44 @@ export const ProductVariants = () => {
                     return (
                       <div
                         key={variantIndex}
-                        className="grid gap-4 p-6 md:grid-cols-4"
+                        className="grid gap-4 p-6 md:grid-cols-5"
                       >
+                        <FormField
+                          control={form.control}
+                          name={`variants.${variantIndex}.image`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <ImageSelectModal
+                                  onValueChange={(images) =>
+                                    field.onChange(images[0])
+                                  }
+                                  value={field.value ? [field.value] : []}
+                                  multiple={false}
+                                  trigger={
+                                    <button
+                                      type="button"
+                                      className="relative flex size-12 items-center justify-center rounded-md border border-dashed border-primary/40 p-px text-muted-foreground hover:border-primary"
+                                    >
+                                      {field.value ? (
+                                        <div className="relative size-full">
+                                          <Image
+                                            src={field.value.url}
+                                            alt={field.value.name}
+                                            fill
+                                            className="rounded-md object-cover"
+                                          />
+                                        </div>
+                                      ) : (
+                                        <Icons.imagePlus className="size-6" />
+                                      )}
+                                    </button>
+                                  }
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
                         <div className="col-span-2 flex flex-wrap items-center gap-1.5">
                           {optionValues?.map(({ value }, idx) => {
                             if (value)

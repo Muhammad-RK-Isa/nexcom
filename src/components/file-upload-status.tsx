@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import React from "react";
 
 import { cn } from "~/lib/utils";
-import type { StoredFile } from "~/types";
+import type { Image } from "~/types";
 import { Icons } from "./icons";
 import { FileCard } from "./image-uploader";
 import { Button } from "./ui/button";
@@ -15,7 +15,7 @@ interface ploadStatusProps {
   className?: string;
   progresses?: Record<string, number>;
   isUploadFinished?: boolean;
-  uploadedFiles?: StoredFile[];
+  uploadedFiles?: Image[];
 }
 
 export const FileUploadStatus: React.FC<ploadStatusProps> = ({

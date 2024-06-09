@@ -64,6 +64,7 @@ export const generateVariants = ({
       price: ev?.price ?? price ?? 0,
       inventoryQuantity: ev?.inventoryQuantity ?? inventoryQuantity ?? 0,
       optionValues,
+      image: ev?.image ?? null,
     };
   });
 };

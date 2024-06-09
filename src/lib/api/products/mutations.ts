@@ -81,8 +81,8 @@ export const createProduct = async (product: CreateProductInput) => {
               id: variant.id,
               price: variant.price,
               inventoryQuantity: variant.inventoryQuantity,
-              productImageId: variant.productImageId,
               productId: productRecord.id,
+              imageId: variant.image?.id,
             })
             .returning();
 
@@ -202,7 +202,7 @@ export const updateProduct = async (product: UpdateProductInput) => {
               .set({
                 price: variant.price,
                 inventoryQuantity: variant.inventoryQuantity,
-                productImageId: variant.productImageId,
+                imageId: variant.image?.id,
                 productId: variant.productId,
               })
               .where(eq(productVariants.id, variant.id!));
@@ -256,7 +256,7 @@ export const updateProduct = async (product: UpdateProductInput) => {
               id: variant.id,
               price: variant.price,
               inventoryQuantity: variant.inventoryQuantity,
-              productImageId: variant.productImageId,
+              imageId: variant.image?.id,
               productId: productRecord.id,
             })
             .returning();

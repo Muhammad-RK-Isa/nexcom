@@ -11,7 +11,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 
-import { Breadcrumbs } from "~/components/breadcrumbs";
+import { Breadcrumbs } from "./breadcrumbs";
 import { currentUser } from "~/lib/auth/utils";
 import { AdminMobileSidebar } from "./mobile-sidebar";
 import { DropdownItemLogout } from "./dropdown-item-logout";

@@ -33,6 +33,7 @@ export const getProductById = async ({ id }: ProductId) => {
               optionValue: true,
             },
           },
+          image: true,
         },
       },
       productImages: {

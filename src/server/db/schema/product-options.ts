@@ -8,7 +8,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { generateId } from "~/lib/utils";
-import { productOptionValues } from "./product-option-values";
+import { productOptionValues } from ".";
 import { products } from "./products";
 
 export const productOptions = pgTable("product_options", {

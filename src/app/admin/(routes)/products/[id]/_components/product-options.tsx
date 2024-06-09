@@ -31,6 +31,7 @@ export const ProductOptions = () => {
       price,
       inventoryQuantity,
     });
+    replaceVariants([]);
     replaceVariants(newVariants);
   }, [inventoryQuantity, options, variantFields, replaceVariants, price]);
 

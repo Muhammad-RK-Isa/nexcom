@@ -4,7 +4,6 @@ import { boolean, integer, pgTable, varchar } from "drizzle-orm/pg-core";
 import { products } from "./products";
 import { images } from "./images";
 import { generateId } from "~/lib/utils";
-import { productVariants } from "./product-variants";
 
 export const productsImages = pgTable("products_images", {
   id: varchar("id", { length: 255 })
@@ -21,17 +20,13 @@ export const productsImages = pgTable("products_images", {
   rank: integer("rank").notNull().default(0),
 });
 
-export const productsImagesRelations = relations(
-  productsImages,
-  ({ one, many }) => ({
-    product: one(products, {
-      fields: [productsImages.productId],
-      references: [products.id],
-    }),
-    image: one(images, {
-      fields: [productsImages.imageId],
-      references: [images.id],
-    }),
-    variants: many(productVariants),
+export const productsImagesRelations = relations(productsImages, ({ one }) => ({
+  product: one(products, {
+    fields: [productsImages.productId],
+    references: [products.id],
   }),
-);
+  image: one(images, {
+    fields: [productsImages.imageId],
+    references: [images.id],
+  }),
+}));

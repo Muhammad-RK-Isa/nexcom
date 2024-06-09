@@ -21,6 +21,7 @@ export const ProductFormSkeleton = () => {
                 <InputLableSkeleton />
                 <InputLableSkeleton />
                 <InputLableSkeleton variant={"textarea"} />
+                <InputLableSkeleton />
               </div>
             </CardContent>
           </Card>

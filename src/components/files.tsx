@@ -1,6 +1,8 @@
-import Image from "next/image";
-import type { StoredFile } from "~/types";
+import NextImage from "next/image";
 
+import type { Image } from "~/types";
+
+import { EmptyCard } from "~/components/empty-card";
 import {
   Card,
   CardContent,
@@ -9,10 +11,9 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
-import { EmptyCard } from "~/components/empty-card";
 
 interface FilesProps {
-  files: StoredFile[];
+  files: Image[];
 }
 
 export function Files({ files }: FilesProps) {
@@ -28,7 +29,7 @@ export function Files({ files }: FilesProps) {
             <div className="flex w-max space-x-2.5">
               {files.map((file) => (
                 <div key={file.id} className="relative size-44">
-                  <Image
+                  <NextImage
                     src={file.url}
                     alt={file.name}
                     fill

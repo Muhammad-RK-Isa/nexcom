@@ -26,7 +26,7 @@ import { useRouter } from "next-nprogress-bar";
 import { toast } from "sonner";
 import { Icons } from "~/components/icons";
 import { Badge } from "~/components/ui/badge";
-import { productStatuses } from "~/server/db/schema";
+import { productStatuses } from "~/schema";
 import { api } from "~/trpc/react";
 import { type TableProduct } from "~/types";
 import { getStatusIcon } from "../_lib/utils";
@@ -197,6 +197,7 @@ export function getColumns(): ColumnDef<TableProduct>[] {
                   }
                 >
                   Edit
+                  <Icons.edit className="ml-auto size-4" aria-hidden="true" />
                 </DropdownMenuItem>
                 <DropdownMenuSub>
                   <DropdownMenuSubTrigger>Status</DropdownMenuSubTrigger>
@@ -206,6 +207,7 @@ export function getColumns(): ColumnDef<TableProduct>[] {
                         value={row.original.status}
                         onValueChange={(value) => {
                           const status = productStatuses.parse(value);
+                          if (row.original.status === status) return;
                           updateProductStatus({ id: row.original.id, status });
                         }}
                       >
@@ -219,7 +221,7 @@ export function getColumns(): ColumnDef<TableProduct>[] {
                             >
                               {status}
                               {isUpdating ? (
-                                <Icons.spinner className="ml-2 size-5" />
+                                <Icons.spinner className="ml-2 size-4" />
                               ) : null}
                             </DropdownMenuRadioItem>
                           ),
@@ -233,6 +235,7 @@ export function getColumns(): ColumnDef<TableProduct>[] {
                   onSelect={() => setShowDeleteProductAlertDialog(true)}
                 >
                   Delete
+                  <Icons.trash className="ml-auto size-4" aria-hidden="true" />
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

@@ -90,6 +90,7 @@ export const ProductOption: React.FC<ProductOptionProps> = ({
                             options: newOpts,
                             existingVariants: variants,
                           });
+                          form.setValue("variants", []);
                           form.setValue("variants", newVars);
                         }}
                         className="absolute right-0 top-0"

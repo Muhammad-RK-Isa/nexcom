@@ -1,11 +1,11 @@
 import * as React from "react";
-import type { StoredFile } from "~/types";
 import { toast } from "sonner";
 import type { UploadFilesOptions } from "uploadthing/types";
+import type { Image } from "~/types";
 
-import { uploadFiles } from "~/lib/uploadthing";
 import { type OurFileRouter } from "~/app/api/uploadthing/core";
 import { getErrorMessage } from "~/lib/handle-error";
+import { uploadFiles } from "~/lib/uploadthing";
 import { api } from "~/trpc/react";
 
 interface UseUploadFileProps
@@ -13,7 +13,7 @@ interface UseUploadFileProps
     UploadFilesOptions<OurFileRouter, keyof OurFileRouter>,
     "headers" | "onUploadBegin" | "onUploadProgress" | "skipPolling"
   > {
-  defaultUploadedFiles?: StoredFile[];
+  defaultUploadedFiles?: Image[];
 }
 
 export function useUploadFile(
@@ -21,7 +21,7 @@ export function useUploadFile(
   { defaultUploadedFiles = [], ...props }: UseUploadFileProps = {},
 ) {
   const [uploadedFiles, setUploadedFiles] =
-    React.useState<StoredFile[]>(defaultUploadedFiles);
+    React.useState<Image[]>(defaultUploadedFiles);
   const [progresses, setProgresses] = React.useState<Record<string, number>>(
     {},
   );
@@ -45,7 +45,7 @@ export function useUploadFile(
         },
       });
 
-      const formattedRes: StoredFile[] = res.map((file) => {
+      const formattedRes: Image[] = res.map((file) => {
         return {
           id: file.key,
           name: file.name,

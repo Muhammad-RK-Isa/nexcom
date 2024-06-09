@@ -42,7 +42,7 @@ import {
   productStatuses,
   sizeUnits,
   weightUnits,
-} from "~/server/db/schema";
+} from "~/schema";
 import { api } from "~/trpc/react";
 import type {
   CompleteProduct,

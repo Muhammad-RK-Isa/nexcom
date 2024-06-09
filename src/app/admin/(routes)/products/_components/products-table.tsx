@@ -12,7 +12,7 @@ import { DataTable } from "~/components/data-table/data-table";
 import { DataTableToolbar } from "~/components/data-table/data-table-toolbar";
 import { useDataTable } from "~/lib/hooks/use-data-table";
 
-import { productStatuses } from "~/server/db/schema";
+import { productStatuses } from "~/schema";
 import { getStatusIcon } from "../_lib/utils";
 import { getColumns } from "./products-table-columns";
 import { ProductsTableFloatingBar } from "./products-table-floating-bar";

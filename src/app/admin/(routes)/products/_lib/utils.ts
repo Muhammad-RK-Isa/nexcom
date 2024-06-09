@@ -1,5 +1,5 @@
 import { Icons } from "~/components/icons";
-import { productStatuses } from "~/server/db/schema";
+import { productStatuses } from "~/schema";
 import type { TableProduct } from "~/types";
 
 /**

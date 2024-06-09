@@ -62,9 +62,9 @@ export function DeleteProductsAlertDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will move{" "}
+            This action cannot be undone. This will delete{" "}
             <span className="font-medium">{products.length}</span>
-            {products.length === 1 ? " product" : " products"} to the trash.
+            {products.length === 1 ? " product" : " products"} permanently.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="gap-2 sm:space-x-0">
