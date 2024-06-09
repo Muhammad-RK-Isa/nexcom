@@ -12,7 +12,7 @@ import { SignUpForm } from "./_components/sign-up-form";
 import { SignUpFormSkeleton } from "./_components/sign-up-form-skeleton";
 
 export const metadata = {
-  title: "Sign Up for Next Commerce",
+  title: `Sign Up - ${APP_TITLE}`,
   description: "Sign Up Page",
 };
 

@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-
 import Image from "next/image";
+
 import {
   Dialog,
   DialogContent,
@@ -14,17 +14,12 @@ import { useUploadFile } from "~/lib/hooks/use-upload-files";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import type { StoredFile, TableImageParams } from "~/types";
-import { EmptyCard } from "./empty-card";
+import { EmptyCard } from "~/components/empty-card";
 import { ImageUploader } from "./image-uploader";
-import { Button, buttonVariants } from "./ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
-import { Checkbox } from "./ui/checkbox";
+import { Button, buttonVariants } from "~/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { Checkbox } from "~/components/ui/checkbox";
+import { ScrollArea } from "~/components/ui/scroll-area";
 
 interface ImageSelectModalProps {
   open?: boolean;
@@ -43,7 +38,7 @@ export const ImageSelectModal: React.FC<ImageSelectModalProps> = ({
     React.useState<StoredFile[]>(value);
   const [searchParams, setSearchParams] = React.useState<TableImageParams>({
     page: 1,
-    per_page: 10,
+    per_page: 50,
     sort: "",
     name: "",
     from: "",
@@ -109,13 +104,11 @@ export const ImageSelectModal: React.FC<ImageSelectModalProps> = ({
             onUpload={uploadFiles}
             className="h-40 text-sm"
           />
-          {uploadedFiles?.length > 0 ? (
-            <Images
-              files={uploadedFiles}
-              selectedImages={selectedImages}
-              setSelectedImages={setSelectedImages}
-            />
-          ) : null}
+          <Images
+            files={uploadedFiles}
+            selectedImages={selectedImages}
+            setSelectedImages={setSelectedImages}
+          />
           <div className="-mx-6 mt-auto flex items-center justify-center space-x-2 border-t px-6 pt-4">
             <Button
               type="button"
@@ -168,44 +161,45 @@ export function Images({
     <Card>
       <CardHeader>
         <CardTitle>Uploaded files</CardTitle>
-        <CardDescription>View the uploaded files here</CardDescription>
       </CardHeader>
       <CardContent>
         {files.length > 0 ? (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {files.map((file) => (
-              <div
-                key={file.id}
-                className="group flex flex-col space-y-2 rounded-md border bg-secondary p-4 transition-colors hover:bg-secondary/80"
-                onClick={() => handleSelect(file)}
-              >
-                <div className="relative size-28 rounded-md shadow-sm drop-shadow-sm">
-                  <Image
-                    src={file.url}
-                    alt={file.name}
-                    fill
-                    sizes="(min-width: 640px) 640px, 100vw"
-                    loading="lazy"
-                    className="rounded-md object-cover"
-                  />
-                  <Checkbox
-                    checked={!!selectedImages.find((f) => f.id === file.id)}
-                    onChange={() => handleSelect(file)}
-                    className={cn(
-                      "absolute left-2 top-2 z-20",
-                      selectedImages.find((f) => f.id === file.id)
-                        ? "opacity-100"
-                        : "opacity-0 group-hover:opacity-100",
-                    )}
-                  />
-                  <div className="absolute inset-y-0 z-10 size-full rounded-md bg-[#09090b] bg-opacity-0 transition-all duration-150 group-hover:bg-opacity-40" />
+          <ScrollArea className="h-fit">
+            <div className="grid h-full max-h-[40vh] grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+              {files.map((file) => (
+                <div
+                  key={file.id}
+                  className="group flex flex-col space-y-2 rounded-md border bg-secondary p-4 transition-colors hover:bg-secondary/80 dark:bg-secondary/40"
+                  onClick={() => handleSelect(file)}
+                >
+                  <div className="relative size-28 rounded-md shadow-sm drop-shadow-sm">
+                    <Image
+                      src={file.url}
+                      alt={file.name}
+                      fill
+                      sizes="(min-width: 640px) 640px, 100vw"
+                      loading="lazy"
+                      className="rounded-md object-cover"
+                    />
+                    <Checkbox
+                      checked={!!selectedImages.find((f) => f.id === file.id)}
+                      onChange={() => handleSelect(file)}
+                      className={cn(
+                        "absolute left-2 top-2 z-20 data-[state=checked]:bg-background data-[state=checked]:text-foreground dark:border-background",
+                        selectedImages.find((f) => f.id === file.id)
+                          ? "opacity-100"
+                          : "opacity-0 group-hover:opacity-100",
+                      )}
+                    />
+                    <div className="absolute inset-y-0 z-10 size-full rounded-md bg-[#09090b] bg-opacity-0 transition-all duration-150 group-hover:bg-opacity-40" />
+                  </div>
+                  <div className="line-clamp-2 break-all text-center text-xs">
+                    {file.name}
+                  </div>
                 </div>
-                <div className="line-clamp-2 break-all text-center text-xs">
-                  {file.name}
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </ScrollArea>
         ) : (
           <EmptyCard
             title="No files uploaded"

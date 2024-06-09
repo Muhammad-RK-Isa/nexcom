@@ -12,7 +12,7 @@ import { SignInForm } from "./_components/sign-in-form";
 import { SignInFormSkeleton } from "./_components/sign-in-form-skeleton";
 
 export const metadata = {
-  title: "Sign In to Next Commerce",
+  title: `Sign In - ${APP_TITLE}`,
   description: "Sign In Page",
 };
 

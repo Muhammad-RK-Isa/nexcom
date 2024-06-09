@@ -15,6 +15,7 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 import { getErrorMessage } from "~/lib/handle-error";
 import { useControllableState } from "~/lib/hooks/use-controllable-state";
 import { cn, formatBytes } from "~/lib/utils";
+import { FileUploadStatus } from "./file-upload-status";
 
 interface ImageUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -165,26 +166,17 @@ export function ImageUploader(props: ImageUploaderProps) {
         const target =
           updatedFiles.length > 0 ? `${updatedFiles.length} files` : `file`;
 
-        if (showProgress) {
-          toast.promise(onUpload(updatedFiles), {
-            loading: `Uploading ${target}`,
-            success: () => {
-              setFiles([]);
-              return `${target} uploaded`;
-            },
-            error: `Failed to upload ${target}`,
-          });
-        } else {
-          try {
-            await onUpload(updatedFiles);
+        toast.promise(onUpload(updatedFiles), {
+          loading: `Uploading ${target}`,
+          success: () => {
             setFiles([]);
-          } catch (error) {
-            toast.error(getErrorMessage(error));
-          }
-        }
+            return `${target} uploaded`;
+          },
+          error: `Failed to upload ${target}`,
+        });
       }
     },
-    [files, maxFiles, multiple, onUpload, setFiles, showProgress],
+    [files, maxFiles, multiple, onUpload, setFiles],
   );
 
   function onRemove(index: number) {
@@ -270,20 +262,6 @@ export function ImageUploader(props: ImageUploaderProps) {
           </div>
         )}
       </Dropzone>
-      {showProgress && files?.length ? (
-        <ScrollArea className="h-fit w-full px-3">
-          <div className="max-h-48 space-y-4">
-            {files?.map((file, index) => (
-              <FileCard
-                key={index}
-                file={file}
-                onRemove={() => onRemove(index)}
-                progress={progresses?.[file.name]}
-              />
-            ))}
-          </div>
-        </ScrollArea>
-      ) : null}
     </div>
   );
 }

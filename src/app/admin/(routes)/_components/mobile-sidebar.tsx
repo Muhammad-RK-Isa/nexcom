@@ -35,7 +35,7 @@ export const AdminMobileSidebar = () => {
       </SheetTrigger>
       <SheetContent
         side="left"
-        className="flex h-full flex-col justify-between sm:max-w-xs"
+        className="flex h-full flex-col justify-between border-r-border/40 bg-background dark:bg-card sm:max-w-xs"
       >
         <nav className="grid gap-4">
           <SheetClose asChild>

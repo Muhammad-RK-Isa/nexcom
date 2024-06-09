@@ -5,7 +5,7 @@ const StorefrontRoutesLayout = ({ children }: React.PropsWithChildren) => {
   return (
     <div className="relative flex min-h-screen w-full flex-col">
       <div className="border-b py-2 text-center text-xs tracking-wider text-muted-foreground">
-        Peace be upon you السلام عليكم
+        Peace be upon on you السلام عليكم
       </div>
       {children}
       <Footer className="absolute bottom-0" />

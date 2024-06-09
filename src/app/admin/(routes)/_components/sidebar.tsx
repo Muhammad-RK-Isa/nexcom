@@ -15,7 +15,7 @@ export const AdminSidebar = () => {
   const router = useRouter();
 
   return (
-    <aside className="sticky left-0 top-0 hidden h-full max-h-screen flex-col gap-2 border-r bg-muted/40 md:flex">
+    <aside className="sticky left-0 top-0 hidden h-full max-h-screen flex-col gap-2 border-r bg-background dark:bg-card md:flex">
       <Link
         href={Paths.Storefront}
         className="flex h-14 items-center gap-2 border-b px-4 text-xl font-semibold uppercase lg:h-[60px] lg:px-7"
