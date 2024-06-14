@@ -4,26 +4,44 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next-nprogress-bar";
+import { motion } from "framer-motion";
 
 import { APP_TITLE, Paths } from "~/lib/constants";
 import { cn } from "~/lib/utils";
 import { adminNavLinks } from "../_lib/utils";
 import { ThemeSelect } from "~/components/theme-select";
+import { Button } from "~/components/ui/button";
+import { Icons } from "~/components/icons";
+import { useSidebar } from "~/lib/hooks/use-sidebar";
 
 export const AdminSidebar = () => {
   const pathname = usePathname();
   const router = useRouter();
 
+  const { onClose, isOpen } = useSidebar();
+
   return (
-    <aside className="sticky left-0 top-0 hidden h-full max-h-screen flex-col gap-2 border-r bg-background dark:bg-card md:flex">
-      <Link
-        href={Paths.Storefront}
-        className="flex h-14 items-center gap-2 border-b px-4 text-xl font-semibold uppercase lg:h-[60px] lg:px-7"
-      >
-        <span className="text-clip bg-primary/60 bg-[linear-gradient(90deg,transparent_25%,rgba(255,255,255,.5)_50%,transparent_75%,transparent_100%)] bg-[length:250%_250%,100%_100%] bg-clip-text bg-no-repeat text-transparent transition-[background-position_0s_ease] hover:animate-shine dark:bg-primary/40">
-          {APP_TITLE}
-        </span>
-      </Link>
+    <motion.aside
+      className="sticky left-0 top-0 hidden h-screen max-h-screen gap-2 overflow-x-hidden border-r bg-background dark:bg-card md:flex md:flex-col"
+      animate={{ width: isOpen ? "280px" : "0px" }}
+      initial={{ width: isOpen ? "280px" : "0px" }}
+      transition={{ duration: 0.2 }}
+    >
+      <div className="flex h-14 items-center gap-2 border-b px-4 text-xl font-semibold uppercase lg:h-[60px] lg:px-7">
+        <Link href={Paths.Storefront}>
+          <span className="text-clip bg-primary/60 bg-[linear-gradient(90deg,transparent_25%,rgba(255,255,255,.5)_50%,transparent_75%,transparent_100%)] bg-[length:250%_250%,100%_100%] bg-clip-text bg-no-repeat text-transparent transition-[background-position_0s_ease] hover:animate-shine dark:bg-primary/40">
+            {APP_TITLE}
+          </span>
+        </Link>
+        <Button
+          size="icon"
+          variant="ghost"
+          onClick={onClose}
+          className="-mr-4 ml-auto"
+        >
+          <Icons.panelLeft className="size-4" />
+        </Button>
+      </div>
       <div className="flex flex-1 flex-col py-3">
         <nav className="grid items-start gap-1 px-2 text-sm font-medium lg:px-4">
           {adminNavLinks.map(({ title, icon: Icon, path, active }, idx) => (
@@ -44,6 +62,6 @@ export const AdminSidebar = () => {
         </nav>
         <ThemeSelect className="mt-auto p-4" />
       </div>
-    </aside>
+    </motion.aside>
   );
 };

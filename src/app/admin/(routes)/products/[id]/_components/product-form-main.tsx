@@ -130,6 +130,8 @@ export const ProductFormMain: React.FC<ProductFormMainProps> = ({
     });
 
   const onSubmit = (values: CreateProductInput) => {
+    // console.log(values);
+    // return;
     if (!!product?.id) {
       updateProduct({
         ...values,

@@ -136,23 +136,27 @@ export const updateProduct = async (product: UpdateProductInput) => {
           variants: true,
         },
       });
-      product.images?.map(async (image) => {
-        await tx
-          .delete(productsImages)
-          .where(eq(productsImages.productId, product.id));
-        await tx.insert(productsImages).values({
-          imageId: image.id,
-          productId: product.id,
-          isThumbnail:
-            product.images?.findIndex((i) => i.id === image.id) === 0,
-          rank: product.images?.findIndex((i) => i.id === image.id),
-        });
-      });
+
+      await tx
+        .delete(productsImages)
+        .where(eq(productsImages.productId, product.id));
+
+      await Promise.all(
+        product.images?.map(async (image) => {
+          await tx.insert(productsImages).values({
+            imageId: image.id,
+            productId: product.id,
+            isThumbnail:
+              product.images?.findIndex((i) => i.id === image.id) === 0,
+            rank: product.images?.findIndex((i) => i.id === image.id),
+          });
+        }) ?? [],
+      );
 
       const optionValueRecords = await tx.query.productOptionValues.findMany({
         where: (t, { inArray }) =>
           inArray(t.optionId, [
-            ...(productRecord?.options.map(({ id }) => id) ?? "null"),
+            ...(productRecord?.options.map(({ id }) => id) ?? []),
           ]),
         with: {
           option: true,
@@ -160,21 +164,40 @@ export const updateProduct = async (product: UpdateProductInput) => {
       });
 
       if (productRecord) {
-        const updatableOptions = product.options.filter(({ id }) =>
-          productRecord.options.some((o) => o.id === id),
+        const updatableOptions = product.options.filter(({ id, title, rank }) =>
+          productRecord.options.some(
+            (o) => o.id === id && o.title === title && o.rank === rank,
+          ),
         );
 
         const updatableOptionValues = new Set<ProductOptionValue>();
-        product.options.map(({ values }) => {
-          values.map((v) => {
-            optionValueRecords.some(({ id }) => v.id === id) &&
+        product.options.forEach(({ values }) => {
+          values.forEach((v) => {
+            if (
+              optionValueRecords.some(
+                ({ id, value }) => v.id === id && v.value === value,
+              )
+            ) {
               updatableOptionValues.add(v);
+            }
           });
         });
 
+        const updatableVariants = product.variants.filter(
+          ({ id, price, inventoryQuantity, image }) =>
+            productRecord.variants.some(
+              (v) =>
+                v.id === id &&
+                v.price === price &&
+                v.inventoryQuantity === inventoryQuantity &&
+                v.imageId === image?.id,
+            ),
+        );
+
         if (
           updatableOptions.length === product.options.length &&
-          updatableOptionValues.size === optionValueRecords.length
+          updatableOptionValues.size === optionValueRecords.length &&
+          updatableVariants.length === product.variants.length
         ) {
           console.log("✅ Updatable. Updating...");
           for (const option of updatableOptions) {
@@ -196,7 +219,7 @@ export const updateProduct = async (product: UpdateProductInput) => {
               .where(eq(productOptionValues.id, optVal.id));
           }
 
-          for (const variant of product.variants) {
+          for (const variant of updatableVariants) {
             await tx
               .update(productVariants)
               .set({
@@ -238,17 +261,35 @@ export const updateProduct = async (product: UpdateProductInput) => {
               rank: option.rank,
               productId: productRecord.id,
             })
+            .onConflictDoUpdate({
+              target: [productOptions.id],
+              set: {
+                title: option.title,
+                rank: option.rank,
+                productId: productRecord.id,
+              },
+            })
             .returning();
 
-          if (newOption)
-            for (const value of option.values) {
-              await tx.insert(productOptionValues).values({
-                ...value,
-                optionId: newOption.id,
-              });
-            }
+          if (newOption) {
+            await Promise.all(
+              option.values.map((value) =>
+                tx
+                  .insert(productOptionValues)
+                  .values({
+                    ...value,
+                    optionId: newOption.id,
+                  })
+                  .onConflictDoUpdate({
+                    target: [productOptionValues.id],
+                    set: value,
+                  }),
+              ),
+            );
+          }
         }
 
+        console.log("📦 Variants", product.variants);
         for (const variant of product.variants) {
           const [variantRecord] = await tx
             .insert(productVariants)
@@ -259,20 +300,44 @@ export const updateProduct = async (product: UpdateProductInput) => {
               imageId: variant.image?.id,
               productId: productRecord.id,
             })
+            .onConflictDoUpdate({
+              target: [productVariants.id],
+              set: {
+                price: variant.price,
+                inventoryQuantity: variant.inventoryQuantity,
+                imageId: variant.image?.id,
+                productId: productRecord.id,
+              },
+            })
             .returning();
 
           if (variantRecord && variant.optionValues) {
-            for (const optionValue of variant.optionValues) {
-              await tx.insert(variantsOptionValues).values({
-                variantId: variantRecord.id,
-                optionValueId: optionValue.id,
-              });
-            }
+            await Promise.all(
+              variant.optionValues.map((optionValue) =>
+                tx
+                  .insert(variantsOptionValues)
+                  .values({
+                    variantId: variantRecord.id,
+                    optionValueId: optionValue.id,
+                  })
+                  .onConflictDoUpdate({
+                    target: [
+                      variantsOptionValues.variantId,
+                      variantsOptionValues.optionValueId,
+                    ],
+                    set: {
+                      variantId: variantRecord.id,
+                      optionValueId: optionValue.id,
+                    },
+                  }),
+              ),
+            );
           }
         }
         return productRecord;
       }
     });
+
     return p;
   } catch (err) {
     throw err;

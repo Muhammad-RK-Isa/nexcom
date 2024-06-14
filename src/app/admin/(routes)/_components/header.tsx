@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { signOut, useSession } from "next-auth/react";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -12,12 +15,16 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 
 import { Breadcrumbs } from "./breadcrumbs";
-import { currentUser } from "~/lib/auth/utils";
 import { AdminMobileSidebar } from "./mobile-sidebar";
-import { DropdownItemLogout } from "./dropdown-item-logout";
+import { useSidebar } from "~/lib/hooks/use-sidebar";
+import { Icons } from "~/components/icons";
+import { cn } from "~/lib/utils";
 
-export const AdminHeader = async () => {
-  const user = await currentUser();
+export const AdminHeader = () => {
+  const { data } = useSession();
+  const { isOpen, onOpen } = useSidebar();
+
+  const user = data?.user;
 
   const avatarFallback =
     user?.name
@@ -28,12 +35,16 @@ export const AdminHeader = async () => {
 
   return (
     <header className="sticky top-0 z-50 flex h-14 items-center gap-4 border-b bg-background px-4 backdrop-blur-sm dark:bg-card lg:h-[60px] lg:px-6">
-      <React.Suspense>
-        <AdminMobileSidebar />
-      </React.Suspense>
-      <React.Suspense>
-        <Breadcrumbs />
-      </React.Suspense>
+      <AdminMobileSidebar />
+      <Button
+        size="icon"
+        variant="ghost"
+        onClick={onOpen}
+        className={cn("-ml-4", isOpen ? "md:hidden" : "md:flex")}
+      >
+        <Icons.panelLeft className="size-4" />
+      </Button>
+      <Breadcrumbs />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="ml-auto rounded-full">
@@ -56,9 +67,7 @@ export const AdminHeader = async () => {
           <DropdownMenuItem disabled>Profile</DropdownMenuItem>
           <DropdownMenuItem disabled>Settings</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <React.Suspense>
-            <DropdownItemLogout />
-          </React.Suspense>
+          <DropdownMenuItem onClick={() => signOut()}>Logout</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

@@ -64,6 +64,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
+    "cookies-next": "^4.2.1",
     "date-fns": "^3.6.0",
     "dotenv-cli": "^7.4.2",
     "drizzle-orm": "0.30.10",
@@ -93,7 +94,8 @@
     "use-deep-compare-effect": "^1.8.1",
     "uuid": "^9.0.1",
     "vaul": "^0.9.1",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@types/eslint": "^8.56.2",

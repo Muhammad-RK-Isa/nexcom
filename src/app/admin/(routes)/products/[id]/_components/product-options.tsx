@@ -17,23 +17,19 @@ export const ProductOptions = () => {
     name: "options",
   });
 
-  const { replace: replaceVariants, fields: variantFields } = useFieldArray({
-    control: form.control,
-    name: "variants",
-  });
-
-  const { price, inventoryQuantity, options } = form.watch();
+  const { price, inventoryQuantity, options, variants } = form.watch();
 
   const updateVariants = React.useCallback(() => {
     const newVariants = generateVariants({
       options,
-      existingVariants: variantFields,
+      existingVariants: variants,
       price,
       inventoryQuantity,
     });
-    replaceVariants([]);
-    replaceVariants(newVariants);
-  }, [inventoryQuantity, options, variantFields, replaceVariants, price]);
+    console.log(newVariants);
+    form.setValue("variants", newVariants, { shouldDirty: true });
+    form.register("variants");
+  }, [inventoryQuantity, options, variants, form, price]);
 
   return (
     <div className="grid divide-y rounded-md border">
