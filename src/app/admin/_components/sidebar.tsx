@@ -13,8 +13,13 @@ import { ThemeSelect } from "~/components/theme-select";
 import { Button } from "~/components/ui/button";
 import { Icons } from "~/components/icons";
 import { useSidebar } from "~/lib/hooks/use-sidebar";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
 
-export const AdminSidebar = () => {
+export const Sidebar = () => {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -37,9 +42,10 @@ export const AdminSidebar = () => {
           size="icon"
           variant="ghost"
           onClick={onClose}
-          className="-mr-4 ml-auto"
+          className="group -mr-4 ml-auto"
         >
-          <Icons.panelLeft className="size-4" />
+          <Icons.panelLeftClose className="size-4 text-muted-foreground transition-colors group-hover:text-primary" />
+          <span className="sr-only">Close side panel</span>
         </Button>
       </div>
       <div className="flex flex-1 flex-col py-3">
@@ -60,7 +66,26 @@ export const AdminSidebar = () => {
             </button>
           ))}
         </nav>
-        <ThemeSelect className="mt-auto p-4" />
+        <div className="mt-auto flex items-center justify-between p-4">
+          <ThemeSelect />
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant={"ghost"}
+                size={"icon"}
+                className={cn(
+                  "size-max cursor-pointer rounded-full p-2 text-muted-foreground transition-colors hover:text-primary",
+                )}
+                onClick={() => router.push("/admin/settings")}
+              >
+                <Icons.settings className="size-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="top" className="capitalize">
+              Go to settings
+            </TooltipContent>
+          </Tooltip>
+        </div>
       </div>
     </motion.aside>
   );

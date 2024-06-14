@@ -13,31 +13,27 @@ interface ProductsPageProps {
 
 const ProductsPage: React.FC<ProductsPageProps> = async ({ searchParams }) => {
   const search = searchProductParamsSchema.parse(searchParams);
-
   const tableProducts = await api.products.getTableProducts(search);
-
   return (
     <ProductsTableProvider>
       <React.Suspense
         fallback={
           <DataTableSkeleton
-            columnCount={8}
+            columnCount={10}
             searchableColumnCount={1}
             filterableColumnCount={2}
             cellWidths={[
+              "1.5rem",
+              "10rem",
+              "5rem",
+              "4.5rem",
+              "4.5rem",
+              "5.5rem",
+              "6rem",
+              "6.5rem",
+              "6.5rem",
               "2.5rem",
-              "30rem",
-              "7rem",
-              "7rem",
-              "7rem",
-              "7rem",
-              "9rem",
-              "9rem",
-              "9rem",
-              "4rem",
             ]}
-            shrinkZero
-            showToolbarToggles
           />
         }
       >

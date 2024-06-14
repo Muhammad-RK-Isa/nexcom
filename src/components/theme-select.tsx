@@ -38,7 +38,9 @@ export const ThemeSelect: React.FC<ThemeToggleProps> = ({
               size={"icon"}
               className={cn(
                 "size-max cursor-pointer rounded-full p-2 transition-colors hover:text-primary",
-                theme === thm ? "bg-accent text-primary" : "text-primary/50",
+                theme === thm
+                  ? "bg-accent text-primary"
+                  : "text-muted-foreground",
               )}
               onClick={() => setTheme(thm)}
             >

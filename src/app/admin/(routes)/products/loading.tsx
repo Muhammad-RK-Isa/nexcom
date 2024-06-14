@@ -8,18 +8,17 @@ const Loading = () => {
       searchableColumnCount={1}
       filterableColumnCount={2}
       cellWidths={[
+        "1.5rem",
+        "10rem",
+        "5rem",
+        "4.5rem",
+        "4.5rem",
+        "5.5rem",
+        "6rem",
+        "6.5rem",
+        "6.5rem",
         "2.5rem",
-        "30rem",
-        "7rem",
-        "7rem",
-        "7rem",
-        "7rem",
-        "9rem",
-        "9rem",
-        "9rem",
-        "4rem",
       ]}
-      shrinkZero
     />
   );
 };

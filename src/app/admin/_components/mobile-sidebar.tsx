@@ -21,15 +21,15 @@ import { ThemeSelect } from "~/components/theme-select";
 import { adminNavLinks } from "../_lib/utils";
 import { useRouter } from "next-nprogress-bar";
 
-export const AdminMobileSidebar = () => {
+export const MobileSidebar = () => {
   const pathname = usePathname();
   const router = useRouter();
 
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button size="icon" variant="outline" className="md:hidden">
-          <Icons.panelLeft className="size-5" />
+        <Button size="icon" variant="ghost" className="-ml-2 md:hidden">
+          <Icons.menu className="size-5" />
           <span className="sr-only">Toggle Menu</span>
         </Button>
       </SheetTrigger>

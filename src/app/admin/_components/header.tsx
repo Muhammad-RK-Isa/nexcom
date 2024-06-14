@@ -15,7 +15,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 
 import { Breadcrumbs } from "./breadcrumbs";
-import { AdminMobileSidebar } from "./mobile-sidebar";
+import { MobileSidebar } from "./mobile-sidebar";
 import { useSidebar } from "~/lib/hooks/use-sidebar";
 import { Icons } from "~/components/icons";
 import { cn } from "~/lib/utils";
@@ -35,14 +35,15 @@ export const AdminHeader = () => {
 
   return (
     <header className="sticky top-0 z-50 flex h-14 items-center gap-4 border-b bg-background px-4 backdrop-blur-sm dark:bg-card lg:h-[60px] lg:px-6">
-      <AdminMobileSidebar />
+      <MobileSidebar />
       <Button
         size="icon"
         variant="ghost"
         onClick={onOpen}
-        className={cn("-ml-4", isOpen ? "md:hidden" : "md:flex")}
+        className={cn("group -ml-4 hidden", isOpen ? "md:hidden" : "md:flex")}
       >
-        <Icons.panelLeft className="size-4" />
+        <Icons.panelLeftOpen className="size-4 text-muted-foreground transition-colors group-hover:text-primary" />
+        <span className="sr-only">Open side panel</span>
       </Button>
       <Breadcrumbs />
       <DropdownMenu>
