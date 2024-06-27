@@ -1,31 +1,28 @@
-import NextImage from "next/image";
+import NextImage from "next/image"
 
-import type { Image } from "~/types";
-
-import { EmptyCard } from "~/components/empty-card";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card";
-import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
+} from "~/components/ui/card"
+import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area"
+import { EmptyCard } from "~/components/empty-card"
+import type { Image } from "~/types"
 
 interface FilesProps {
-  files: Image[];
+  files: Image[]
 }
 
-export function Files({ files }: FilesProps) {
+export default function Images({ files }: FilesProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Uploaded files</CardTitle>
-        <CardDescription>View the uploaded files here</CardDescription>
+        <CardTitle>Images</CardTitle>
       </CardHeader>
       <CardContent>
         {files.length > 0 ? (
-          <ScrollArea className="max-w-xs pb-4 sm:max-w-md lg:max-w-lg">
+          <ScrollArea className="max-w-[18rem] rounded-md pb-4 sm:max-w-sm md:max-w-md lg:max-w-lg">
             <div className="flex w-max space-x-2.5">
               {files.map((file) => (
                 <div key={file.id} className="relative size-44">
@@ -51,5 +48,5 @@ export function Files({ files }: FilesProps) {
         )}
       </CardContent>
     </Card>
-  );
+  )
 }

@@ -1,23 +1,24 @@
-import { relations } from "drizzle-orm";
+import { relations } from "drizzle-orm"
 import {
   pgEnum,
   pgTable,
   timestamp,
   uniqueIndex,
   varchar,
-} from "drizzle-orm/pg-core";
-import { z } from "zod";
+} from "drizzle-orm/pg-core"
+import { z } from "zod"
 
-import { accounts } from "./accounts";
-import { generateId } from "~/lib/utils";
+import { generateId } from "~/lib/utils"
+
+import { accounts } from "./accounts"
 
 export const pgUserRolesEnum = pgEnum("userRole", [
   "viewer",
   "customer",
   "admin",
-]);
+])
 
-export const UserRole = z.enum(pgUserRolesEnum.enumValues);
+export const UserRole = z.enum(pgUserRolesEnum.enumValues)
 
 export const users = pgTable(
   "user",
@@ -40,12 +41,12 @@ export const users = pgTable(
   },
   (t) => ({
     emailIdx: uniqueIndex("user_email_idx").on(t.email),
-  }),
-);
+  })
+)
 
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
-}));
+}))
 
 export const createUserSchema = z
   .object({
@@ -57,39 +58,39 @@ export const createUserSchema = z
       .string()
       .regex(
         /^(?=.*[A-Za-z])(?=.*\d).{6,}$/,
-        "Password must be at least 6 characters long and include at least one letter and one digit",
+        "Password must be at least 6 characters long and include at least one letter and one digit"
       ),
     confirm: z.string(),
   })
   .refine((values) => values.password === values.confirm, {
     message: "Passwords don't match",
     path: ["confirm"],
-  });
+  })
 
 export const signInSchema = z.object({
   email: z.string().email({ message: "Invalid email" }),
   password: z
     .string()
     .regex(/^(?=.*[A-Za-z])(?=.*\d).{6,}$/, "Invalid password"),
-});
+})
 
 export const forgotPasswordSchema = z.object({
   email: z.string().email(),
-});
+})
 
 export const resetPasswordSchema = z.object({
   token: z.string().min(1, "Invalid token"),
   password: z.string().min(8, "Password is too short").max(255),
-});
+})
 
 export const otpSchema = z.object({
   code: z.string().length(6),
-});
+})
 
 export const verifyEmailSchema = otpSchema.extend({
   email: z.string().email(),
-});
+})
 
 export const resendEmailVerificationCodeSchema = z.object({
   email: z.string().email(),
-});
+})

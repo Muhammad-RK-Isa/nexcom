@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
+import { AppProgressBar as ProgressBar } from "next-nprogress-bar"
 
 const ProgressBarProvider = () => {
   return (
@@ -12,7 +12,7 @@ const ProgressBarProvider = () => {
       }}
       shallowRouting
     />
-  );
-};
+  )
+}
 
-export default ProgressBarProvider;
+export default ProgressBarProvider

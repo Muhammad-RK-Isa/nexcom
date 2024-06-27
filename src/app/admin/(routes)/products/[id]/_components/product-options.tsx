@@ -1,23 +1,24 @@
-import React from "react";
-import { useFieldArray, useFormContext } from "react-hook-form";
+import React from "react"
+import { useFieldArray, useFormContext } from "react-hook-form"
 
-import { Icons } from "~/components/icons";
-import { Button } from "~/components/ui/button";
-import { generateId } from "~/lib/utils";
-import type { UpdateProductInput } from "~/types";
-import { generateVariants } from "../_lib/utils";
-import { Sortable } from "~/components/ui/sortable";
-import { ProductOption } from "./product-option";
+import { generateId } from "~/lib/utils"
+import { Button } from "~/components/ui/button"
+import { Sortable } from "~/components/ui/sortable"
+import { Icons } from "~/components/icons"
+import type { UpdateProductInput } from "~/types"
+
+import { generateVariants } from "../_lib/utils"
+import { ProductOption } from "./product-option"
 
 export const ProductOptions = () => {
-  const form = useFormContext<UpdateProductInput>();
+  const form = useFormContext<UpdateProductInput>()
 
   const { append: addOption } = useFieldArray({
     control: form.control,
     name: "options",
-  });
+  })
 
-  const { price, inventoryQuantity, options, variants } = form.watch();
+  const { price, inventoryQuantity, options, variants } = form.watch()
 
   const updateVariants = React.useCallback(() => {
     const newVariants = generateVariants({
@@ -25,11 +26,11 @@ export const ProductOptions = () => {
       existingVariants: variants,
       price,
       inventoryQuantity,
-    });
-    console.log(newVariants);
-    form.setValue("variants", newVariants, { shouldDirty: true });
-    form.register("variants");
-  }, [inventoryQuantity, options, variants, form, price]);
+    })
+    console.log(newVariants)
+    form.setValue("variants", newVariants, { shouldDirty: true })
+    form.register("variants")
+  }, [inventoryQuantity, options, variants, form, price])
 
   return (
     <div className="grid divide-y rounded-md border">
@@ -40,8 +41,8 @@ export const ProductOptions = () => {
             const newOptions = opts.map((option) => ({
               ...option,
               rank: opts.findIndex((o) => o.id === option.id) + 1,
-            }));
-            form.setValue("options", newOptions);
+            }))
+            form.setValue("options", newOptions)
           }}
           overlay={
             <div className="h-[102px] w-full rounded-md border bg-secondary/40 shadow-sm drop-shadow-sm backdrop-blur-sm" />
@@ -66,7 +67,7 @@ export const ProductOptions = () => {
         variant={"link"}
         className="rounded-t-none bg-muted/40 py-6"
         onClick={() => {
-          const newOptionId = generateId({ prefix: "opt" });
+          const newOptionId = generateId({ prefix: "opt" })
           addOption({
             id: newOptionId,
             title: "",
@@ -79,13 +80,13 @@ export const ProductOptions = () => {
                 optionId: newOptionId,
               },
             ],
-          });
-          updateVariants();
+          })
+          updateVariants()
         }}
       >
         <Icons.plus className="mr-2 size-4" />
         Add {options.length > 0 ? "another option" : "an option"}
       </Button>
     </div>
-  );
-};
+  )
+}

@@ -1,14 +1,15 @@
-"use client";
+"use client"
 
-import { forwardRef } from "react";
-import { useFormStatus } from "react-dom";
-import { Button, type ButtonProps } from "~/components/ui/button";
+import { forwardRef } from "react"
+import { useFormStatus } from "react-dom"
+
+import { Button, type ButtonProps } from "~/components/ui/button"
 
 const SubmitButton = forwardRef<
   HTMLButtonElement,
   ButtonProps & { loadingText?: string }
 >(({ className, children, loadingText, ...props }) => {
-  const { pending } = useFormStatus();
+  const { pending } = useFormStatus()
   return (
     <Button
       {...props}
@@ -19,8 +20,8 @@ const SubmitButton = forwardRef<
     >
       {children}
     </Button>
-  );
-});
-SubmitButton.displayName = "SubmitButton";
+  )
+})
+SubmitButton.displayName = "SubmitButton"
 
-export { SubmitButton };
+export { SubmitButton }

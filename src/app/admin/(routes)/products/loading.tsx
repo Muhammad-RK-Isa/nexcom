@@ -1,5 +1,6 @@
-import React from "react";
-import { DataTableSkeleton } from "~/components/skeletons/data-table-skeleton";
+import React from "react"
+
+import { DataTableSkeleton } from "~/components/skeletons/data-table-skeleton"
 
 const Loading = () => {
   return (
@@ -19,8 +20,9 @@ const Loading = () => {
         "6.5rem",
         "2.5rem",
       ]}
+      shrinkZero
     />
-  );
-};
+  )
+}
 
-export default Loading;
+export default Loading

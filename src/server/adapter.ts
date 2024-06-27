@@ -1,10 +1,11 @@
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import type { Adapter, AdapterAccount, AdapterUser } from "@auth/core/adapters";
-import { and, eq } from "drizzle-orm";
+import type { Adapter, AdapterAccount, AdapterUser } from "@auth/core/adapters"
+import { DrizzleAdapter } from "@auth/drizzle-adapter"
+import { and, eq } from "drizzle-orm"
 
-import { db } from "./db";
-import { accounts, users } from "./db/schema";
-import { generateId } from "~/lib/utils";
+import { generateId } from "~/lib/utils"
+
+import { db } from "./db"
+import { accounts, users } from "./db/schema"
 
 export const drizzleAdapter: Adapter = {
   ...DrizzleAdapter(db),
@@ -13,25 +14,25 @@ export const drizzleAdapter: Adapter = {
       .insert(users)
       .values({ ...data, id: generateId({ prefix: "user" }) })
       .returning()
-      .then((res) => res[0] ?? data);
+      .then((res) => res[0] ?? data)
   },
   async getUser(data) {
     return await db
       .select()
       .from(users)
       .where(eq(users.id, data))
-      .then((res) => res[0] ?? null);
+      .then((res) => res[0] ?? null)
   },
   async getUserByEmail(data) {
     return await db
       .select()
       .from(users)
       .where(eq(users.email, data))
-      .then((res) => res[0] ?? null);
+      .then((res) => res[0] ?? null)
   },
   async updateUser(data) {
     if (!data.id) {
-      throw new Error("No user id.");
+      throw new Error("No user id.")
     }
 
     return await db
@@ -39,7 +40,7 @@ export const drizzleAdapter: Adapter = {
       .set(data)
       .where(eq(users.id, data.id))
       .returning()
-      .then((res) => res[0]!);
+      .then((res) => res[0]!)
   },
   async getUserByAccount(account: AdapterAccount) {
     const dbAccount =
@@ -49,12 +50,12 @@ export const drizzleAdapter: Adapter = {
         .where(
           and(
             eq(accounts.providerAccountId, account.providerAccountId),
-            eq(accounts.provider, account.provider),
-          ),
+            eq(accounts.provider, account.provider)
+          )
         )
         .leftJoin(users, eq(accounts.userId, users.id))
-        .then((res) => res[0])) ?? null;
+        .then((res) => res[0])) ?? null
 
-    return dbAccount?.user ?? null;
+    return dbAccount?.user ?? null
   },
-};
+}

@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { Icons } from "~/components/icons";
+import React, { useState } from "react"
+
+import { Icons } from "~/components/icons"
 
 interface KeywordsInputProps {
-  initialKeywords?: string[];
-  onKeywordsChange: (keywords: string[]) => void;
-  placeholder?: string;
+  initialKeywords?: string[]
+  onKeywordsChange: (keywords: string[]) => void
+  placeholder?: string
 }
 
 const KeywordsInput: React.FC<KeywordsInputProps> = ({
@@ -12,8 +13,8 @@ const KeywordsInput: React.FC<KeywordsInputProps> = ({
   onKeywordsChange,
   placeholder,
 }) => {
-  const [keywords, setKeywords] = useState<string[]>(initialKeywords);
-  const [inputValue, setInputValue] = useState<string>("");
+  const [keywords, setKeywords] = useState<string[]>(initialKeywords)
+  const [inputValue, setInputValue] = useState<string>("")
 
   // Handles adding new keyword on Enter or comma press, and keyword removal on Backspace
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -21,55 +22,55 @@ const KeywordsInput: React.FC<KeywordsInputProps> = ({
       (event.key === "Enter" || event.key === ",") &&
       inputValue.trim() !== ""
     ) {
-      event.preventDefault();
-      const newKeywords = [...keywords, inputValue.trim()];
-      setKeywords(newKeywords);
-      onKeywordsChange(newKeywords);
-      setInputValue("");
+      event.preventDefault()
+      const newKeywords = [...keywords, inputValue.trim()]
+      setKeywords(newKeywords)
+      onKeywordsChange(newKeywords)
+      setInputValue("")
     } else if (event.key === "Backspace" && inputValue === "") {
-      event.preventDefault();
-      const newKeywords = keywords.slice(0, -1);
-      setKeywords(newKeywords);
-      onKeywordsChange(newKeywords);
+      event.preventDefault()
+      const newKeywords = keywords.slice(0, -1)
+      setKeywords(newKeywords)
+      onKeywordsChange(newKeywords)
     }
-  };
+  }
 
   // Handles pasting keywords separated by commas, new lines, or tabs
   const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    const paste = event.clipboardData.getData("text");
+    event.preventDefault()
+    const paste = event.clipboardData.getData("text")
     const keywordsToAdd = paste
       .split(/[\n\t,]+/)
       .map((keyword) => keyword.trim())
-      .filter(Boolean);
+      .filter(Boolean)
     if (keywordsToAdd.length) {
-      const newKeywords = [...keywords, ...keywordsToAdd];
-      setKeywords(newKeywords);
-      onKeywordsChange(newKeywords);
-      setInputValue("");
+      const newKeywords = [...keywords, ...keywordsToAdd]
+      setKeywords(newKeywords)
+      onKeywordsChange(newKeywords)
+      setInputValue("")
     }
-  };
+  }
 
   // Updates the inputValue state as the user types
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-  };
+    setInputValue(event.target.value)
+  }
   // Adds the keyword when the input loses focus, if there's a keyword to add
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     if (inputValue.trim() !== "" && event.relatedTarget?.tagName !== "BUTTON") {
-      const newKeywords = [...keywords, inputValue.trim()];
-      setKeywords(newKeywords);
-      onKeywordsChange(newKeywords);
-      setInputValue("");
+      const newKeywords = [...keywords, inputValue.trim()]
+      setKeywords(newKeywords)
+      onKeywordsChange(newKeywords)
+      setInputValue("")
     }
-  };
+  }
 
   // Removes a keyword from the list
   const removeKeyword = (indexToRemove: number) => {
-    const newKeywords = keywords.filter((_, index) => index !== indexToRemove);
-    setKeywords(newKeywords);
-    onKeywordsChange(newKeywords);
-  };
+    const newKeywords = keywords.filter((_, index) => index !== indexToRemove)
+    setKeywords(newKeywords)
+    onKeywordsChange(newKeywords)
+  }
 
   return (
     <div className="flex min-h-9 w-full flex-wrap items-center rounded-md border border-input px-2 py-2 text-sm shadow-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-ring">
@@ -100,7 +101,7 @@ const KeywordsInput: React.FC<KeywordsInputProps> = ({
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default KeywordsInput;
+export default KeywordsInput

@@ -1,39 +1,39 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
-import React from "react";
-import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next-nprogress-bar";
+import React from "react"
+import Link from "next/link"
+import { useSearchParams } from "next/navigation"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { DEFAULT_LOGIN_REDIRECT } from "~/routes"
+import { createUserSchema } from "~/server/db/schema"
+import { api } from "~/trpc/react"
+import { signIn } from "next-auth/react"
+import { useRouter } from "next-nprogress-bar"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
-import { Icons } from "~/components/icons";
-import { AnimatedInput } from "~/components/ui/animated-input";
-import { Button } from "~/components/ui/button";
+import { Paths } from "~/lib/constants"
+import { AnimatedInput } from "~/components/ui/animated-input"
+import { Button } from "~/components/ui/button"
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-} from "~/components/ui/form";
-import { DEFAULT_LOGIN_REDIRECT } from "~/routes";
-import { createUserSchema } from "~/server/db/schema";
-import type { CreateUserInput } from "~/types";
-import { api } from "~/trpc/react";
-import { Paths } from "~/lib/constants";
-import { toast } from "sonner";
+} from "~/components/ui/form"
+import { Icons } from "~/components/icons"
+import type { CreateUserInput } from "~/types"
 
 export const SignUpForm = () => {
-  const searchParams = useSearchParams();
-  const router = useRouter();
+  const searchParams = useSearchParams()
+  const router = useRouter()
 
   const callbackUrl = decodeURIComponent(
-    searchParams.get("callbackUrl") ?? DEFAULT_LOGIN_REDIRECT,
-  );
+    searchParams.get("callbackUrl") ?? DEFAULT_LOGIN_REDIRECT
+  )
 
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false)
 
   const form = useForm<CreateUserInput>({
     resolver: zodResolver(createUserSchema),
@@ -43,21 +43,21 @@ export const SignUpForm = () => {
       password: "",
       confirm: "",
     },
-  });
+  })
 
-  const createUser = api.users.create.useMutation();
+  const createUser = api.users.create.useMutation()
 
   const onSubmit = async (values: CreateUserInput) => {
     await createUser.mutateAsync(
       { ...values },
       {
         onSuccess: () => {
-          toast.success("Account created. Please, sign in to continue.");
-          router.push(Paths.SignIn);
+          toast.success("Account created. Please, sign in to continue.")
+          router.push(Paths.SignIn)
         },
-      },
-    );
-  };
+      }
+    )
+  }
 
   return (
     <Form {...form}>
@@ -89,8 +89,8 @@ export const SignUpForm = () => {
                   placeholder="email@example.com"
                   type="email"
                   onChange={(value) => {
-                    field.onChange(value);
-                    if (createUser.status === "error") createUser.reset();
+                    field.onChange(value)
+                    if (createUser.status === "error") createUser.reset()
                   }}
                 />
               </FormControl>
@@ -186,7 +186,7 @@ export const SignUpForm = () => {
                     <li className="ml-4" key={idx}>
                       {message}
                     </li>
-                  ),
+                  )
                 )}
               </>
             ) : null}
@@ -236,8 +236,8 @@ export const SignUpForm = () => {
         </button>
       </form>
     </Form>
-  );
-};
+  )
+}
 
 const BottomGradient = () => {
   return (
@@ -245,5 +245,5 @@ const BottomGradient = () => {
       <span className="absolute inset-x-0 -bottom-px block h-px w-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-0 transition duration-500 group-hover/btn:opacity-100" />
       <span className="absolute inset-x-10 -bottom-px mx-auto block h-px w-1/2 bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-0 blur-sm transition duration-500 group-hover/btn:opacity-100" />
     </>
-  );
-};
+  )
+}

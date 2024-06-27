@@ -1,31 +1,32 @@
-"use client";
+"use client"
 
-import { DownloadIcon } from "@radix-ui/react-icons";
-import { type Table } from "@tanstack/react-table";
+import Link from "next/link"
+import { useSearchParams } from "next/navigation"
+import { DownloadIcon } from "@radix-ui/react-icons"
+import { type Table } from "@tanstack/react-table"
 
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { DateRangePicker } from "~/components/date-range-picker";
-import { Icons } from "~/components/icons";
-import { Button, buttonVariants } from "~/components/ui/button";
-import { exportTableToCSV } from "~/lib/export";
-import { cn } from "~/lib/utils";
-import type { TableProduct } from "~/types";
-import { DeleteProductsAlertDialog } from "./delete-products-alert-dialog";
+import { exportTableToCSV } from "~/lib/export"
+import { cn } from "~/lib/utils"
+import { Button, buttonVariants } from "~/components/ui/button"
+import { DateRangePicker } from "~/components/date-range-picker"
+import { Icons } from "~/components/icons"
+import type { TableProduct } from "~/types"
+
+import { DeleteProductsAlertDialog } from "./delete-products-alert-dialog"
 
 interface ProductsTableToolbarActionsProps {
-  table: Table<TableProduct>;
+  table: Table<TableProduct>
 }
 
 export function ProductsTableToolbarActions({
   table,
 }: ProductsTableToolbarActionsProps) {
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams()
 
   const search = {
     from: searchParams.get("from"),
     to: searchParams.get("to"),
-  };
+  }
 
   return (
     <div className="flex items-center gap-2">
@@ -68,5 +69,5 @@ export function ProductsTableToolbarActions({
         }
       />
     </div>
-  );
+  )
 }

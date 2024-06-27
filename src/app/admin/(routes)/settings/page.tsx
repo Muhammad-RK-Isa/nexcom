@@ -1,14 +1,11 @@
-import React from "react";
-import { Appearances } from "./_components/appearances";
+import React from "react"
 
 const SettingsPage = () => {
   return (
     <div>
-      <React.Suspense>
-        <Appearances />
-      </React.Suspense>
+      Settings page
     </div>
-  );
-};
+  )
+}
 
-export default SettingsPage;
+export default SettingsPage

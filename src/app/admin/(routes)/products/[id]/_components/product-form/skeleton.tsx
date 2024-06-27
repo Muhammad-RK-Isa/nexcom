@@ -1,11 +1,10 @@
-import React from "react";
-import { InputLableSkeleton } from "~/components/skeletons/input-label-skeleton";
-import { Card, CardContent, CardHeader } from "~/components/ui/card";
-import { Skeleton } from "~/components/ui/skeleton";
+import { Card, CardContent, CardHeader } from "~/components/ui/card"
+import { Skeleton } from "~/components/ui/skeleton"
+import { InputLableSkeleton } from "~/components/skeletons/input-label-skeleton"
 
-export const ProductFormSkeleton = () => {
+const ProductFormSkeleton = () => {
   return (
-    <div className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-6">
+    <div className="mx-auto grid max-w-6xl flex-1 auto-rows-max gap-6">
       <div className="flex items-center gap-4">
         <Skeleton className="h-7 w-full md:h-8 md:w-1/4" />
         <Skeleton className="ml-auto h-7 w-full md:h-8 md:w-1/4" />
@@ -74,5 +73,7 @@ export const ProductFormSkeleton = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
+
+export default ProductFormSkeleton

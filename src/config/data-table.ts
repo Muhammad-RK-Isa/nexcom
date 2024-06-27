@@ -1,8 +1,8 @@
-import { MixIcon } from "@radix-ui/react-icons";
+import { MixIcon } from "@radix-ui/react-icons"
 
-import { Icons } from "~/components/icons";
+import { Icons } from "~/components/icons"
 
-export type DataTableConfig = typeof dataTableConfig;
+export type DataTableConfig = typeof dataTableConfig
 
 export const dataTableConfig = {
   comparisonOperators: [
@@ -49,4 +49,4 @@ export const dataTableConfig = {
       tooltipDescription: "A floating bar that sticks to the top of the table.",
     },
   ],
-};
+}

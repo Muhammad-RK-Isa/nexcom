@@ -1,36 +1,36 @@
-"use client";
+"use client"
 
-import * as React from "react";
+import * as React from "react"
+import { productStatuses } from "~/schema"
+
+import { useDataTable } from "~/lib/hooks/use-data-table"
+import { DataTableAdvancedToolbar } from "~/components/data-table/advanced/data-table-advanced-toolbar"
+import { DataTable } from "~/components/data-table/data-table"
+import { DataTableToolbar } from "~/components/data-table/data-table-toolbar"
 import type {
   CompleteTableProducts,
   DataTableFilterField,
   TableProduct,
-} from "~/types";
+} from "~/types"
 
-import { DataTableAdvancedToolbar } from "~/components/data-table/advanced/data-table-advanced-toolbar";
-import { DataTable } from "~/components/data-table/data-table";
-import { DataTableToolbar } from "~/components/data-table/data-table-toolbar";
-import { useDataTable } from "~/lib/hooks/use-data-table";
-
-import { productStatuses } from "~/schema";
-import { getStatusIcon } from "../_lib/utils";
-import { getColumns } from "./products-table-columns";
-import { ProductsTableFloatingBar } from "./products-table-floating-bar";
-import { useProductsTable } from "./products-table-provider";
-import { ProductsTableToolbarActions } from "./products-table-toolbar-actions";
+import { getStatusIcon } from "../_lib/utils"
+import { getColumns } from "./products-table-columns"
+import { ProductsTableFloatingBar } from "./products-table-floating-bar"
+import { useProductsTable } from "./products-table-provider"
+import { ProductsTableToolbarActions } from "./products-table-toolbar-actions"
 
 interface ProductsTableProps {
-  tableProducts: CompleteTableProducts;
+  tableProducts: CompleteTableProducts
 }
 
 export function ProductsTable({ tableProducts }: ProductsTableProps) {
   // Feature flags for showcasing some additional features. Feel free to remove them.
-  const { featureFlags } = useProductsTable();
+  const { featureFlags } = useProductsTable()
 
-  const { data, pageCount } = tableProducts;
+  const { data, pageCount } = tableProducts
 
   // Memoize the columns so they don't re-render on every render
-  const columns = React.useMemo(() => getColumns(), []);
+  const columns = React.useMemo(() => getColumns(), [])
 
   /**
    * This component can render either a faceted filter or a search filter based on the `options` prop.
@@ -59,7 +59,7 @@ export function ProductsTable({ tableProducts }: ProductsTableProps) {
         withCount: true,
       })),
     },
-  ];
+  ]
 
   const { table } = useDataTable({
     data,
@@ -69,7 +69,7 @@ export function ProductsTable({ tableProducts }: ProductsTableProps) {
     enableAdvancedFilter: featureFlags.includes("advancedFilter"),
     defaultPerPage: 10,
     defaultSort: "createdAt.desc",
-  });
+  })
 
   return (
     <DataTable
@@ -90,5 +90,5 @@ export function ProductsTable({ tableProducts }: ProductsTableProps) {
         </DataTableToolbar>
       )}
     </DataTable>
-  );
+  )
 }

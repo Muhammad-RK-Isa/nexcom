@@ -1,14 +1,15 @@
-import React from "react";
-import Link from "next/link";
+import React from "react"
+import Link from "next/link"
 
-import { buttonVariants } from "~/components/ui/button";
-import { APP_TITLE, Paths } from "~/lib/constants";
-import { SignOut } from "./_components/sign-out";
-import { currentUser } from "~/lib/auth/utils";
-import { cn } from "~/lib/utils";
+import { currentUser } from "~/lib/auth/utils"
+import { APP_TITLE, Paths } from "~/lib/constants"
+import { cn } from "~/lib/utils"
+import { buttonVariants } from "~/components/ui/button"
+
+import { SignOut } from "./_components/sign-out"
 
 const StorefrontHomepage = async () => {
-  const user = await currentUser();
+  const user = await currentUser()
   return (
     <div className="flex flex-col gap-y-6 px-12 pt-40 text-center text-4xl font-semibold">
       Welcome to {APP_TITLE}
@@ -41,7 +42,7 @@ const StorefrontHomepage = async () => {
         </>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default StorefrontHomepage;
+export default StorefrontHomepage

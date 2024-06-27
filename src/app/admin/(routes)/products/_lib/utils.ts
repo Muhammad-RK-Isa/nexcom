@@ -1,6 +1,7 @@
-import { Icons } from "~/components/icons";
-import { productStatuses } from "~/schema";
-import type { TableProduct } from "~/types";
+import { productStatuses } from "~/schema"
+
+import { Icons } from "~/components/icons"
+import type { TableProduct } from "~/types"
 
 /**
  * Returns the appropriate status icon based on the provided status.
@@ -11,7 +12,7 @@ export function getStatusIcon(status: TableProduct["status"]) {
   const statusIcons = {
     [productStatuses.Values.active]: Icons.checkCircle,
     [productStatuses.Values.draft]: Icons.multiplyCircle,
-  };
+  }
 
-  return statusIcons[status];
+  return statusIcons[status]
 }

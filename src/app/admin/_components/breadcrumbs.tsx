@@ -1,6 +1,6 @@
-import React from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import React from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 import {
   Breadcrumb,
@@ -9,11 +9,11 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "~/components/ui/breadcrumb";
+} from "~/components/ui/breadcrumb"
 
 export const Breadcrumbs = () => {
-  const pathname = usePathname();
-  const segments = pathname.split("/").filter((item) => item !== "");
+  const pathname = usePathname()
+  const segments = pathname.split("/").filter((item) => item !== "")
 
   return (
     <Breadcrumb>
@@ -23,8 +23,8 @@ export const Breadcrumbs = () => {
             ? "Edit product"
             : segment.startsWith("admin")
               ? null
-              : segment;
-          if (!newSegment) return null;
+              : segment
+          if (!newSegment) return null
           return (
             <React.Fragment key={idx}>
               <BreadcrumbItem>
@@ -48,9 +48,9 @@ export const Breadcrumbs = () => {
                 <BreadcrumbSeparator key={idx} />
               ) : null}
             </React.Fragment>
-          );
+          )
         })}
       </BreadcrumbList>
     </Breadcrumb>
-  );
-};
+  )
+}

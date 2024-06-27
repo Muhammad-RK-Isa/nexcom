@@ -1,33 +1,34 @@
-import { createUploadthing, type FileRouter } from "uploadthing/next";
-import { UploadThingError } from "uploadthing/server";
-import { currentUser } from "~/lib/auth/utils";
+import { createUploadthing, type FileRouter } from "uploadthing/next"
+import { UploadThingError } from "uploadthing/server"
 
-const f = createUploadthing();
+import { currentUser } from "~/lib/auth/utils"
+
+const f = createUploadthing()
 
 export const ourFileRouter = {
   authenticatedRoute: f({ image: { maxFileSize: "4MB", maxFileCount: 4 } })
     .middleware(async () => {
-      const user = await currentUser();
-      if (!user) throw new UploadThingError("Unauthenticated");
-      return { user };
+      const user = await currentUser()
+      if (!user) throw new UploadThingError("Unauthenticated")
+      return { user }
     })
     .onUploadComplete(({ file }) => {
-      console.log("✅ Upload completed");
-      console.log("🔗 File url", file.url);
+      console.log("✅ Upload completed")
+      console.log("🔗 File url", file.url)
     }),
   authorizedRoute: f({ image: { maxFileSize: "8MB", maxFileCount: 32 } })
     .middleware(async () => {
-      const user = await currentUser();
-      if (!user) throw new UploadThingError("Unauthenticated");
-      if (user.role !== "admin") throw new UploadThingError("Unauthorized");
-      return { user };
+      const user = await currentUser()
+      if (!user) throw new UploadThingError("Unauthenticated")
+      if (user.role !== "admin") throw new UploadThingError("Unauthorized")
+      return { user }
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      console.log("✅ Upload completed by: ", metadata.user.id);
-      console.log("🔗 File url", file.url);
+      console.log("✅ Upload completed by: ", metadata.user.id)
+      console.log("🔗 File url", file.url)
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { uploadedBy: metadata.user.id };
+      return { uploadedBy: metadata.user.id }
     }),
-} satisfies FileRouter;
+} satisfies FileRouter
 
-export type OurFileRouter = typeof ourFileRouter;
+export type OurFileRouter = typeof ourFileRouter

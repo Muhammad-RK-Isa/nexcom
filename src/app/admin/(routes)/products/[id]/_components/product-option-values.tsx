@@ -1,30 +1,30 @@
-import React from "react";
-import { type Control, useFieldArray, useFormContext } from "react-hook-form";
+import React from "react"
+import { useFieldArray, useFormContext, type Control } from "react-hook-form"
 
-import { Icons } from "~/components/icons";
-import { Button } from "~/components/ui/button";
+import { generateId } from "~/lib/utils"
+import { Button } from "~/components/ui/button"
 import {
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from "~/components/ui/form";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import type { UpdateProductInput } from "~/types";
-import { generateId } from "~/lib/utils";
+} from "~/components/ui/form"
+import { Input } from "~/components/ui/input"
+import { Label } from "~/components/ui/label"
 import {
   Sortable,
   SortableDragHandle,
   SortableItem,
-} from "~/components/ui/sortable";
+} from "~/components/ui/sortable"
+import { Icons } from "~/components/icons"
+import type { UpdateProductInput } from "~/types"
 
 interface ProductOptionValuesProps {
-  optionIdx: number;
-  optionId?: string;
-  control: Control<UpdateProductInput>;
-  updateVariants: () => void;
-  onFinishEdit: () => void;
+  optionIdx: number
+  optionId?: string
+  control: Control<UpdateProductInput>
+  updateVariants: () => void
+  onFinishEdit: () => void
 }
 
 export const ProductOptionValues: React.FC<ProductOptionValuesProps> = ({
@@ -34,16 +34,16 @@ export const ProductOptionValues: React.FC<ProductOptionValuesProps> = ({
   updateVariants,
   onFinishEdit,
 }) => {
-  const form = useFormContext<UpdateProductInput>();
+  const form = useFormContext<UpdateProductInput>()
 
-  const { options } = form.watch();
+  const { options } = form.watch()
 
   const { append, remove } = useFieldArray({
     control,
     name: `options.${optionIdx}.values`,
-  });
+  })
 
-  const optionValues = options.find((o) => o.id === optionId)?.values ?? [];
+  const optionValues = options.find((o) => o.id === optionId)?.values ?? []
 
   return (
     <Sortable
@@ -52,9 +52,9 @@ export const ProductOptionValues: React.FC<ProductOptionValuesProps> = ({
         const newOptVals = optVals.map((optVal) => ({
           ...optVal,
           rank: optVals.findIndex((o) => o.id === optVal.id) + 1,
-        }));
-        form.setValue(`options.${optionIdx}.values`, newOptVals);
-        form.trigger(`options.${optionIdx}.values`);
+        }))
+        form.setValue(`options.${optionIdx}.values`, newOptVals)
+        form.trigger(`options.${optionIdx}.values`)
       }}
     >
       <div className="-ml-11 grid gap-2 md:-ml-8">
@@ -84,11 +84,11 @@ export const ProductOptionValues: React.FC<ProductOptionValuesProps> = ({
                               {...field}
                               className="bg-background"
                               onChange={(e) => {
-                                field.onChange(e.currentTarget.value);
+                                field.onChange(e.currentTarget.value)
                                 form.clearErrors(
-                                  `options.${optionIdx}.values.${k}.value`,
-                                );
-                                updateVariants();
+                                  `options.${optionIdx}.values.${k}.value`
+                                )
+                                updateVariants()
                               }}
                             />
                             {optionValues.length > 1 ? (
@@ -97,8 +97,8 @@ export const ProductOptionValues: React.FC<ProductOptionValuesProps> = ({
                                 variant={"tone"}
                                 size={"icon"}
                                 onClick={() => {
-                                  remove(k);
-                                  updateVariants();
+                                  remove(k)
+                                  updateVariants()
                                 }}
                                 className="absolute right-0 top-0"
                                 aria-hidden="true"
@@ -130,9 +130,9 @@ export const ProductOptionValues: React.FC<ProductOptionValuesProps> = ({
                 value: "",
                 rank: optionValues.length + 1,
                 optionId,
-              });
-              updateVariants();
-              form.clearErrors(`options.${optionIdx}.values`);
+              })
+              updateVariants()
+              form.clearErrors(`options.${optionIdx}.values`)
             }}
             className="flex-1"
           >
@@ -144,8 +144,8 @@ export const ProductOptionValues: React.FC<ProductOptionValuesProps> = ({
             size={"sm"}
             variant={"outline"}
             onClick={() => {
-              updateVariants();
-              onFinishEdit();
+              updateVariants()
+              onFinishEdit()
             }}
           >
             <Icons.check className="mr-2 size-4" />
@@ -159,5 +159,5 @@ export const ProductOptionValues: React.FC<ProductOptionValuesProps> = ({
         ) : null}
       </div>
     </Sortable>
-  );
-};
+  )
+}

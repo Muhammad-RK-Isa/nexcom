@@ -1,21 +1,22 @@
-import { motion } from "framer-motion";
-import React from "react";
+import React from "react"
+import { motion } from "framer-motion"
 
-import { cn } from "~/lib/utils";
-import type { Image } from "~/types";
-import { Icons } from "./icons";
-import { FileCard } from "./image-uploader";
-import { Button } from "./ui/button";
-import { ScrollArea } from "./ui/scroll-area";
+import { cn } from "~/lib/utils"
+import type { Image } from "~/types"
+
+import { Icons } from "./icons"
+import { FileCard } from "./image-uploader"
+import { Button } from "./ui/button"
+import { ScrollArea } from "./ui/scroll-area"
 
 interface ploadStatusProps {
-  files: File[];
-  setFiles: (value: File[]) => void;
-  onUnMount: () => void;
-  className?: string;
-  progresses?: Record<string, number>;
-  isUploadFinished?: boolean;
-  uploadedFiles?: Image[];
+  files: File[]
+  setFiles: (value: File[]) => void
+  onUnMount: () => void
+  className?: string
+  progresses?: Record<string, number>
+  isUploadFinished?: boolean
+  uploadedFiles?: Image[]
 }
 
 export const FileUploadStatus: React.FC<ploadStatusProps> = ({
@@ -27,28 +28,28 @@ export const FileUploadStatus: React.FC<ploadStatusProps> = ({
   isUploadFinished,
   uploadedFiles,
 }) => {
-  const [isExpanded, setIsExpanded] = React.useState(false);
+  const [isExpanded, setIsExpanded] = React.useState(false)
 
   const onRemove = (index: number) => {
-    if (!files) return;
-    const newFiles = files.filter((_, i) => i !== index);
-    setFiles(newFiles);
-  };
+    if (!files) return
+    const newFiles = files.filter((_, i) => i !== index)
+    setFiles(newFiles)
+  }
 
-  let remainingFiles: number = 0;
+  let remainingFiles: number = 0
 
   for (const key in progresses) {
     if (Number(progresses[key]) < 100) {
-      remainingFiles++;
+      remainingFiles++
     }
   }
 
   React.useEffect(() => {
     if (isUploadFinished) {
-      setIsExpanded(false);
-      setFiles([]);
+      setIsExpanded(false)
+      setFiles([])
     }
-  }, [isUploadFinished, setFiles]);
+  }, [isUploadFinished, setFiles])
 
   return (
     <div className={cn(className)}>
@@ -63,7 +64,7 @@ export const FileUploadStatus: React.FC<ploadStatusProps> = ({
         animate={{ height: isExpanded ? 384 : 56 }}
         className={cn(
           "w-80 overflow-hidden rounded-md border bg-card shadow-lg drop-shadow-lg backdrop-blur-sm dark:border-none",
-          { "cursor-default": isExpanded },
+          { "cursor-default": isExpanded }
         )}
       >
         <div className="flex flex-col">
@@ -121,5 +122,5 @@ export const FileUploadStatus: React.FC<ploadStatusProps> = ({
         </div>
       </motion.div>
     </div>
-  );
-};
+  )
+}

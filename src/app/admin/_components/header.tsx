@@ -1,9 +1,12 @@
-"use client";
+"use client"
 
-import React from "react";
-import { signOut, useSession } from "next-auth/react";
+import React from "react"
+import { signOut, useSession } from "next-auth/react"
 
-import { Button } from "~/components/ui/button";
+import { useSidebar } from "~/lib/hooks/use-sidebar"
+import { cn } from "~/lib/utils"
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
+import { Button } from "~/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,36 +14,33 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+} from "~/components/ui/dropdown-menu"
+import { Icons } from "~/components/icons"
 
-import { Breadcrumbs } from "./breadcrumbs";
-import { MobileSidebar } from "./mobile-sidebar";
-import { useSidebar } from "~/lib/hooks/use-sidebar";
-import { Icons } from "~/components/icons";
-import { cn } from "~/lib/utils";
+import { Breadcrumbs } from "./breadcrumbs"
+import { MobileSidebar } from "./mobile-sidebar"
 
 export const AdminHeader = () => {
-  const { data } = useSession();
-  const { isOpen, onOpen } = useSidebar();
+  const { data } = useSession()
+  const { isOpen, onOpen } = useSidebar()
 
-  const user = data?.user;
+  const user = data?.user
 
   const avatarFallback =
     user?.name
       ?.split(" ")
       .slice(0, 2)
       .map((word) => word.substring(0, 1))
-      .join("") ?? "";
+      .join("") ?? ""
 
   return (
-    <header className="sticky top-0 z-50 flex h-14 items-center gap-4 border-b bg-background px-4 backdrop-blur-sm dark:bg-card lg:h-[60px] lg:px-6">
+    <header className="sticky left-0 top-0 z-50 flex h-14 items-center gap-4 border-b bg-background px-4 backdrop-blur-sm dark:bg-card lg:h-[60px] lg:px-6">
       <MobileSidebar />
       <Button
         size="icon"
         variant="ghost"
         onClick={onOpen}
-        className={cn("group -ml-4 hidden", isOpen ? "md:hidden" : "md:flex")}
+        className={cn("group -ml-2 hidden", isOpen ? "lg:hidden" : "lg:flex")}
       >
         <Icons.panelLeftOpen className="size-4 text-muted-foreground transition-colors group-hover:text-primary" />
         <span className="sr-only">Open side panel</span>
@@ -48,8 +48,12 @@ export const AdminHeader = () => {
       <Breadcrumbs />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="ml-auto rounded-full">
-            <Avatar className="size-8">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="ml-auto size-6 rounded-full"
+          >
+            <Avatar className="size-full">
               <AvatarImage src={user?.image ?? ""} alt="User avater" />
               <AvatarFallback className="text-xs">
                 {avatarFallback}
@@ -72,5 +76,5 @@ export const AdminHeader = () => {
         </DropdownMenuContent>
       </DropdownMenu>
     </header>
-  );
-};
+  )
+}

@@ -1,5 +1,6 @@
-import React from "react";
-import Footer from "~/components/footer";
+import React from "react"
+
+import Footer from "~/components/footer"
 
 const StorefrontRoutesLayout = ({ children }: React.PropsWithChildren) => {
   return (
@@ -10,7 +11,7 @@ const StorefrontRoutesLayout = ({ children }: React.PropsWithChildren) => {
       {children}
       <Footer className="absolute bottom-0" />
     </div>
-  );
-};
+  )
+}
 
-export default StorefrontRoutesLayout;
+export default StorefrontRoutesLayout

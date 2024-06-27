@@ -1,13 +1,13 @@
-import { getServerAuthSession } from "~/server/auth";
+import { getServerAuthSession } from "~/server/auth"
 
 export const currentUser = async () => {
-  const session = await getServerAuthSession();
+  const session = await getServerAuthSession()
 
-  return session?.user;
-};
+  return session?.user
+}
 
 export const currentRole = async () => {
-  const session = await getServerAuthSession();
+  const session = await getServerAuthSession()
 
-  return session?.user.role;
-};
+  return session?.user.role
+}

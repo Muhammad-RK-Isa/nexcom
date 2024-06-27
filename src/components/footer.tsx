@@ -1,14 +1,15 @@
-import React from "react";
-import Link from "next/link";
+import React from "react"
+import Link from "next/link"
 
-import { Icons } from "./icons";
-import { cn } from "~/lib/utils";
-import { ThemeSelect } from "./theme-select";
-import { Skeleton } from "./ui/skeleton";
+import { cn } from "~/lib/utils"
+
+import { Icons } from "./icons"
+import { ThemeSelect } from "./theme-select"
+import { Skeleton } from "./ui/skeleton"
 
 interface FooterProps {
-  className?: string;
-  props?: React.HTMLProps<HTMLDivElement>;
+  className?: string
+  props?: React.HTMLProps<HTMLDivElement>
 }
 
 const Footer: React.FC<FooterProps> = ({ className, props }) => {
@@ -17,7 +18,7 @@ const Footer: React.FC<FooterProps> = ({ className, props }) => {
       {...props}
       className={cn(
         "flex w-full flex-col items-center justify-between gap-8 border-t p-8 pt-8 sm:flex-row",
-        className,
+        className
       )}
     >
       <p className="text-xs">
@@ -61,7 +62,7 @@ const Footer: React.FC<FooterProps> = ({ className, props }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

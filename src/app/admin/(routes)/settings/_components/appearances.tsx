@@ -1,26 +1,27 @@
-"use client";
+"use client"
 
-import React from "react";
-import { useTheme } from "next-themes";
-import { Button } from "~/components/ui/button";
+import React from "react"
+import { useTheme } from "next-themes"
+
+import { Button } from "~/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card";
+} from "~/components/ui/card"
 
 export const Appearances = () => {
-  const { setTheme } = useTheme();
-  const [mounted, setMounted] = React.useState(false);
+  const { setTheme } = useTheme()
+  const [mounted, setMounted] = React.useState(false)
 
   React.useEffect(() => {
-    setMounted(true);
-  }, []);
+    setMounted(true)
+  }, [])
 
   if (!mounted) {
-    return null;
+    return null
   }
 
   return (
@@ -121,5 +122,5 @@ export const Appearances = () => {
         </CardContent>
       </Card>
     </div>
-  );
-};
+  )
+}

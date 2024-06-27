@@ -1,20 +1,20 @@
-import { isEqual } from "lodash";
+import { isEqual } from "lodash"
 
-import { generateId } from "~/lib/utils";
-import type { ProductOption, ProductVariant } from "~/types";
+import { generateId } from "~/lib/utils"
+import type { ProductOption, ProductVariant } from "~/types"
 
 interface VariantCombo {
-  optionId: string;
-  valueId: string;
-  value: string;
-  rank: number;
+  optionId: string
+  valueId: string
+  value: string
+  rank: number
 }
 
 interface GenerateVariantsProps {
-  options: ProductOption[];
-  price?: number;
-  inventoryQuantity?: number;
-  existingVariants?: ProductVariant[];
+  options: ProductOption[]
+  price?: number
+  inventoryQuantity?: number
+  existingVariants?: ProductVariant[]
 }
 export const generateVariants = ({
   options,
@@ -22,14 +22,14 @@ export const generateVariants = ({
   inventoryQuantity,
   existingVariants,
 }: GenerateVariantsProps): ProductVariant[] => {
-  if (options.length === 0) return [];
+  if (options.length === 0) return []
 
   const combinations = (
     opts: ProductOption[],
-    prefix: VariantCombo[] = [],
+    prefix: VariantCombo[] = []
   ): VariantCombo[][] => {
-    if (opts.length === 0) return [prefix];
-    const [first, ...rest] = opts;
+    if (opts.length === 0) return [prefix]
+    const [first, ...rest] = opts
     return first!.values.flatMap((value) =>
       combinations(rest, [
         ...prefix,
@@ -39,11 +39,11 @@ export const generateVariants = ({
           value: value.value,
           rank: value.rank,
         },
-      ]),
-    );
-  };
+      ])
+    )
+  }
 
-  const variantCombos = combinations(options);
+  const variantCombos = combinations(options)
 
   return variantCombos.map((combo) => {
     const optionValues = combo.map(({ valueId, optionId, value, rank }) => ({
@@ -51,13 +51,13 @@ export const generateVariants = ({
       value,
       rank,
       optionId,
-    }));
+    }))
     const ev = existingVariants?.find(({ optionValues: optVals }) =>
       isEqual(
         optionValues.map(({ optionId, value }) => ({ optionId, value })),
-        optVals?.map(({ optionId, value }) => ({ optionId, value })),
-      ),
-    );
+        optVals?.map(({ optionId, value }) => ({ optionId, value }))
+      )
+    )
 
     return {
       id: ev?.id ?? generateId({ prefix: "variant" }),
@@ -65,6 +65,6 @@ export const generateVariants = ({
       inventoryQuantity: ev?.inventoryQuantity ?? inventoryQuantity ?? 0,
       optionValues,
       image: ev?.image ?? null,
-    };
-  });
-};
+    }
+  })
+}

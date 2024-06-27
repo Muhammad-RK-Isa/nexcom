@@ -1,23 +1,24 @@
-import { z } from "zod";
-import { createSelectSchema } from "drizzle-zod";
 import {
   images,
   pgProductStatuses,
   pgSizeUnits,
   pgWeightUnits,
   products,
-} from "~/server/db/schema";
-import { generateId } from "~/lib/utils";
+} from "~/server/db/schema"
+import { createSelectSchema } from "drizzle-zod"
+import { z } from "zod"
 
-export const baseImageSchema = createSelectSchema(images);
+import { generateId } from "~/lib/utils"
+
+export const baseImageSchema = createSelectSchema(images)
 
 export const insertImageSchema = baseImageSchema.omit({
   createdAt: true,
   updatedAt: true,
-});
+})
 
-export const imageIdSchema = baseImageSchema.pick({ id: true });
-export const imageIdsSchema = z.array(imageIdSchema);
+export const imageIdSchema = baseImageSchema.pick({ id: true })
+export const imageIdsSchema = z.array(imageIdSchema)
 
 export const updateImageSchema = z.object({
   id: imageIdSchema,
@@ -25,17 +26,17 @@ export const updateImageSchema = z.object({
   description: z.string().optional(),
   url: z.string().min(1, { message: "Please enter a url" }),
   isThumbnail: z.boolean().optional().default(false),
-});
+})
 
 export const imageSchema = baseImageSchema.omit({
   createdAt: true,
   updatedAt: true,
-});
+})
 
-export const productStatuses = z.enum(pgProductStatuses.enumValues);
+export const productStatuses = z.enum(pgProductStatuses.enumValues)
 
-export const weightUnits = z.enum(pgWeightUnits.enumValues);
-export const sizeUnits = z.enum(pgSizeUnits.enumValues);
+export const weightUnits = z.enum(pgWeightUnits.enumValues)
+export const sizeUnits = z.enum(pgSizeUnits.enumValues)
 
 export const baseProductSchema = createSelectSchema(products)
   .extend({
@@ -93,7 +94,7 @@ export const baseProductSchema = createSelectSchema(products)
     weightUnit: true,
     heightUnit: true,
     lengthUnit: true,
-  });
+  })
 
 export const searchImageParamsSchema = z.object({
   page: z.coerce.number().default(1),
@@ -103,19 +104,19 @@ export const searchImageParamsSchema = z.object({
   from: z.string().optional(),
   to: z.string().optional(),
   operator: z.enum(["and", "or"]).optional(),
-});
+})
 
 export const updateProductStatusSchema = baseProductSchema.pick({
   id: true,
   status: true,
-});
-export const productIdSchema = baseProductSchema.pick({ id: true });
-export const productIdsSchema = z.array(productIdSchema);
+})
+export const productIdSchema = baseProductSchema.pick({ id: true })
+export const productIdsSchema = z.array(productIdSchema)
 
 export const updateProductsStatusSchema = z.object({
   productIds: productIdsSchema,
   status: productStatuses,
-});
+})
 
 export const searchProductParamsSchema = z.object({
   page: z.coerce.number().default(1),
@@ -126,14 +127,14 @@ export const searchProductParamsSchema = z.object({
   from: z.string().optional(),
   to: z.string().optional(),
   operator: z.enum(["and", "or"]).optional(),
-});
+})
 
 export const optionValueSchema = z.object({
   id: z.string().default(generateId({ prefix: "optval" })),
   value: z.string().min(1, { message: "Option value cannot be empty" }),
   rank: z.number().nonnegative(),
   optionId: z.string(),
-});
+})
 
 export const productOptionSchema = z.object({
   id: z.string().default(generateId({ prefix: "opt" })),
@@ -142,7 +143,7 @@ export const productOptionSchema = z.object({
   values: z
     .array(optionValueSchema)
     .min(1, { message: "At least one value is required" }),
-});
+})
 
 export const productVariantSchema = z.object({
   id: z
@@ -162,13 +163,13 @@ export const productVariantSchema = z.object({
   optionValues: z.array(optionValueSchema).default([]).optional(),
   image: imageSchema.nullable().optional(),
   createdAt: z.date().nullable().optional(),
-});
+})
 
 export const updateProductSchema = baseProductSchema.extend({
   options: z.array(productOptionSchema).optional().default([]),
   variants: z.array(productVariantSchema).optional().default([]),
-});
+})
 
 export const insertProductSchema = updateProductSchema.omit({
   id: true,
-});
+})

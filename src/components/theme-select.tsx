@@ -1,31 +1,32 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { useTheme } from "next-themes";
+import * as React from "react"
+import { useTheme } from "next-themes"
 
-import { Icons } from "~/components/icons";
-import { cn } from "~/lib/utils";
-import { Button } from "./ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { cn } from "~/lib/utils"
+import { Icons } from "~/components/icons"
+
+import { Button } from "./ui/button"
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip"
 
 interface ThemeToggleProps {
-  className?: string;
-  tooltipSide?: "right" | "left" | "top" | "bottom";
+  className?: string
+  tooltipSide?: "right" | "left" | "top" | "bottom"
 }
 
 export const ThemeSelect: React.FC<ThemeToggleProps> = ({
   className,
   tooltipSide = "top",
 }) => {
-  const { theme, setTheme, themes } = useTheme();
-  const [mounted, setMounted] = React.useState(false);
+  const { theme, setTheme, themes } = useTheme()
+  const [mounted, setMounted] = React.useState(false)
 
   React.useEffect(() => {
-    setMounted(true);
-  }, []);
+    setMounted(true)
+  }, [])
 
   if (!mounted) {
-    return null;
+    return null
   }
 
   return (
@@ -40,7 +41,7 @@ export const ThemeSelect: React.FC<ThemeToggleProps> = ({
                 "size-max cursor-pointer rounded-full p-2 transition-colors hover:text-primary",
                 theme === thm
                   ? "bg-accent text-primary"
-                  : "text-muted-foreground",
+                  : "text-muted-foreground"
               )}
               onClick={() => setTheme(thm)}
             >
@@ -59,5 +60,5 @@ export const ThemeSelect: React.FC<ThemeToggleProps> = ({
         </Tooltip>
       ))}
     </div>
-  );
-};
+  )
+}

@@ -1,32 +1,32 @@
-import "server-only";
+import "server-only"
 
-import { and, eq, inArray, ne } from "drizzle-orm";
-
-import { db } from "~/server/db";
+import { db } from "~/server/db"
 import {
-  productOptionValues,
   productOptions,
-  productVariants,
+  productOptionValues,
   products,
   productsImages,
+  productVariants,
   variantsOptionValues,
-} from "~/server/db/schema";
+} from "~/server/db/schema"
+import { and, eq, inArray, ne } from "drizzle-orm"
+
 import type {
   CreateProductInput,
   ProductId,
   ProductOptionValue,
   UpdateProductInput,
-  UpdateProductStatusInput,
   UpdateProductsStatusInput,
-} from "~/types";
+  UpdateProductStatusInput,
+} from "~/types"
 
 export const createProduct = async (product: CreateProductInput) => {
   try {
     const [existingRow] = await db
       .select()
       .from(products)
-      .where(eq(products.title, product.title));
-    if (existingRow) throw new Error("Existing product");
+      .where(eq(products.title, product.title))
+    if (existingRow) throw new Error("Existing product")
 
     const p = await db.transaction(async (tx) => {
       const [productRecord] = await tx
@@ -40,7 +40,7 @@ export const createProduct = async (product: CreateProductInput) => {
           height: product.height?.value,
           heightUnit: product.height?.unit,
         })
-        .returning();
+        .returning()
 
       if (productRecord) {
         product.images?.map(
@@ -51,8 +51,8 @@ export const createProduct = async (product: CreateProductInput) => {
               isThumbnail:
                 product.images?.findIndex((i) => i.id === image.id) === 0,
               rank: product.images?.findIndex((i) => i.id === image.id),
-            }),
-        );
+            })
+        )
 
         for (const option of product.options) {
           const [newOption] = await tx
@@ -63,14 +63,14 @@ export const createProduct = async (product: CreateProductInput) => {
               rank: option.rank,
               productId: productRecord.id,
             })
-            .returning();
+            .returning()
 
           if (newOption)
             for (const value of option.values) {
               await tx.insert(productOptionValues).values({
                 ...value,
                 optionId: newOption.id,
-              });
+              })
             }
         }
 
@@ -84,25 +84,25 @@ export const createProduct = async (product: CreateProductInput) => {
               productId: productRecord.id,
               imageId: variant.image?.id,
             })
-            .returning();
+            .returning()
 
           if (variantRecord && variant.optionValues) {
             for (const optionValue of variant.optionValues) {
               await tx.insert(variantsOptionValues).values({
                 variantId: variantRecord.id,
                 optionValueId: optionValue.id,
-              });
+              })
             }
           }
         }
-        return productRecord;
+        return productRecord
       }
-    });
-    return { product: p };
+    })
+    return { product: p }
   } catch (err) {
-    throw err;
+    throw err
   }
-};
+}
 
 export const updateProduct = async (product: UpdateProductInput) => {
   try {
@@ -110,10 +110,10 @@ export const updateProduct = async (product: UpdateProductInput) => {
       .select()
       .from(products)
       .where(
-        and(eq(products.title, product.title), ne(products.id, product.id!)),
-      );
+        and(eq(products.title, product.title), ne(products.id, product.id!))
+      )
 
-    if (existingRow) throw new Error("Existing product");
+    if (existingRow) throw new Error("Existing product")
 
     const p = await db.transaction(async (tx) => {
       await tx
@@ -127,7 +127,7 @@ export const updateProduct = async (product: UpdateProductInput) => {
           height: product.height?.value,
           heightUnit: product.height?.unit,
         })
-        .where(eq(products.id, product.id));
+        .where(eq(products.id, product.id))
 
       const productRecord = await tx.query.products.findFirst({
         where: (t, { eq }) => eq(t.id, product.id),
@@ -135,11 +135,11 @@ export const updateProduct = async (product: UpdateProductInput) => {
           options: true,
           variants: true,
         },
-      });
+      })
 
       await tx
         .delete(productsImages)
-        .where(eq(productsImages.productId, product.id));
+        .where(eq(productsImages.productId, product.id))
 
       await Promise.all(
         product.images?.map(async (image) => {
@@ -149,9 +149,9 @@ export const updateProduct = async (product: UpdateProductInput) => {
             isThumbnail:
               product.images?.findIndex((i) => i.id === image.id) === 0,
             rank: product.images?.findIndex((i) => i.id === image.id),
-          });
-        }) ?? [],
-      );
+          })
+        }) ?? []
+      )
 
       const optionValueRecords = await tx.query.productOptionValues.findMany({
         where: (t, { inArray }) =>
@@ -161,27 +161,27 @@ export const updateProduct = async (product: UpdateProductInput) => {
         with: {
           option: true,
         },
-      });
+      })
 
       if (productRecord) {
         const updatableOptions = product.options.filter(({ id, title, rank }) =>
           productRecord.options.some(
-            (o) => o.id === id && o.title === title && o.rank === rank,
-          ),
-        );
+            (o) => o.id === id && o.title === title && o.rank === rank
+          )
+        )
 
-        const updatableOptionValues = new Set<ProductOptionValue>();
+        const updatableOptionValues = new Set<ProductOptionValue>()
         product.options.forEach(({ values }) => {
           values.forEach((v) => {
             if (
               optionValueRecords.some(
-                ({ id, value }) => v.id === id && v.value === value,
+                ({ id, value }) => v.id === id && v.value === value
               )
             ) {
-              updatableOptionValues.add(v);
+              updatableOptionValues.add(v)
             }
-          });
-        });
+          })
+        })
 
         const updatableVariants = product.variants.filter(
           ({ id, price, inventoryQuantity, image }) =>
@@ -190,16 +190,16 @@ export const updateProduct = async (product: UpdateProductInput) => {
                 v.id === id &&
                 v.price === price &&
                 v.inventoryQuantity === inventoryQuantity &&
-                v.imageId === image?.id,
-            ),
-        );
+                v.imageId === image?.id
+            )
+        )
 
         if (
           updatableOptions.length === product.options.length &&
           updatableOptionValues.size === optionValueRecords.length &&
           updatableVariants.length === product.variants.length
         ) {
-          console.log("✅ Updatable. Updating...");
+          console.log("✅ Updatable. Updating...")
           for (const option of updatableOptions) {
             await tx
               .update(productOptions)
@@ -209,14 +209,14 @@ export const updateProduct = async (product: UpdateProductInput) => {
                 productId: productRecord.id,
               })
               .where(eq(productOptions.id, option.id))
-              .returning();
+              .returning()
           }
 
           for (const optVal of updatableOptionValues) {
             await tx
               .update(productOptionValues)
               .set(optVal)
-              .where(eq(productOptionValues.id, optVal.id));
+              .where(eq(productOptionValues.id, optVal.id))
           }
 
           for (const variant of updatableVariants) {
@@ -228,29 +228,29 @@ export const updateProduct = async (product: UpdateProductInput) => {
                 imageId: variant.image?.id,
                 productId: variant.productId,
               })
-              .where(eq(productVariants.id, variant.id!));
+              .where(eq(productVariants.id, variant.id!))
           }
-          return;
+          return
         }
 
-        console.log("❌ Not Updatable. Recreating everything...");
+        console.log("❌ Not Updatable. Recreating everything...")
         await tx.delete(productOptions).where(
           inArray(
             productOptions.id,
-            productRecord.options.map(({ id }) => id),
-          ),
-        );
+            productRecord.options.map(({ id }) => id)
+          )
+        )
 
         await tx.delete(productOptionValues).where(
           inArray(
             productOptionValues.id,
-            optionValueRecords.map(({ id }) => id),
-          ),
-        );
+            optionValueRecords.map(({ id }) => id)
+          )
+        )
 
         await tx
           .delete(productVariants)
-          .where(eq(productVariants.productId, productRecord.id));
+          .where(eq(productVariants.productId, productRecord.id))
 
         for (const option of product.options) {
           const [newOption] = await tx
@@ -269,7 +269,7 @@ export const updateProduct = async (product: UpdateProductInput) => {
                 productId: productRecord.id,
               },
             })
-            .returning();
+            .returning()
 
           if (newOption) {
             await Promise.all(
@@ -283,13 +283,13 @@ export const updateProduct = async (product: UpdateProductInput) => {
                   .onConflictDoUpdate({
                     target: [productOptionValues.id],
                     set: value,
-                  }),
-              ),
-            );
+                  })
+              )
+            )
           }
         }
 
-        console.log("📦 Variants", product.variants);
+        console.log("📦 Variants", product.variants)
         for (const variant of product.variants) {
           const [variantRecord] = await tx
             .insert(productVariants)
@@ -309,7 +309,7 @@ export const updateProduct = async (product: UpdateProductInput) => {
                 productId: productRecord.id,
               },
             })
-            .returning();
+            .returning()
 
           if (variantRecord && variant.optionValues) {
             await Promise.all(
@@ -329,20 +329,20 @@ export const updateProduct = async (product: UpdateProductInput) => {
                       variantId: variantRecord.id,
                       optionValueId: optionValue.id,
                     },
-                  }),
-              ),
-            );
+                  })
+              )
+            )
           }
         }
-        return productRecord;
+        return productRecord
       }
-    });
+    })
 
-    return p;
+    return p
   } catch (err) {
-    throw err;
+    throw err
   }
-};
+}
 
 export const updateProductStatus = async ({
   id,
@@ -353,12 +353,12 @@ export const updateProductStatus = async ({
       .update(products)
       .set({ status })
       .where(eq(products.id, id))
-      .returning();
-    return p;
+      .returning()
+    return p
   } catch (err) {
-    throw err;
+    throw err
   }
-};
+}
 
 export const updateProductsStatus = async ({
   status,
@@ -366,8 +366,8 @@ export const updateProductsStatus = async ({
 }: UpdateProductsStatusInput) => {
   if (productIds.length < 1)
     throw new Error(
-      "At least one product must be selected to perform this action",
-    );
+      "At least one product must be selected to perform this action"
+    )
   try {
     const result = await db
       .update(products)
@@ -375,36 +375,33 @@ export const updateProductsStatus = async ({
       .where(
         inArray(
           products.id,
-          productIds.map(({ id }) => id),
-        ),
-      );
-    return result;
+          productIds.map(({ id }) => id)
+        )
+      )
+    return result
   } catch (err) {
-    throw err;
+    throw err
   }
-};
+}
 
 export const deleteProduct = async ({ id }: ProductId) => {
   try {
-    const [p] = await db
-      .delete(products)
-      .where(eq(products.id, id))
-      .returning();
-    return p;
+    const [p] = await db.delete(products).where(eq(products.id, id)).returning()
+    return p
   } catch (err) {
-    throw err;
+    throw err
   }
-};
+}
 
 export const deleteProducts = async (ids: ProductId[]) => {
-  const productIdArray = ids.map(({ id }) => id);
+  const productIdArray = ids.map(({ id }) => id)
   try {
     const rows = await db
       .delete(products)
       .where(inArray(products.id, productIdArray))
-      .returning();
-    return rows;
+      .returning()
+    return rows
   } catch (error) {
-    throw error;
+    throw error
   }
-};
+}

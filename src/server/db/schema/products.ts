@@ -1,4 +1,4 @@
-import { relations, sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm"
 import {
   boolean,
   index,
@@ -9,16 +9,17 @@ import {
   text,
   timestamp,
   varchar,
-} from "drizzle-orm/pg-core";
+} from "drizzle-orm/pg-core"
 
-import { generateId } from "~/lib/utils";
-import { productOptions } from "./product-options";
-import { productVariants } from "./product-variants";
-import { productsImages } from "./products-images";
+import { generateId } from "~/lib/utils"
 
-export const pgProductStatuses = pgEnum("productStatuses", ["active", "draft"]);
-export const pgWeightUnits = pgEnum("weightUnit", ["kg", "g", "lb", "oz"]);
-export const pgSizeUnits = pgEnum("pgSizeUnit", ["m", "cm", "mm", "in", "ft"]);
+import { productOptions } from "./product-options"
+import { productVariants } from "./product-variants"
+import { productsImages } from "./products-images"
+
+export const pgProductStatuses = pgEnum("productStatuses", ["active", "draft"])
+export const pgWeightUnits = pgEnum("weightUnit", ["kg", "g", "lb", "oz"])
+export const pgSizeUnits = pgEnum("pgSizeUnit", ["m", "cm", "mm", "in", "ft"])
 
 export const products = pgTable(
   "products",
@@ -55,11 +56,11 @@ export const products = pgTable(
   },
   (t) => ({
     slugIdx: index("slug_index").on(t.slug),
-  }),
-);
+  })
+)
 
 export const productsRelations = relations(products, ({ many }) => ({
   options: many(productOptions),
   variants: many(productVariants),
   productImages: many(productsImages),
-}));
+}))

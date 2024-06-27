@@ -1,10 +1,10 @@
-import { type IconProps, Icons } from "~/components/icons";
+import { Icons, type IconProps } from "~/components/icons"
 
 interface AdminNavLinks {
-  title: string;
-  icon: React.FunctionComponent<IconProps>;
-  path: string;
-  active: boolean;
+  title: string
+  icon: React.FunctionComponent<IconProps>
+  path: string
+  active: boolean
 }
 
 export const adminNavLinks: AdminNavLinks[] = [
@@ -38,4 +38,4 @@ export const adminNavLinks: AdminNavLinks[] = [
     path: "/",
     active: true,
   },
-];
+]

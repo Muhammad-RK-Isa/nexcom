@@ -1,19 +1,20 @@
-import React from "react";
+import React from "react"
+import { searchProductParamsSchema } from "~/schema"
+import { api } from "~/trpc/server"
 
-import { ProductsTableProvider } from "./_components/products-table-provider";
-import type { SearchParams } from "~/types";
-import { searchProductParamsSchema } from "~/schema";
-import { DataTableSkeleton } from "~/components/skeletons/data-table-skeleton";
-import { ProductsTable } from "./_components/products-table";
-import { api } from "~/trpc/server";
+import { DataTableSkeleton } from "~/components/skeletons/data-table-skeleton"
+import type { SearchParams } from "~/types"
+
+import { ProductsTable } from "./_components/products-table"
+import { ProductsTableProvider } from "./_components/products-table-provider"
 
 interface ProductsPageProps {
-  searchParams: SearchParams;
+  searchParams: SearchParams
 }
 
 const ProductsPage: React.FC<ProductsPageProps> = async ({ searchParams }) => {
-  const search = searchProductParamsSchema.parse(searchParams);
-  const tableProducts = await api.products.getTableProducts(search);
+  const search = searchProductParamsSchema.parse(searchParams)
+  const tableProducts = await api.products.getTableProducts(search)
   return (
     <ProductsTableProvider>
       <React.Suspense
@@ -34,6 +35,7 @@ const ProductsPage: React.FC<ProductsPageProps> = async ({ searchParams }) => {
               "6.5rem",
               "2.5rem",
             ]}
+            shrinkZero
           />
         }
       >
@@ -44,7 +46,7 @@ const ProductsPage: React.FC<ProductsPageProps> = async ({ searchParams }) => {
         <ProductsTable tableProducts={tableProducts} />
       </React.Suspense>
     </ProductsTableProvider>
-  );
-};
+  )
+}
 
-export default ProductsPage;
+export default ProductsPage

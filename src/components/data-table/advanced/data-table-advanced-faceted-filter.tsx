@@ -1,6 +1,6 @@
-import type { Column } from "@tanstack/react-table";
-import type { DataTableFilterOption, Option } from "~/types";
+import type { Column } from "@tanstack/react-table"
 
+import { cn } from "~/lib/utils"
 import {
   Command,
   CommandEmpty,
@@ -9,18 +9,18 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "~/components/ui/command";
-import { cn } from "~/lib/utils";
-import { Icons } from "~/components/icons";
+} from "~/components/ui/command"
+import { Icons } from "~/components/icons"
+import type { DataTableFilterOption, Option } from "~/types"
 
 interface DataTableAdvancedFacetedFilterProps<TData, TValue> {
-  column?: Column<TData, TValue>;
-  title?: string;
-  options: Option[];
-  selectedValues: Set<string>;
+  column?: Column<TData, TValue>
+  title?: string
+  options: Option[]
+  selectedValues: Set<string>
   setSelectedOptions: React.Dispatch<
     React.SetStateAction<DataTableFilterOption<TData>[]>
-  >;
+  >
 }
 
 export function DataTableAdvancedFacetedFilter<TData, TValue>({
@@ -43,21 +43,21 @@ export function DataTableAdvancedFacetedFilter<TData, TValue>({
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup className="px-0">
           {options.map((option) => {
-            const isSelected = selectedValues.has(option.value);
+            const isSelected = selectedValues.has(option.value)
 
             return (
               <CommandItem
                 key={option.value}
                 onSelect={() => {
                   if (isSelected) {
-                    selectedValues.delete(option.value);
+                    selectedValues.delete(option.value)
                   } else {
-                    selectedValues.add(option.value);
+                    selectedValues.add(option.value)
                   }
-                  const filterValues = Array.from(selectedValues);
+                  const filterValues = Array.from(selectedValues)
                   column?.setFilterValue(
-                    filterValues.length ? filterValues : undefined,
-                  );
+                    filterValues.length ? filterValues : undefined
+                  )
                   setSelectedOptions((prev) =>
                     prev.map((item) =>
                       item.value === column?.id
@@ -65,9 +65,9 @@ export function DataTableAdvancedFacetedFilter<TData, TValue>({
                             ...item,
                             filterValues,
                           }
-                        : item,
-                    ),
-                  );
+                        : item
+                    )
+                  )
                 }}
               >
                 <div
@@ -75,7 +75,7 @@ export function DataTableAdvancedFacetedFilter<TData, TValue>({
                     "mr-2 flex size-4 items-center justify-center rounded-sm border border-primary",
                     isSelected
                       ? "bg-primary text-primary-foreground"
-                      : "opacity-50 [&_svg]:invisible",
+                      : "opacity-50 [&_svg]:invisible"
                   )}
                 >
                   <Icons.check className="size-4" aria-hidden="true" />
@@ -94,7 +94,7 @@ export function DataTableAdvancedFacetedFilter<TData, TValue>({
                     </span>
                   )}
               </CommandItem>
-            );
+            )
           })}
         </CommandGroup>
         {selectedValues.size > 0 && (
@@ -103,7 +103,7 @@ export function DataTableAdvancedFacetedFilter<TData, TValue>({
             <CommandGroup>
               <CommandItem
                 onSelect={() => {
-                  column?.setFilterValue(undefined);
+                  column?.setFilterValue(undefined)
                   setSelectedOptions((prev) =>
                     prev.map((item) =>
                       item.value === column?.id
@@ -111,9 +111,9 @@ export function DataTableAdvancedFacetedFilter<TData, TValue>({
                             ...item,
                             filterValues: [],
                           }
-                        : item,
-                    ),
-                  );
+                        : item
+                    )
+                  )
                 }}
                 className="justify-center text-center"
               >
@@ -124,5 +124,5 @@ export function DataTableAdvancedFacetedFilter<TData, TValue>({
         )}
       </CommandList>
     </Command>
-  );
+  )
 }

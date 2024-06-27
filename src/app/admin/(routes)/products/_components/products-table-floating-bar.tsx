@@ -1,29 +1,12 @@
-import * as React from "react";
+import * as React from "react"
+import { SelectTrigger } from "@radix-ui/react-select"
+import { type Table } from "@tanstack/react-table"
+import { productStatuses } from "~/schema"
+import { api } from "~/trpc/react"
+import { useRouter } from "next-nprogress-bar"
+import { toast } from "sonner"
 
-import { SelectTrigger } from "@radix-ui/react-select";
-import { type Table } from "@tanstack/react-table";
-import { toast } from "sonner";
-
-import { exportTableToCSV } from "~/lib/export";
-import { Button } from "~/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-} from "~/components/ui/select";
-import { Separator } from "~/components/ui/separator";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
-import { Kbd } from "~/components/kbd";
-import type { TableProduct } from "~/types";
-import { productStatuses } from "~/schema";
-import { api } from "~/trpc/react";
-import { useRouter } from "next-nprogress-bar";
-import { Icons } from "~/components/icons";
+import { exportTableToCSV } from "~/lib/export"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -33,22 +16,38 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "~/components/ui/alert-dialog";
+} from "~/components/ui/alert-dialog"
+import { Button } from "~/components/ui/button"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+} from "~/components/ui/select"
+import { Separator } from "~/components/ui/separator"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "~/components/ui/tooltip"
+import { Icons } from "~/components/icons"
+import { Kbd } from "~/components/kbd"
+import type { TableProduct } from "~/types"
 
 interface ProductsTableFloatingBarProps {
-  table: Table<TableProduct>;
+  table: Table<TableProduct>
 }
 
 export function ProductsTableFloatingBar({
   table,
 }: ProductsTableFloatingBarProps) {
-  const rows = table.getFilteredSelectedRowModel().rows;
+  const rows = table.getFilteredSelectedRowModel().rows
 
-  const router = useRouter();
+  const router = useRouter()
 
   const [showDeleteProductAlertDialog, setShowDeleteProductAlertDialog] =
-    React.useState(false);
-  const [isExporting, startExport] = React.useTransition();
+    React.useState(false)
+  const [isExporting, startExport] = React.useTransition()
 
   const { mutate: updateProductsStatus, isPending: isUpdating } =
     api.products.updateProductsStatus.useMutation({
@@ -56,14 +55,14 @@ export function ProductsTableFloatingBar({
         const message =
           rows.length > 1
             ? `${rows.length} products updated`
-            : "One product updated";
-        toast.success(message);
-        router.refresh();
+            : "One product updated"
+        toast.success(message)
+        router.refresh()
       },
       onError: (err) => {
-        toast.error(err.message);
+        toast.error(err.message)
       },
-    });
+    })
 
   const { mutate: deleteProducts, isPending: isDeleting } =
     api.products.deleteProducts.useMutation({
@@ -71,25 +70,25 @@ export function ProductsTableFloatingBar({
         const message =
           rows.length > 1
             ? `${rows.length} products deleted`
-            : "One product deleted";
-        toast.success(message);
-        table.toggleAllRowsSelected(false);
-        setShowDeleteProductAlertDialog(false);
-        router.refresh();
+            : "One product deleted"
+        toast.success(message)
+        table.toggleAllRowsSelected(false)
+        setShowDeleteProductAlertDialog(false)
+        router.refresh()
       },
-    });
+    })
 
   // Clear selection on Escape key press
   React.useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
-        table.toggleAllRowsSelected(false);
+        table.toggleAllRowsSelected(false)
       }
     }
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [table]);
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [table])
 
   return (
     <div className="fixed inset-x-0 bottom-4 z-50 mx-auto w-fit px-4">
@@ -129,7 +128,7 @@ export function ProductsTableFloatingBar({
                 updateProductsStatus({
                   productIds: rows.map((row) => ({ id: row.original.id })),
                   status: value,
-                });
+                })
               }}
             >
               <Tooltip delayDuration={250}>
@@ -185,8 +184,8 @@ export function ProductsTableFloatingBar({
                         excludeColumns: ["select", "actions"],
                         onlySelected: true,
                         filename: "products",
-                      });
-                    });
+                      })
+                    })
                   }}
                   disabled={isExporting}
                 >
@@ -235,7 +234,7 @@ export function ProductsTableFloatingBar({
                         variant="destructive"
                         onClick={() =>
                           deleteProducts(
-                            rows.map((row) => ({ id: row.original.id })),
+                            rows.map((row) => ({ id: row.original.id }))
                           )
                         }
                         loading={isDeleting}
@@ -255,5 +254,5 @@ export function ProductsTableFloatingBar({
         </div>
       </div>
     </div>
-  );
+  )
 }

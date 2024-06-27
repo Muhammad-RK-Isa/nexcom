@@ -1,16 +1,11 @@
-import { relations } from "drizzle-orm";
-import {
-  integer,
-  pgTable,
-  real,
-  timestamp,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm"
+import { integer, pgTable, real, timestamp, varchar } from "drizzle-orm/pg-core"
 
-import { generateId } from "~/lib/utils";
-import { variantsOptionValues } from "./variants-option-values";
-import { products } from "./products";
-import { images } from "./images";
+import { generateId } from "~/lib/utils"
+
+import { images } from "./images"
+import { products } from "./products"
+import { variantsOptionValues } from "./variants-option-values"
 
 export const productVariants = pgTable("product_variants", {
   id: varchar("id", { length: 255 })
@@ -27,7 +22,7 @@ export const productVariants = pgTable("product_variants", {
   imageId: varchar("image_id", { length: 255 }).references(() => images.id, {
     onDelete: "set null",
   }),
-});
+})
 
 export const variantsRelations = relations(
   productVariants,
@@ -41,5 +36,5 @@ export const variantsRelations = relations(
       references: [images.id],
     }),
     variantsOptionValues: many(variantsOptionValues),
-  }),
-);
+  })
+)

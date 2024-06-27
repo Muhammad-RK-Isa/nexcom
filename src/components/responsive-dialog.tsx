@@ -1,22 +1,24 @@
-"use client";
+"use client"
 
 import {
   useState,
-  type ReactNode,
   type Dispatch,
+  type ReactNode,
   type SetStateAction,
-} from "react";
+} from "react"
 
-import { Button } from "~/components/ui/button";
+import { useMediaQuery } from "~/lib/hooks/use-media-query"
+import { cn } from "~/lib/utils"
+import { Button } from "~/components/ui/button"
 import {
   Dialog,
-  DialogTitle,
   DialogContent,
   DialogDescription,
-  DialogHeader,
-  DialogTrigger,
   DialogFooter,
-} from "~/components/ui/dialog";
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog"
 import {
   Drawer,
   DrawerClose,
@@ -26,28 +28,26 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "~/components/ui/drawer";
-import { useMediaQuery } from "~/lib/hooks/use-media-query";
-import { cn } from "~/lib/utils";
+} from "~/components/ui/drawer"
 
 type StatefulContent = ({
   open,
   setOpen,
 }: {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}) => ReactNode | ReactNode[];
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
+}) => ReactNode | ReactNode[]
 
 export const ResponsiveDialog = (props: {
-  trigger: ReactNode;
-  title?: ReactNode;
-  description?: ReactNode;
-  children: ReactNode | ReactNode[] | StatefulContent;
-  footer?: ReactNode;
-  contentClassName?: string;
+  trigger: ReactNode
+  title?: ReactNode
+  description?: ReactNode
+  children: ReactNode | ReactNode[] | StatefulContent
+  footer?: ReactNode
+  contentClassName?: string
 }) => {
-  const [open, setOpen] = useState(false);
-  const isDesktop = useMediaQuery("(min-width: 640px)");
+  const [open, setOpen] = useState(false)
+  const isDesktop = useMediaQuery("(min-width: 640px)")
 
   return isDesktop ? (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -87,17 +87,17 @@ export const ResponsiveDialog = (props: {
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
-  );
-};
+  )
+}
 
 const isFunctionType = (
-  prop: ReactNode | ReactNode[] | StatefulContent,
+  prop: ReactNode | ReactNode[] | StatefulContent
 ): prop is ({
   open,
   setOpen,
 }: {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
 }) => ReactNode | ReactNode[] => {
-  return typeof prop === "function";
-};
+  return typeof prop === "function"
+}

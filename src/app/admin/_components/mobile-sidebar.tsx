@@ -1,36 +1,38 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import React from "react";
+import React from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { useRouter } from "next-nprogress-bar"
 
-import { cn } from "~/lib/utils";
-
-import { Icons } from "~/components/icons";
+import { APP_TITLE } from "~/lib/constants"
+import { cn } from "~/lib/utils"
+import { Button } from "~/components/ui/button"
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetTrigger,
-  SheetClose,
-} from "~/components/ui/sheet";
-import { APP_TITLE } from "~/lib/constants";
+} from "~/components/ui/sheet"
+import { Icons } from "~/components/icons"
+import { ThemeSelect } from "~/components/theme-select"
 
-import { Button } from "~/components/ui/button";
-import { ThemeSelect } from "~/components/theme-select";
-
-import { adminNavLinks } from "../_lib/utils";
-import { useRouter } from "next-nprogress-bar";
+import { adminNavLinks } from "../_lib/utils"
 
 export const MobileSidebar = () => {
-  const pathname = usePathname();
-  const router = useRouter();
+  const pathname = usePathname()
+  const router = useRouter()
 
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button size="icon" variant="ghost" className="-ml-2 md:hidden">
-          <Icons.menu className="size-5" />
-          <span className="sr-only">Toggle Menu</span>
+        <Button
+          size="icon"
+          variant="outline"
+          className="-ml-2 size-8 lg:hidden"
+        >
+          <Icons.panelLeft className="size-4" />
+          <span className="sr-only">Toggle Sidebar</span>
         </Button>
       </SheetTrigger>
       <SheetContent
@@ -53,7 +55,7 @@ export const MobileSidebar = () => {
                   "flex items-center gap-4 px-2.5 py-1.5 hover:text-foreground disabled:text-muted-foreground/50",
                   path === pathname
                     ? "rounded-lg bg-accent text-foreground"
-                    : "text-muted-foreground",
+                    : "text-muted-foreground"
                 )}
               >
                 <Icon className="size-5" />
@@ -62,7 +64,7 @@ export const MobileSidebar = () => {
             </SheetClose>
           ))}
           <Link
-            href="/admin/settins"
+            href="/admin/settings"
             className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
           >
             <Icons.settings className="size-5" />
@@ -72,5 +74,5 @@ export const MobileSidebar = () => {
         <ThemeSelect />
       </SheetContent>
     </Sheet>
-  );
-};
+  )
+}

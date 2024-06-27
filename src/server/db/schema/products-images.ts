@@ -1,9 +1,10 @@
-import { relations } from "drizzle-orm";
-import { boolean, integer, pgTable, varchar } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm"
+import { boolean, integer, pgTable, varchar } from "drizzle-orm/pg-core"
 
-import { products } from "./products";
-import { images } from "./images";
-import { generateId } from "~/lib/utils";
+import { generateId } from "~/lib/utils"
+
+import { images } from "./images"
+import { products } from "./products"
 
 export const productsImages = pgTable("products_images", {
   id: varchar("id", { length: 255 })
@@ -18,7 +19,7 @@ export const productsImages = pgTable("products_images", {
     .references(() => images.id, { onDelete: "cascade" }),
   isThumbnail: boolean("is_thumbnail").notNull().default(false),
   rank: integer("rank").notNull().default(0),
-});
+})
 
 export const productsImagesRelations = relations(productsImages, ({ one }) => ({
   product: one(products, {
@@ -29,4 +30,4 @@ export const productsImagesRelations = relations(productsImages, ({ one }) => ({
     fields: [productsImages.imageId],
     references: [images.id],
   }),
-}));
+}))

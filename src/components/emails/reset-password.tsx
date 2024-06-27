@@ -7,11 +7,12 @@ import {
   Preview,
   Section,
   Text,
-} from "@react-email/components";
-import { APP_TITLE } from "~/lib/constants";
+} from "@react-email/components"
+
+import { APP_TITLE } from "~/lib/constants"
 
 export interface ResetPasswordTemplateProps {
-  link: string;
+  link: string
 }
 
 export const ResetPasswordTemplate = ({ link }: ResetPasswordTemplateProps) => {
@@ -44,19 +45,19 @@ export const ResetPasswordTemplate = ({ link }: ResetPasswordTemplateProps) => {
         </Container>
       </Body>
     </Html>
-  );
-};
+  )
+}
 
 const main = {
   backgroundColor: "#f6f9fc",
   padding: "10px 0",
-};
+}
 
 const container = {
   backgroundColor: "#ffffff",
   border: "1px solid #f0f0f0",
   padding: "45px",
-};
+}
 
 const text = {
   fontSize: "16px",
@@ -65,14 +66,14 @@ const text = {
   fontWeight: "300",
   color: "#404040",
   lineHeight: "26px",
-};
+}
 
 const title = {
   ...text,
   fontSize: "22px",
   fontWeight: "700",
   lineHeight: "32px",
-};
+}
 
 const button = {
   backgroundColor: "#09090b",
@@ -85,4 +86,4 @@ const button = {
   display: "block",
   width: "210px",
   padding: "14px 7px",
-};
+}

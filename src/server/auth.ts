@@ -1,17 +1,18 @@
-import { getServerSession, type NextAuthOptions } from "next-auth";
-import { type Adapter } from "next-auth/adapters";
-import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
-import { compare } from "bcrypt-ts";
+import { getUserByEmail } from "~/server/data/user"
+import { signInSchema } from "~/server/db/schema"
+import { compare } from "bcrypt-ts"
+import { eq } from "drizzle-orm"
+import { getServerSession, type NextAuthOptions } from "next-auth"
+import { type Adapter } from "next-auth/adapters"
+import CredentialsProvider from "next-auth/providers/credentials"
+import GoogleProvider from "next-auth/providers/google"
 
-import { env } from "~/env";
-import { getUserByEmail } from "~/server/data/user";
-import { Paths } from "~/lib/constants";
-import { signInSchema } from "~/server/db/schema";
-import { drizzleAdapter } from "./adapter";
-import { db } from "./db";
-import { users } from "./db/schema";
-import { eq } from "drizzle-orm";
+import { Paths } from "~/lib/constants"
+import { env } from "~/env"
+
+import { drizzleAdapter } from "./adapter"
+import { db } from "./db"
+import { users } from "./db/schema"
 
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
@@ -27,34 +28,34 @@ export const authOptions: NextAuthOptions = {
           emailVerified: new Date(),
           image: profile.image,
         })
-        .where(eq(users.id, user.id));
+        .where(eq(users.id, user.id))
     },
   },
   callbacks: {
     session: async ({ session, token }) => {
       if (token.sub && session.user) {
-        session.user.id = token.sub;
+        session.user.id = token.sub
       }
 
       if (token.role && session.user) {
-        session.user.role = token.role;
+        session.user.role = token.role
       }
 
       if (session.user) {
-        session.user.name = token.name;
-        session.user.email = token.email;
+        session.user.name = token.name
+        session.user.email = token.email
       }
 
-      return session;
+      return session
     },
     jwt: async ({ token, user }) => {
-      if (!token.sub) return token;
+      if (!token.sub) return token
 
-      if (!user) return token;
+      if (!user) return token
 
-      token.role = user.role!;
+      token.role = user.role!
 
-      return token;
+      return token
     },
   },
   adapter: drizzleAdapter as Adapter,
@@ -81,22 +82,22 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const validatedFields = signInSchema.safeParse(credentials);
+        const validatedFields = signInSchema.safeParse(credentials)
 
         if (validatedFields.success) {
-          const { email, password } = validatedFields.data;
+          const { email, password } = validatedFields.data
 
-          const user = await getUserByEmail(email);
+          const user = await getUserByEmail(email)
 
           if (!user || !user.hashedPassword)
-            throw new Error("Incorrect email or password");
+            throw new Error("Incorrect email or password")
 
-          const passwordsMatch = await compare(password, user.hashedPassword);
+          const passwordsMatch = await compare(password, user.hashedPassword)
 
-          if (passwordsMatch) return user;
-          else throw new Error("Incorrect email or password");
+          if (passwordsMatch) return user
+          else throw new Error("Incorrect email or password")
         }
-        return null;
+        return null
       },
     }),
     /**
@@ -118,11 +119,11 @@ export const authOptions: NextAuthOptions = {
     signIn: Paths.SignIn,
     newUser: Paths.SignUp,
   },
-};
+}
 
 /**
  * Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.
  *
  * @see https://next-auth.js.org/configuration/nextjs
  */
-export const getServerAuthSession = () => getServerSession(authOptions);
+export const getServerAuthSession = () => getServerSession(authOptions)

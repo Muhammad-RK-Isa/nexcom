@@ -1,9 +1,9 @@
-import React from "react";
+import React from "react"
 
-import { Skeleton } from "~/components/ui/skeleton";
+import { Card, CardContent, CardHeader } from "~/components/ui/card"
+import { Skeleton } from "~/components/ui/skeleton"
 
-import { SignInFormSkeleton } from "./_components/sign-in-form-skeleton";
-import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import { SignInFormSkeleton } from "./_components/sign-in-form-skeleton"
 
 const Loading = () => {
   return (
@@ -16,7 +16,7 @@ const Loading = () => {
         <SignInFormSkeleton />
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default Loading;
+export default Loading

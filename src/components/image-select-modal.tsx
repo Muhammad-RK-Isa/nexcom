@@ -1,12 +1,15 @@
-"use client";
+"use client"
 
-import NextImage from "next/image";
-import React from "react";
+import React from "react"
+import NextImage from "next/image"
+import { api } from "~/trpc/react"
+import { toast } from "sonner"
 
-import { EmptyCard } from "~/components/empty-card";
-import { Button, buttonVariants } from "~/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { Checkbox } from "~/components/ui/checkbox";
+import { useUploadFile } from "~/lib/hooks/use-upload-files"
+import { cn } from "~/lib/utils"
+import { Button, buttonVariants } from "~/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
+import { Checkbox } from "~/components/ui/checkbox"
 import {
   Dialog,
   DialogClose,
@@ -15,13 +18,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "~/components/ui/dialog";
-import { ScrollArea } from "~/components/ui/scroll-area";
-import { useUploadFile } from "~/lib/hooks/use-upload-files";
-import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
-import type { Image, TableImageParams } from "~/types";
-import { ImageUploader } from "./image-uploader";
+} from "~/components/ui/dialog"
+import { ScrollArea } from "~/components/ui/scroll-area"
+import { EmptyCard } from "~/components/empty-card"
+import { Icons } from "~/components/icons"
+import type { Image, TableImageParams } from "~/types"
+
+import { ImageUploader } from "./image-uploader"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,17 +35,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "./ui/alert-dialog";
-import { toast } from "sonner";
-import { Icons } from "./icons";
+} from "./ui/alert-dialog"
 
 interface ImageSelectModalProps {
-  open?: boolean;
-  value: Image[];
-  onOpenChange?: (value: boolean) => void;
-  onValueChange: (value: Image[]) => void;
-  trigger?: React.ReactNode | null;
-  multiple?: boolean;
+  open?: boolean
+  value: Image[]
+  onOpenChange?: (value: boolean) => void
+  onValueChange: (value: Image[]) => void
+  trigger?: React.ReactNode | null
+  multiple?: boolean
 }
 
 export const ImageSelectModal: React.FC<ImageSelectModalProps> = ({
@@ -53,7 +54,7 @@ export const ImageSelectModal: React.FC<ImageSelectModalProps> = ({
   trigger,
   multiple = true,
 }) => {
-  const [selectedImages, setSelectedImages] = React.useState<Image[]>(value);
+  const [selectedImages, setSelectedImages] = React.useState<Image[]>(value)
   const [searchParams, setSearchParams] = React.useState<TableImageParams>({
     page: 1,
     per_page: 50,
@@ -62,32 +63,32 @@ export const ImageSelectModal: React.FC<ImageSelectModalProps> = ({
     from: "",
     to: "",
     operator: "and",
-  });
+  })
 
   const updateSearchParams = <K extends keyof TableImageParams>(
     key: K,
-    value: TableImageParams[K],
+    value: TableImageParams[K]
   ) => {
     setSearchParams((prevParams) => ({
       ...prevParams,
       [key]: value,
-    }));
-  };
+    }))
+  }
 
   const { data: images, refetch } =
-    api.images.getTableImages.useQuery(searchParams);
+    api.images.getTableImages.useQuery(searchParams)
   const { mutate: deleteImages, isPending: isDeleting } =
     api.images.deleteImages.useMutation({
       onSuccess: () => {
-        refetch();
-        toast.success("Images deleted");
-        setSelectedImages([]);
-        onValueChange([]);
+        refetch()
+        toast.success("Images deleted")
+        setSelectedImages([])
+        onValueChange([])
       },
       onError: (err) => {
-        toast.error(err.message);
+        toast.error(err.message)
       },
-    });
+    })
 
   const reshapedImages = React.useMemo(() => {
     return (
@@ -96,8 +97,8 @@ export const ImageSelectModal: React.FC<ImageSelectModalProps> = ({
         name: image.name,
         url: image.url,
       })) ?? []
-    );
-  }, [images]);
+    )
+  }, [images])
 
   const {
     uploadFiles,
@@ -107,11 +108,11 @@ export const ImageSelectModal: React.FC<ImageSelectModalProps> = ({
     setUploadedFiles,
   } = useUploadFile("authorizedRoute", {
     defaultUploadedFiles: reshapedImages ?? [],
-  });
+  })
 
   React.useEffect(() => {
-    setUploadedFiles(reshapedImages ?? []);
-  }, [setUploadedFiles, reshapedImages]);
+    setUploadedFiles(reshapedImages ?? [])
+  }, [setUploadedFiles, reshapedImages])
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -187,7 +188,7 @@ export const ImageSelectModal: React.FC<ImageSelectModalProps> = ({
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
                       <AlertDialogAction
                         className={cn(
-                          buttonVariants({ variant: "destructive" }),
+                          buttonVariants({ variant: "destructive" })
                         )}
                         onClick={() => deleteImages(selectedImages)}
                       >
@@ -205,8 +206,8 @@ export const ImageSelectModal: React.FC<ImageSelectModalProps> = ({
                   variant="outline"
                   size={"sm"}
                   onClick={() => {
-                    setSelectedImages(value);
-                    onOpenChange?.(false);
+                    setSelectedImages(value)
+                    onOpenChange?.(false)
                   }}
                 >
                   Cancel
@@ -218,8 +219,8 @@ export const ImageSelectModal: React.FC<ImageSelectModalProps> = ({
                   size={"sm"}
                   disabled={reshapedImages.length === 0 || isDeleting}
                   onClick={() => {
-                    onValueChange(selectedImages);
-                    onOpenChange?.(false);
+                    onValueChange(selectedImages)
+                    onOpenChange?.(false)
                   }}
                 >
                   Done
@@ -230,14 +231,14 @@ export const ImageSelectModal: React.FC<ImageSelectModalProps> = ({
         </div>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}
 
 interface ImagesProps {
-  files: Image[];
-  selectedImages: Image[];
-  setSelectedImages: (files: Image[]) => void;
-  multiple: boolean;
+  files: Image[]
+  selectedImages: Image[]
+  setSelectedImages: (files: Image[]) => void
+  multiple: boolean
 }
 
 export function Images({
@@ -249,18 +250,18 @@ export function Images({
   const handleSelect = (file: Image) => {
     if (multiple) {
       if (!!selectedImages.find((f) => f.id === file.id)) {
-        setSelectedImages(selectedImages.filter((f) => f.id !== file.id));
+        setSelectedImages(selectedImages.filter((f) => f.id !== file.id))
       } else {
-        setSelectedImages([...selectedImages, file]);
+        setSelectedImages([...selectedImages, file])
       }
     } else {
       if (!!selectedImages.find((f) => f.id === file.id)) {
-        setSelectedImages([]);
+        setSelectedImages([])
       } else {
-        setSelectedImages([file]);
+        setSelectedImages([file])
       }
     }
-  };
+  }
 
   return (
     <Card>
@@ -300,7 +301,7 @@ export function Images({
                         "absolute left-2 top-2 z-20 dark:border-background data-[state=checked]:dark:bg-background data-[state=checked]:dark:text-foreground",
                         selectedImages.find((f) => f.id === file.id)
                           ? "opacity-100"
-                          : "opacity-0 group-hover:opacity-100",
+                          : "opacity-0 group-hover:opacity-100"
                       )}
                     />
                     <div className="absolute inset-y-0 z-10 size-full rounded-md bg-[#09090b] bg-opacity-0 transition-all duration-150 group-hover:md:bg-opacity-40" />
@@ -321,5 +322,5 @@ export function Images({
         )}
       </CardContent>
     </Card>
-  );
+  )
 }

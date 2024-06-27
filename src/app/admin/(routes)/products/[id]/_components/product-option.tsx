@@ -1,29 +1,30 @@
-import React from "react";
-import { type Control, useFormContext } from "react-hook-form";
+import React from "react"
+import { useFormContext, type Control } from "react-hook-form"
 
-import { Icons } from "~/components/icons";
-import { Button } from "~/components/ui/button";
+import { cn } from "~/lib/utils"
+import { Badge } from "~/components/ui/badge"
+import { Button } from "~/components/ui/button"
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form";
-import { Input } from "~/components/ui/input";
-import { cn } from "~/lib/utils";
-import type { UpdateProductInput } from "~/types";
-import { ProductOptionValues } from "./product-option-values";
-import { Badge } from "~/components/ui/badge";
-import { SortableDragHandle, SortableItem } from "~/components/ui/sortable";
-import { generateVariants } from "../_lib/utils";
+} from "~/components/ui/form"
+import { Input } from "~/components/ui/input"
+import { SortableDragHandle, SortableItem } from "~/components/ui/sortable"
+import { Icons } from "~/components/icons"
+import type { UpdateProductInput } from "~/types"
+
+import { generateVariants } from "../_lib/utils"
+import { ProductOptionValues } from "./product-option-values"
 
 interface ProductOptionProps {
-  control: Control<UpdateProductInput>;
-  optionIndex: number;
-  optionId: string;
-  updateVariants: () => void;
-  defaultExpanded?: boolean;
+  control: Control<UpdateProductInput>
+  optionIndex: number
+  optionId: string
+  updateVariants: () => void
+  defaultExpanded?: boolean
 }
 
 export const ProductOption: React.FC<ProductOptionProps> = ({
@@ -33,26 +34,26 @@ export const ProductOption: React.FC<ProductOptionProps> = ({
   updateVariants,
   defaultExpanded = false,
 }) => {
-  const [isExpanded, setIsExpanded] = React.useState(defaultExpanded);
+  const [isExpanded, setIsExpanded] = React.useState(defaultExpanded)
 
-  const form = useFormContext<UpdateProductInput>();
-  const { options, variants } = form.watch();
+  const form = useFormContext<UpdateProductInput>()
+  const { options, variants } = form.watch()
 
-  const option = options.find((o) => o.id === optionId);
+  const option = options.find((o) => o.id === optionId)
 
   const handleCollapse = async () => {
     const isFilled = await form.trigger(`options.${optionIndex}`, {
       shouldFocus: true,
-    });
-    if (isFilled) setIsExpanded(!isExpanded);
-  };
+    })
+    if (isFilled) setIsExpanded(!isExpanded)
+  }
 
   return (
     <SortableItem value={optionId} asChild>
       <div
         className={cn(
           "flex gap-4 overflow-auto bg-background p-6 pl-4",
-          isExpanded && "pb-8",
+          isExpanded && "pb-8"
         )}
       >
         <SortableDragHandle type="button" variant={"ghost"} size={"icon"}>
@@ -73,8 +74,8 @@ export const ProductOption: React.FC<ProductOptionProps> = ({
                         placeholder="e.g. Size, Color"
                         className="bg-background"
                         onChange={(e) => {
-                          field.onChange(e.currentTarget.value);
-                          form.clearErrors(`options.${optionIndex}.title`);
+                          field.onChange(e.currentTarget.value)
+                          form.clearErrors(`options.${optionIndex}.title`)
                         }}
                       />
                       <Button
@@ -83,15 +84,15 @@ export const ProductOption: React.FC<ProductOptionProps> = ({
                         size={"icon"}
                         onClick={() => {
                           const newOpts = options.filter(
-                            (o) => o.id !== optionId,
-                          );
-                          form.setValue("options", newOpts);
+                            (o) => o.id !== optionId
+                          )
+                          form.setValue("options", newOpts)
                           const newVars = generateVariants({
                             options: newOpts,
                             existingVariants: variants,
-                          });
-                          form.setValue("variants", []);
-                          form.setValue("variants", newVars);
+                          })
+                          form.setValue("variants", [])
+                          form.setValue("variants", newVars)
                         }}
                         className="absolute right-0 top-0"
                         aria-hidden="true"
@@ -124,7 +125,7 @@ export const ProductOption: React.FC<ProductOptionProps> = ({
                       <Badge key={idx} variant={"secondary"} className="px-2">
                         {value}
                       </Badge>
-                    );
+                    )
                 })}
               </div>
             </div>
@@ -141,5 +142,5 @@ export const ProductOption: React.FC<ProductOptionProps> = ({
         )}
       </div>
     </SortableItem>
-  );
-};
+  )
+}

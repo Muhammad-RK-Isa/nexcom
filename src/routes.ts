@@ -10,20 +10,20 @@ export const authRoutes = [
   "/reset-password",
   "/create-new-password",
   "/verify-email",
-];
+]
 
-export const protectedRoutes = ["/profile", "/checkout"];
+export const protectedRoutes = ["/profile", "/checkout"]
 
 /**
  * The prefix for API authentication routes
  * Routes that start with this prefix are used for API authentication purposes
  * @type {string}
  */
-export const apiAuthPrefix = "/api/auth";
-export const adminPrefix = "/admin";
+export const apiAuthPrefix = "/api/auth"
+export const adminPrefix = "/admin"
 
 /**
  * The default redirect path after logging in
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT = "/";
+export const DEFAULT_LOGIN_REDIRECT = "/"

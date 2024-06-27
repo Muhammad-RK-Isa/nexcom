@@ -1,7 +1,7 @@
-import { relations } from "drizzle-orm";
-import { pgTable, primaryKey, varchar } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm"
+import { pgTable, primaryKey, varchar } from "drizzle-orm/pg-core"
 
-import { productOptionValues, productVariants } from ".";
+import { productOptionValues, productVariants } from "."
 
 export const variantsOptionValues = pgTable(
   "variants_option_values",
@@ -17,8 +17,8 @@ export const variantsOptionValues = pgTable(
     compundKey: primaryKey({
       columns: [t.variantId, t.optionValueId],
     }),
-  }),
-);
+  })
+)
 
 export const variantOptionValuesRelations = relations(
   variantsOptionValues,
@@ -31,5 +31,5 @@ export const variantOptionValuesRelations = relations(
       fields: [variantsOptionValues.optionValueId],
       references: [productOptionValues.id],
     }),
-  }),
-);
+  })
+)

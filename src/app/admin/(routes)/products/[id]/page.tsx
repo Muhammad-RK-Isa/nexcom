@@ -1,23 +1,23 @@
-import React from "react";
+import React from "react"
+import { notFound } from "next/navigation"
+import { api } from "~/trpc/server"
 
-import { api } from "~/trpc/server";
-import { ProductFormMain } from "./_components/product-form-main";
-import { notFound } from "next/navigation";
-import { ProductFormSkeleton } from "./_components/product-form-skeleton";
+import ProductForm from "./_components/product-form"
+import ProductFormSkeleton from "./_components/product-form/skeleton"
 
 const ProductPage = async ({ params: { id } }: { params: { id: string } }) => {
   const product =
-    id === "new" ? null : await api.products.getProductById({ id });
+    id === "new" ? null : await api.products.getProductById({ id })
 
-  if (!product && id !== "new") return notFound();
+  if (!product && id !== "new") return notFound()
 
   return (
-    <div className="-m-4 bg-fixed p-4 lg:-m-6 lg:p-6">
+    <div className="-mx-4 -mb-4 lg:-mx-6 lg:-mb-6">
       <React.Suspense fallback={<ProductFormSkeleton />}>
-        <ProductFormMain product={product} />
+        <ProductForm product={product} />
       </React.Suspense>
     </div>
-  );
-};
+  )
+}
 
-export default ProductPage;
+export default ProductPage

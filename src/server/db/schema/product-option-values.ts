@@ -1,15 +1,10 @@
-import { relations } from "drizzle-orm";
-import {
-  integer,
-  pgTable,
-  text,
-  timestamp,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm"
+import { integer, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core"
 
-import { generateId } from "~/lib/utils";
-import { productOptions } from "./product-options";
-import { variantsOptionValues } from "./variants-option-values";
+import { generateId } from "~/lib/utils"
+
+import { productOptions } from "./product-options"
+import { variantsOptionValues } from "./variants-option-values"
 
 export const productOptionValues = pgTable("option_values", {
   id: varchar("id", { length: 255 })
@@ -20,12 +15,12 @@ export const productOptionValues = pgTable("option_values", {
   rank: integer("rank").notNull().default(1),
   createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { mode: "date", precision: 3 }).$onUpdate(
-    () => new Date(),
+    () => new Date()
   ),
   optionId: varchar("option_id", { length: 255 })
     .notNull()
     .references(() => productOptions.id, { onDelete: "cascade" }),
-});
+})
 
 export const productOptionValuesRelations = relations(
   productOptionValues,
@@ -35,5 +30,5 @@ export const productOptionValuesRelations = relations(
       references: [productOptions.id],
     }),
     variantsOptionValues: many(variantsOptionValues),
-  }),
-);
+  })
+)

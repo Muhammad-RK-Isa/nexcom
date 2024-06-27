@@ -1,36 +1,36 @@
-"use client";
+"use client"
 
-import * as React from "react";
+import * as React from "react"
 
-import { dataTableConfig, type DataTableConfig } from "~/config/data-table";
-import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
+import { dataTableConfig, type DataTableConfig } from "~/config/data-table"
+import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group"
 
-type FeatureFlagValue = DataTableConfig["featureFlags"][number]["value"];
+type FeatureFlagValue = DataTableConfig["featureFlags"][number]["value"]
 
 interface ProductsTableContextProps {
-  featureFlags: FeatureFlagValue[];
-  setFeatureFlags: React.Dispatch<React.SetStateAction<FeatureFlagValue[]>>;
+  featureFlags: FeatureFlagValue[]
+  setFeatureFlags: React.Dispatch<React.SetStateAction<FeatureFlagValue[]>>
 }
 
 const ProductsTableContext = React.createContext<ProductsTableContextProps>({
   featureFlags: [],
   setFeatureFlags: () => {},
-});
+})
 
 export function useProductsTable() {
-  const context = React.useContext(ProductsTableContext);
+  const context = React.useContext(ProductsTableContext)
   if (!context) {
     throw new Error(
-      "useProductsTable must be used within a ProductsTableProvider",
-    );
+      "useProductsTable must be used within a ProductsTableProvider"
+    )
   }
-  return context;
+  return context
 }
 
 export function ProductsTableProvider({ children }: React.PropsWithChildren) {
   const [featureFlags, setFeatureFlags] = React.useState<FeatureFlagValue[]>([
     "floatingBar",
-  ]);
+  ])
 
   return (
     <ProductsTableContext.Provider
@@ -66,5 +66,5 @@ export function ProductsTableProvider({ children }: React.PropsWithChildren) {
       </div>
       {children}
     </ProductsTableContext.Provider>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm";
+import { relations } from "drizzle-orm"
 import {
   index,
   integer,
@@ -6,10 +6,10 @@ import {
   primaryKey,
   text,
   varchar,
-} from "drizzle-orm/pg-core";
-import { type AdapterAccount } from "next-auth/adapters";
+} from "drizzle-orm/pg-core"
+import { type AdapterAccount } from "next-auth/adapters"
 
-import { users } from "./users";
+import { users } from "./users"
 
 export const accounts = pgTable(
   "account",
@@ -35,9 +35,9 @@ export const accounts = pgTable(
       columns: [t.provider, t.providerAccountId],
     }),
     userIdIdx: index("account_userId_idx").on(t.userId),
-  }),
-);
+  })
+)
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
   user: one(users, { fields: [accounts.userId], references: [users.id] }),
-}));
+}))

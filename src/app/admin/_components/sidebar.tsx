@@ -1,33 +1,34 @@
-"use client";
+"use client"
 
-import React from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useRouter } from "next-nprogress-bar";
-import { motion } from "framer-motion";
+import React from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { motion } from "framer-motion"
+import { useRouter } from "next-nprogress-bar"
 
-import { APP_TITLE, Paths } from "~/lib/constants";
-import { cn } from "~/lib/utils";
-import { adminNavLinks } from "../_lib/utils";
-import { ThemeSelect } from "~/components/theme-select";
-import { Button } from "~/components/ui/button";
-import { Icons } from "~/components/icons";
-import { useSidebar } from "~/lib/hooks/use-sidebar";
+import { APP_TITLE, Paths } from "~/lib/constants"
+import { useSidebar } from "~/lib/hooks/use-sidebar"
+import { cn } from "~/lib/utils"
+import { Button } from "~/components/ui/button"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "~/components/ui/tooltip";
+} from "~/components/ui/tooltip"
+import { Icons } from "~/components/icons"
+import { ThemeSelect } from "~/components/theme-select"
+
+import { adminNavLinks } from "../_lib/utils"
 
 export const Sidebar = () => {
-  const pathname = usePathname();
-  const router = useRouter();
+  const pathname = usePathname()
+  const router = useRouter()
 
-  const { onClose, isOpen } = useSidebar();
+  const { onClose, isOpen } = useSidebar()
 
   return (
     <motion.aside
-      className="sticky left-0 top-0 hidden h-screen max-h-screen gap-2 overflow-x-hidden border-r bg-background dark:bg-card md:flex md:flex-col"
+      className="sticky left-0 top-0 hidden h-screen max-h-screen gap-2 overflow-x-hidden border-r bg-background dark:bg-card lg:flex lg:flex-col"
       animate={{ width: isOpen ? "280px" : "0px" }}
       initial={{ width: isOpen ? "280px" : "0px" }}
       transition={{ duration: 0.2 }}
@@ -58,7 +59,7 @@ export const Sidebar = () => {
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all",
                 path === pathname && "bg-muted text-primary",
-                active ? "hover:bg-muted hover:text-primary" : "opacity-50",
+                active ? "hover:bg-muted hover:text-primary" : "opacity-50"
               )}
             >
               <Icon className="size-4" />
@@ -74,7 +75,7 @@ export const Sidebar = () => {
                 variant={"ghost"}
                 size={"icon"}
                 className={cn(
-                  "size-max cursor-pointer rounded-full p-2 text-muted-foreground transition-colors hover:text-primary",
+                  "size-max cursor-pointer rounded-full p-2 text-muted-foreground transition-colors hover:text-primary"
                 )}
                 onClick={() => router.push("/admin/settings")}
               >
@@ -88,5 +89,5 @@ export const Sidebar = () => {
         </div>
       </div>
     </motion.aside>
-  );
-};
+  )
+}

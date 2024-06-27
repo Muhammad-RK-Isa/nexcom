@@ -1,12 +1,12 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { toast } from "sonner";
-import { useRouter } from "next-nprogress-bar";
+import * as React from "react"
+import { type Row } from "@tanstack/react-table"
+import { api } from "~/trpc/react"
+import { useRouter } from "next-nprogress-bar"
+import { toast } from "sonner"
 
-import { type TableProduct } from "~/types";
-import { type Row } from "@tanstack/react-table";
-import { Button, buttonVariants } from "~/components/ui/button";
+import { cn } from "~/lib/utils"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -16,16 +16,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "~/components/ui/alert-dialog";
-import { api } from "~/trpc/react";
-import { Icons } from "~/components/icons";
-import { cn } from "~/lib/utils";
+} from "~/components/ui/alert-dialog"
+import { Button, buttonVariants } from "~/components/ui/button"
+import { Icons } from "~/components/icons"
+import { type TableProduct } from "~/types"
 
 interface DeleteProductsAlertDialogProps
   extends React.ComponentPropsWithoutRef<typeof AlertDialog> {
-  products: Row<TableProduct>["original"][];
-  showTrigger?: boolean;
-  onSuccess?: () => void;
+  products: Row<TableProduct>["original"][]
+  showTrigger?: boolean
+  onSuccess?: () => void
 }
 
 export function DeleteProductsAlertDialog({
@@ -34,19 +34,19 @@ export function DeleteProductsAlertDialog({
   onSuccess,
   ...props
 }: DeleteProductsAlertDialogProps) {
-  const router = useRouter();
+  const router = useRouter()
 
   const { mutate, isPending } = api.products.deleteProducts.useMutation({
     onSuccess: () => {
       const message =
         products.length > 1
           ? `${products.length} products deleted`
-          : "One product deleted";
-      toast.success(message);
-      onSuccess?.();
-      router.refresh();
+          : "One product deleted"
+      toast.success(message)
+      onSuccess?.()
+      router.refresh()
     },
-  });
+  })
 
   return (
     <AlertDialog {...props}>
@@ -82,5 +82,5 @@ export function DeleteProductsAlertDialog({
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  );
+  )
 }

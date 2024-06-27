@@ -1,26 +1,27 @@
 import {
-  createProduct,
-  deleteProduct,
-  deleteProducts,
-  updateProduct,
-  updateProductStatus,
-  updateProductsStatus,
-} from "~/lib/api/products/mutations";
-import {
-  getProductById,
-  getProducts,
-  getTableProducts,
-} from "~/lib/api/products/queries";
-import {
   insertProductSchema,
   productIdSchema,
   productIdsSchema,
   searchProductParamsSchema,
   updateProductSchema,
-  updateProductStatusSchema,
   updateProductsStatusSchema,
-} from "~/schema";
-import { adminProcedure, createTRPCRouter } from "~/server/api/trpc";
+  updateProductStatusSchema,
+} from "~/schema"
+import { adminProcedure, createTRPCRouter } from "~/server/api/trpc"
+
+import {
+  createProduct,
+  deleteProduct,
+  deleteProducts,
+  updateProduct,
+  updateProductsStatus,
+  updateProductStatus,
+} from "~/lib/api/products/mutations"
+import {
+  getProductById,
+  getProducts,
+  getTableProducts,
+} from "~/lib/api/products/queries"
 
 export const productsRouter = createTRPCRouter({
   getProducts: adminProcedure.query(async () => getProducts()),
@@ -48,4 +49,4 @@ export const productsRouter = createTRPCRouter({
   deleteProducts: adminProcedure
     .input(productIdsSchema)
     .mutation(async ({ input }) => deleteProducts(input)),
-});
+})

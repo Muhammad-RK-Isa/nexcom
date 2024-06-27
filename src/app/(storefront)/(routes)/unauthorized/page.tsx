@@ -1,7 +1,7 @@
-import React from "react";
+import React from "react"
 
 const UnauthorizedPage = () => {
-  return <div>Unauthorized Access</div>;
-};
+  return <div>Unauthorized Access</div>
+}
 
-export default UnauthorizedPage;
+export default UnauthorizedPage

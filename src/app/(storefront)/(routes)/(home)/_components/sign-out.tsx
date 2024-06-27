@@ -1,9 +1,9 @@
-"use client";
+"use client"
 
-import React from "react";
-import { signOut } from "next-auth/react";
+import React from "react"
+import { signOut } from "next-auth/react"
 
-import { buttonVariants } from "~/components/ui/button";
+import { cn } from "~/lib/utils"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,8 +14,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "~/components/ui/alert-dialog";
-import { cn } from "~/lib/utils";
+} from "~/components/ui/alert-dialog"
+import { buttonVariants } from "~/components/ui/button"
 
 export const SignOut = () => {
   return (
@@ -43,5 +43,5 @@ export const SignOut = () => {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  );
-};
+  )
+}

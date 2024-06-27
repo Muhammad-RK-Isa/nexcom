@@ -1,6 +1,6 @@
-import { env } from "~/env";
+import { env } from "~/env"
 
-export type SiteConfig = typeof siteConfig;
+export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
   name: "Nexcom",
@@ -11,4 +11,4 @@ export const siteConfig = {
       ? "http://localhost:3000"
       : "https://nexcom.muhammadisa.com",
   links: { github: "https://github.com/muhammad-rk-isa/nexcom" },
-};
+}

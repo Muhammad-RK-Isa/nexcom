@@ -1,19 +1,19 @@
-"use client";
+"use client"
 
-import React from "react";
-import { SessionProvider } from "next-auth/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+import React from "react"
+import { SpeedInsights } from "@vercel/speed-insights/next"
+import { TRPCReactProvider } from "~/trpc/react"
+import { SessionProvider } from "next-auth/react"
 
-import { Toaster } from "~/components/ui/sonner";
+import { useMediaQuery } from "~/lib/hooks/use-media-query"
+import { Toaster } from "~/components/ui/sonner"
+import { TooltipProvider } from "~/components/ui/tooltip"
 
-import { ThemeProvider } from "./theme-provider";
-import ProgressBarProvider from "./progress-bar-provider";
-import { useMediaQuery } from "~/lib/hooks/use-media-query";
-import { TooltipProvider } from "~/components/ui/tooltip";
-import { TRPCReactProvider } from "~/trpc/react";
+import ProgressBarProvider from "./progress-bar-provider"
+import { ThemeProvider } from "./theme-provider"
 
 const Providers = ({ children }: React.PropsWithChildren) => {
-  const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const isDesktop = useMediaQuery("(min-width: 1024px)")
   return (
     <SessionProvider>
       <ThemeProvider
@@ -30,7 +30,7 @@ const Providers = ({ children }: React.PropsWithChildren) => {
         <SpeedInsights />
       </ThemeProvider>
     </SessionProvider>
-  );
-};
+  )
+}
 
-export default Providers;
+export default Providers

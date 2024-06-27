@@ -1,39 +1,39 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
-import React from "react";
-import { toast } from "sonner";
-import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next-nprogress-bar";
+import React from "react"
+import Link from "next/link"
+import { useSearchParams } from "next/navigation"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { DEFAULT_LOGIN_REDIRECT } from "~/routes"
+import { signInSchema } from "~/server/db/schema"
+import { signIn } from "next-auth/react"
+import { useRouter } from "next-nprogress-bar"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
-import { Icons } from "~/components/icons";
-import { AnimatedInput } from "~/components/ui/animated-input";
-import { Button } from "~/components/ui/button";
+import { AnimatedInput } from "~/components/ui/animated-input"
+import { Button } from "~/components/ui/button"
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-} from "~/components/ui/form";
-import { DEFAULT_LOGIN_REDIRECT } from "~/routes";
-import { signInSchema } from "~/server/db/schema";
-import type { SignInInput } from "~/types";
+} from "~/components/ui/form"
+import { Icons } from "~/components/icons"
+import type { SignInInput } from "~/types"
 
 export const SignInForm = () => {
-  const searchParams = useSearchParams();
-  const router = useRouter();
+  const searchParams = useSearchParams()
+  const router = useRouter()
 
   const callbackUrl = decodeURIComponent(
-    searchParams.get("callbackUrl") ?? DEFAULT_LOGIN_REDIRECT,
-  );
+    searchParams.get("callbackUrl") ?? DEFAULT_LOGIN_REDIRECT
+  )
 
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [isPending, startTransition] = React.useTransition();
-  const [error, setError] = React.useState("");
+  const [showPassword, setShowPassword] = React.useState(false)
+  const [isPending, startTransition] = React.useTransition()
+  const [error, setError] = React.useState("")
 
   const form = useForm<SignInInput>({
     resolver: zodResolver(signInSchema),
@@ -41,7 +41,7 @@ export const SignInForm = () => {
       email: "",
       password: "",
     },
-  });
+  })
 
   const onSubmit = (values: SignInInput) => {
     startTransition(async () => {
@@ -49,19 +49,19 @@ export const SignInForm = () => {
         const result = await signIn("credentials", {
           ...values,
           redirect: false,
-        });
+        })
         if (result?.error) {
-          setError(result.error);
-          return;
+          setError(result.error)
+          return
         }
-        router.push(callbackUrl);
+        router.push(callbackUrl)
       } catch (error) {
-        toast.error("Something went wrong!");
+        toast.error("Something went wrong!")
       } finally {
-        return;
+        return
       }
-    });
-  };
+    })
+  }
 
   return (
     <Form {...form}>
@@ -81,8 +81,8 @@ export const SignInForm = () => {
                   placeholder="email@example.com"
                   type="email"
                   onChange={(value) => {
-                    field.onChange(value);
-                    setError("");
+                    field.onChange(value)
+                    setError("")
                   }}
                 />
               </FormControl>
@@ -102,8 +102,8 @@ export const SignInForm = () => {
                     placeholder="••••••••"
                     type={showPassword ? "text" : "password"}
                     onChange={(value) => {
-                      field.onChange(value);
-                      setError("");
+                      field.onChange(value)
+                      setError("")
                     }}
                   />
                   <Button
@@ -142,7 +142,7 @@ export const SignInForm = () => {
                     <li className="ml-4" key={idx}>
                       {message}
                     </li>
-                  ),
+                  )
                 )}
               </>
             ) : null}
@@ -198,8 +198,8 @@ export const SignInForm = () => {
         </button>
       </form>
     </Form>
-  );
-};
+  )
+}
 
 const BottomGradient = () => {
   return (
@@ -207,5 +207,5 @@ const BottomGradient = () => {
       <span className="absolute inset-x-0 -bottom-px block h-px w-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-0 transition duration-500 group-hover/btn:opacity-100" />
       <span className="absolute inset-x-10 -bottom-px mx-auto block h-px w-1/2 bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-0 blur-sm transition duration-500 group-hover/btn:opacity-100" />
     </>
-  );
-};
+  )
+}

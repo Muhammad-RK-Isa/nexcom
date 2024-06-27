@@ -1,20 +1,21 @@
-import React from "react";
+import React from "react"
 
+import { APP_TITLE } from "~/lib/constants"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card";
-import { APP_TITLE } from "~/lib/constants";
-import { SignInForm } from "./_components/sign-in-form";
-import { SignInFormSkeleton } from "./_components/sign-in-form-skeleton";
+} from "~/components/ui/card"
+
+import { SignInForm } from "./_components/sign-in-form"
+import { SignInFormSkeleton } from "./_components/sign-in-form-skeleton"
 
 export const metadata = {
   title: `Sign In - ${APP_TITLE}`,
   description: "Sign In Page",
-};
+}
 
 const SignInPage = () => {
   return (
@@ -29,7 +30,7 @@ const SignInPage = () => {
         </React.Suspense>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default SignInPage;
+export default SignInPage
