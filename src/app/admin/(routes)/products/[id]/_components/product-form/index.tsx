@@ -67,40 +67,40 @@ const ProductForm: React.FC<ProductFormProps> = ({ product }) => {
     resolver: zodResolver(insertProductSchema),
     defaultValues: product
       ? {
-        ...product,
-        options: product.options?.sort((a, b) => a.rank - b.rank),
-        images: product.images
-          ?.sort((a, b) => a.rank - b.rank)
-          .flatMap(({ id, name, url }) => ({
-            id,
-            name,
-            url,
-          })),
-      }
+          ...product,
+          options: product.options?.sort((a, b) => a.rank - b.rank),
+          images: product.images
+            ?.sort((a, b) => a.rank - b.rank)
+            .flatMap(({ id, name, url }) => ({
+              id,
+              name,
+              url,
+            })),
+        }
       : {
-        title: "",
-        slug: "",
-        description: "",
-        inventoryQuantity: 0,
-        manageInventory: true,
-        allowBackorder: false,
-        weight: {
-          value: undefined,
-          unit: "kg",
+          title: "",
+          slug: "",
+          description: "",
+          inventoryQuantity: 0,
+          manageInventory: true,
+          allowBackorder: false,
+          weight: {
+            value: undefined,
+            unit: "kg",
+          },
+          length: {
+            value: undefined,
+            unit: "m",
+          },
+          height: {
+            value: undefined,
+            unit: "m",
+          },
+          status: "active",
+          options: [],
+          variants: [],
+          images: [],
         },
-        length: {
-          value: undefined,
-          unit: "m",
-        },
-        height: {
-          value: undefined,
-          unit: "m",
-        },
-        status: "active",
-        options: [],
-        variants: [],
-        images: [],
-      },
   })
 
   const { mutate: createProduct, isPending: isCreating } =

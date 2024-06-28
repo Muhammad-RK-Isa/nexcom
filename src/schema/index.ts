@@ -111,6 +111,7 @@ export const updateProductStatusSchema = baseProductSchema.pick({
   status: true,
 })
 export const productIdSchema = baseProductSchema.pick({ id: true })
+export const productSlugSchema = baseProductSchema.pick({ slug: true })
 export const productIdsSchema = z.array(productIdSchema)
 
 export const updateProductsStatusSchema = z.object({
@@ -118,7 +119,7 @@ export const updateProductsStatusSchema = z.object({
   status: productStatuses,
 })
 
-export const searchProductParamsSchema = z.object({
+export const searchTableProductParamsSchema = z.object({
   page: z.coerce.number().default(1),
   per_page: z.coerce.number().default(10),
   sort: z.string().optional(),
@@ -127,6 +128,15 @@ export const searchProductParamsSchema = z.object({
   from: z.string().optional(),
   to: z.string().optional(),
   operator: z.enum(["and", "or"]).optional(),
+})
+
+export const searchProductParamsSchema = z.object({
+  page: z.coerce.number().default(1),
+  per_page: z.coerce.number().default(10),
+  sort: z.string().optional(),
+  title: z.string().optional(),
+  bestSelling: z.boolean().optional(),
+  featured: z.boolean().optional(),
 })
 
 export const optionValueSchema = z.object({

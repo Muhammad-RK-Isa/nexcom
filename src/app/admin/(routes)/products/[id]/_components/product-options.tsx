@@ -27,7 +27,6 @@ export const ProductOptions = () => {
       price,
       inventoryQuantity,
     })
-    console.log(newVariants)
     form.setValue("variants", newVariants, { shouldDirty: true })
     form.register("variants")
   }, [inventoryQuantity, options, variants, form, price])

@@ -17,7 +17,7 @@ const Footer: React.FC<FooterProps> = ({ className, props }) => {
     <div
       {...props}
       className={cn(
-        "flex w-full flex-col items-center justify-between gap-8 border-t p-8 pt-8 sm:flex-row",
+        "flex w-full flex-col items-center justify-between gap-8 border-t bg-background p-8 pt-8 sm:flex-row",
         className
       )}
     >

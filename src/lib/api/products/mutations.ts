@@ -48,8 +48,6 @@ export const createProduct = async (product: CreateProductInput) => {
             await tx.insert(productsImages).values({
               imageId: image.id,
               productId: productRecord.id,
-              isThumbnail:
-                product.images?.findIndex((i) => i.id === image.id) === 0,
               rank: product.images?.findIndex((i) => i.id === image.id),
             })
         )
@@ -146,8 +144,6 @@ export const updateProduct = async (product: UpdateProductInput) => {
           await tx.insert(productsImages).values({
             imageId: image.id,
             productId: product.id,
-            isThumbnail:
-              product.images?.findIndex((i) => i.id === image.id) === 0,
             rank: product.images?.findIndex((i) => i.id === image.id),
           })
         }) ?? []

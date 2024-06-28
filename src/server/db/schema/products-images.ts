@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm"
-import { boolean, integer, pgTable, varchar } from "drizzle-orm/pg-core"
+import { integer, pgTable, varchar } from "drizzle-orm/pg-core"
 
 import { generateId } from "~/lib/utils"
 
@@ -17,7 +17,6 @@ export const productsImages = pgTable("products_images", {
   imageId: varchar("image_id", { length: 255 })
     .notNull()
     .references(() => images.id, { onDelete: "cascade" }),
-  isThumbnail: boolean("is_thumbnail").notNull().default(false),
   rank: integer("rank").notNull().default(0),
 })
 

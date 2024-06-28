@@ -2,12 +2,18 @@ import {
   insertProductSchema,
   productIdSchema,
   productIdsSchema,
+  productSlugSchema,
   searchProductParamsSchema,
+  searchTableProductParamsSchema,
   updateProductSchema,
   updateProductsStatusSchema,
   updateProductStatusSchema,
 } from "~/schema"
-import { adminProcedure, createTRPCRouter } from "~/server/api/trpc"
+import {
+  adminProcedure,
+  createTRPCRouter,
+  publicProcedure,
+} from "~/server/api/trpc"
 
 import {
   createProduct,
@@ -19,18 +25,24 @@ import {
 } from "~/lib/api/products/mutations"
 import {
   getProductById,
+  getProductBySlug,
   getProducts,
   getTableProducts,
 } from "~/lib/api/products/queries"
 
 export const productsRouter = createTRPCRouter({
-  getProducts: adminProcedure.query(async () => getProducts()),
-  getTableProducts: adminProcedure
+  getProducts: publicProcedure
     .input(searchProductParamsSchema)
+    .query(async ({ input }) => getProducts(input)),
+  getTableProducts: adminProcedure
+    .input(searchTableProductParamsSchema)
     .query(async ({ input }) => getTableProducts(input)),
   getProductById: adminProcedure
     .input(productIdSchema)
     .query(async ({ input }) => getProductById(input)),
+  getProductBySlug: publicProcedure
+    .input(productSlugSchema)
+    .query(async ({ input }) => getProductBySlug(input)),
   createProduct: adminProcedure
     .input(insertProductSchema)
     .mutation(async ({ input }) => createProduct(input)),

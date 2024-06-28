@@ -1,46 +1,20 @@
 import React from "react"
-import Link from "next/link"
+import { api } from "~/trpc/server"
 
-import { currentUser } from "~/lib/auth/utils"
-import { APP_TITLE, Paths } from "~/lib/constants"
-import { cn } from "~/lib/utils"
-import { buttonVariants } from "~/components/ui/button"
+import ProductsCollection from "~/components/shop/product/products-collection"
+import type { SearchProductParams } from "~/types"
 
-import { SignOut } from "./_components/sign-out"
+interface StorefrontHomepageProps {
+  searchParams: SearchProductParams
+}
 
-const StorefrontHomepage = async () => {
-  const user = await currentUser()
+const StorefrontHomepage: React.FC<StorefrontHomepageProps> = async ({
+  searchParams,
+}) => {
+  const { data, pageCount } = await api.products.getProducts(searchParams)
   return (
-    <div className="flex flex-col gap-y-6 px-12 pt-40 text-center text-4xl font-semibold">
-      Welcome to {APP_TITLE}
-      {!user ? (
-        <Link
-          href={Paths.SignIn}
-          className={cn(buttonVariants({ variant: "link" }))}
-        >
-          Sign in
-        </Link>
-      ) : (
-        <>
-          <div className="mx-auto grid gap-2 rounded-md border bg-muted/40 p-4 text-sm font-normal">
-            <code>{user?.name}</code>
-            <code>{user?.email}</code>
-          </div>
-          <div className="mx-auto flex">
-            {user?.role === "admin" && (
-              <Link
-                href={Paths.Admin}
-                className={cn(buttonVariants({ variant: "link" }))}
-              >
-                Admin
-              </Link>
-            )}
-            <React.Suspense>
-              <SignOut />
-            </React.Suspense>
-          </div>
-        </>
-      )}
+    <div className="flex flex-col py-16">
+      <ProductsCollection products={data} />
     </div>
   )
 }

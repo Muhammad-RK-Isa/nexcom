@@ -6,9 +6,11 @@ import type {
   optionValueSchema,
   productIdSchema,
   productOptionSchema,
+  productSlugSchema,
   productVariantSchema,
   searchImageParamsSchema,
   searchProductParamsSchema,
+  searchTableProductParamsSchema,
   updateProductSchema,
   updateProductsStatusSchema,
   updateProductStatusSchema,
@@ -24,11 +26,13 @@ import type {
 } from "~/server/db/schema/users"
 import { type SQL } from "drizzle-orm"
 import type { ClientUploadedFileData } from "uploadthing/types"
-import { type z } from "zod"
+import { TypeOf, type z } from "zod"
 
 import type { getImageById, getTableImages } from "~/lib/api/images/queries"
 import {
   type getProductById,
+  type getProductBySlug,
+  type getProducts,
   type getTableProducts,
 } from "~/lib/api/products/queries"
 
@@ -86,6 +90,7 @@ export type ResendEmailVerificationCode = z.infer<
 
 // Types: Product
 export type ProductId = z.infer<typeof productIdSchema>
+export type ProductSlug = z.infer<typeof productSlugSchema>
 export type CreateProductInput = z.infer<typeof insertProductSchema>
 export type UpdateProductInput = z.infer<typeof updateProductSchema>
 export type UpdateProductStatusInput = z.infer<typeof updateProductStatusSchema>
@@ -97,13 +102,15 @@ export type ProductVariant = z.infer<typeof productVariantSchema>
 export type ProductOptionValue = z.infer<typeof optionValueSchema>
 
 // This type infers the return from getProducts() - meaning it will include any joins
-export type CompleteProduct = Awaited<ReturnType<typeof getProductById>>
+export type CompleteProduct = Awaited<ReturnType<typeof getProductBySlug>>
 export type CompleteTableProducts = Awaited<ReturnType<typeof getTableProducts>>
 export type Product = typeof products.$inferSelect
 export type TableProducts = Awaited<ReturnType<typeof getTableProducts>>
+export type SearchedProducts = Awaited<ReturnType<typeof getProducts>>
 export type TableProduct = TableProducts["data"][number]
 
-export type TableProductsParams = z.infer<typeof searchProductParamsSchema>
+export type SearchProductParams = z.infer<typeof searchProductParamsSchema>
+export type TableProductsParams = z.infer<typeof searchTableProductParamsSchema>
 
 // Types: Image
 export type ImageId = z.infer<typeof imageIdSchema>

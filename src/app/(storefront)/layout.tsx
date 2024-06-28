@@ -9,7 +9,7 @@ const StorefrontRoutesLayout = ({ children }: React.PropsWithChildren) => {
         Peace be upon on you السلام عليكم
       </div>
       {children}
-      <Footer className="absolute bottom-0" />
+      <Footer className="sticky bottom-0 mt-auto" />
     </div>
   )
 }
