@@ -74,7 +74,6 @@ export function DeleteProductsAlertDialog({
             variant="destructive"
             onClick={() => mutate(products.map(({ id }) => ({ id })))}
             loading={isPending}
-            loadingText="Deleting"
             disabled={isPending}
           >
             Delete

@@ -166,9 +166,8 @@ export const ImageSelectModal: React.FC<ImageSelectModalProps> = ({
                       size="sm"
                       disabled={isDeleting}
                       loading={isDeleting}
-                      loadingText="Deleting"
+                      icon={Icons.trash}
                     >
-                      <Icons.trash className="mr-1.5 size-3.5" />
                       Delete&nbsp;
                       <span className="hidden sm:block">selected</span>
                     </Button>

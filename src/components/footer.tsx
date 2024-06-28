@@ -42,7 +42,7 @@ const Footer: React.FC<FooterProps> = ({ className, props }) => {
             <span className="sr-only">Follow me on X</span>
           </Link>
           <Link
-            href="https://github.com/Muhammad-RK-Isa"
+            href="https://github.com/Muhammad-RK-Isa/nexcom"
             target="_blank"
             rel="noreferrer"
             className="group p-1"

@@ -67,40 +67,40 @@ const ProductForm: React.FC<ProductFormProps> = ({ product }) => {
     resolver: zodResolver(insertProductSchema),
     defaultValues: product
       ? {
-          ...product,
-          options: product.options?.sort((a, b) => a.rank - b.rank),
-          images: product.images
-            ?.sort((a, b) => a.rank - b.rank)
-            .flatMap(({ id, name, url }) => ({
-              id,
-              name,
-              url,
-            })),
-        }
+        ...product,
+        options: product.options?.sort((a, b) => a.rank - b.rank),
+        images: product.images
+          ?.sort((a, b) => a.rank - b.rank)
+          .flatMap(({ id, name, url }) => ({
+            id,
+            name,
+            url,
+          })),
+      }
       : {
-          title: "",
-          slug: "",
-          description: "",
-          inventoryQuantity: 0,
-          manageInventory: true,
-          allowBackorder: false,
-          weight: {
-            value: undefined,
-            unit: "kg",
-          },
-          length: {
-            value: undefined,
-            unit: "m",
-          },
-          height: {
-            value: undefined,
-            unit: "m",
-          },
-          status: "active",
-          options: [],
-          variants: [],
-          images: [],
+        title: "",
+        slug: "",
+        description: "",
+        inventoryQuantity: 0,
+        manageInventory: true,
+        allowBackorder: false,
+        weight: {
+          value: undefined,
+          unit: "kg",
         },
+        length: {
+          value: undefined,
+          unit: "m",
+        },
+        height: {
+          value: undefined,
+          unit: "m",
+        },
+        status: "active",
+        options: [],
+        variants: [],
+        images: [],
+      },
   })
 
   const { mutate: createProduct, isPending: isCreating } =
@@ -161,7 +161,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ product }) => {
               <Icons.chevronLeft className="size-4" />
               <span className="sr-only">Back</span>
             </Link>
-            <h1 className="max-w-44 truncate text-lg font-semibold tracking-tight md:max-w-72 md:text-xl lg:max-w-[60%]">
+            <h1 className="max-w-40 truncate text-lg font-semibold tracking-tight md:max-w-72 md:text-xl lg:max-w-[60%]">
               {product?.title ?? "Add Product"}
             </h1>
             {editing ? (
@@ -193,7 +193,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ product }) => {
                 type="submit"
                 disabled={isUpdating || isCreating || !form.formState.isDirty}
                 loading={isUpdating || isCreating}
-                loadingText="Saving"
               >
                 {editing ? "Save" : "Create"}
               </Button>
