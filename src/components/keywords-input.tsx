@@ -73,7 +73,7 @@ const KeywordsInput: React.FC<KeywordsInputProps> = ({
   }
 
   return (
-    <div className="flex min-h-9 w-full flex-wrap items-center rounded-md border border-input px-2 py-2 text-sm shadow-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-ring">
+    <div className="flex min-h-9 w-full flex-wrap items-center rounded-md border border-input p-2 text-sm shadow-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-ring">
       <div
         className="flex w-full flex-wrap gap-1.5 overflow-y-auto"
         style={{ maxHeight: "300px" }}

@@ -38,7 +38,7 @@ export const Appearances = () => {
           <Button
             asChild
             variant={"ghost"}
-            className="h-fit w-fit"
+            className="size-fit"
             onClick={() => setTheme("light")}
           >
             <div className="flex flex-col">
@@ -49,11 +49,11 @@ export const Appearances = () => {
                     <div className="h-2 w-[100px] rounded-lg bg-[#ecedef]" />
                   </div>
                   <div className="flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm">
-                    <div className="h-4 w-4 rounded-full bg-[#ecedef]" />
+                    <div className="size-4 rounded-full bg-[#ecedef]" />
                     <div className="h-2 w-[100px] rounded-lg bg-[#ecedef]" />
                   </div>
                   <div className="flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm">
-                    <div className="h-4 w-4 rounded-full bg-[#ecedef]" />
+                    <div className="size-4 rounded-full bg-[#ecedef]" />
                     <div className="h-2 w-[100px] rounded-lg bg-[#ecedef]" />
                   </div>
                 </div>
@@ -67,7 +67,7 @@ export const Appearances = () => {
             asChild
             variant={"ghost"}
             onClick={() => setTheme("dark")}
-            className="h-fit w-fit"
+            className="size-fit"
           >
             <div className="flex flex-col">
               <div className="items-center rounded-md border-2 border-muted bg-popover p-1 transition-colors hover:bg-accent hover:text-accent-foreground">
@@ -77,11 +77,11 @@ export const Appearances = () => {
                     <div className="h-2 w-[100px] rounded-lg bg-neutral-400" />
                   </div>
                   <div className="flex items-center space-x-2 rounded-md bg-neutral-800 p-2 shadow-sm">
-                    <div className="h-4 w-4 rounded-full bg-neutral-400" />
+                    <div className="size-4 rounded-full bg-neutral-400" />
                     <div className="h-2 w-[100px] rounded-lg bg-neutral-400" />
                   </div>
                   <div className="flex items-center space-x-2 rounded-md bg-neutral-800 p-2 shadow-sm">
-                    <div className="h-4 w-4 rounded-full bg-neutral-400" />
+                    <div className="size-4 rounded-full bg-neutral-400" />
                     <div className="h-2 w-[100px] rounded-lg bg-neutral-400" />
                   </div>
                 </div>
@@ -95,7 +95,7 @@ export const Appearances = () => {
             asChild
             variant={"ghost"}
             onClick={() => setTheme("system")}
-            className="h-fit w-fit"
+            className="size-fit"
           >
             <div className="flex flex-col">
               <div className="items-center rounded-md border-2 border-muted bg-popover p-1 transition-colors hover:bg-accent hover:text-accent-foreground">
@@ -105,11 +105,11 @@ export const Appearances = () => {
                     <div className="h-2 w-[100px] rounded-lg bg-neutral-400" />
                   </div>
                   <div className="flex items-center space-x-2 rounded-md bg-neutral-600 p-2 shadow-sm">
-                    <div className="h-4 w-4 rounded-full bg-neutral-400" />
+                    <div className="size-4 rounded-full bg-neutral-400" />
                     <div className="h-2 w-[100px] rounded-lg bg-neutral-400" />
                   </div>
                   <div className="flex items-center space-x-2 rounded-md bg-neutral-600 p-2 shadow-sm">
-                    <div className="h-4 w-4 rounded-full bg-neutral-400" />
+                    <div className="size-4 rounded-full bg-neutral-400" />
                     <div className="h-2 w-[100px] rounded-lg bg-neutral-400" />
                   </div>
                 </div>

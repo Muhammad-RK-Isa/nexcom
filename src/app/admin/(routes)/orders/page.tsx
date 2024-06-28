@@ -320,9 +320,9 @@ const OrdersPage = () => {
                 <Button
                   size="icon"
                   variant="outline"
-                  className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
+                  className="size-6 opacity-0 transition-opacity group-hover:opacity-100"
                 >
-                  <Icons.copy className="h-3 w-3" />
+                  <Icons.copy className="size-3" />
                   <span className="sr-only">Copy Order ID</span>
                 </Button>
               </CardTitle>
@@ -337,7 +337,7 @@ const OrdersPage = () => {
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button size="icon" variant="outline" className="h-8 w-8">
+                  <Button size="icon" variant="outline" className="size-8">
                     <Icons.ellipsisVertical className="size-3.5" />
                     <span className="sr-only">More</span>
                   </Button>
@@ -448,13 +448,13 @@ const OrdersPage = () => {
             <Pagination className="ml-auto mr-0 w-auto">
               <PaginationContent>
                 <PaginationItem>
-                  <Button size="icon" variant="outline" className="h-6 w-6">
+                  <Button size="icon" variant="outline" className="size-6">
                     <Icons.chevronLeft className="size-3.5" />
                     <span className="sr-only">Previous Order</span>
                   </Button>
                 </PaginationItem>
                 <PaginationItem>
-                  <Button size="icon" variant="outline" className="h-6 w-6">
+                  <Button size="icon" variant="outline" className="size-6">
                     <Icons.chevronRight className="size-3.5" />
                     <span className="sr-only">Next Order</span>
                   </Button>
