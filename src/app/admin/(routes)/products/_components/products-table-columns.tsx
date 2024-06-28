@@ -249,7 +249,6 @@ export function getColumns(): ColumnDef<TableProduct>[] {
                     </DropdownMenuSubContent>
                   </DropdownMenuPortal>
                 </DropdownMenuSub>
-                <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onSelect={() => setShowDeleteProductAlertDialog(true)}
                 >

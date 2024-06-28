@@ -1,11 +1,6 @@
 import NextImage from "next/image"
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area"
 import { EmptyCard } from "~/components/empty-card"
 import type { Image } from "~/types"
@@ -22,7 +17,7 @@ export default function Images({ files }: FilesProps) {
       </CardHeader>
       <CardContent>
         {files.length > 0 ? (
-          <ScrollArea className="max-w-[18rem] rounded-md pb-4 sm:max-w-sm md:max-w-md lg:max-w-lg">
+          <ScrollArea className="max-w-[16rem] rounded-md pb-4 sm:max-w-sm md:max-w-md lg:max-w-lg">
             <div className="flex w-max space-x-2.5">
               {files.map((file) => (
                 <div key={file.id} className="relative size-44">

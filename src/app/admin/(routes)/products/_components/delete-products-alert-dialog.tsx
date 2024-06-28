@@ -67,7 +67,7 @@ export function DeleteProductsAlertDialog({
             {products.length === 1 ? " product" : " products"} permanently.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter className="gap-2 sm:space-x-0">
+        <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <Button
             aria-label="Delete selected rows"

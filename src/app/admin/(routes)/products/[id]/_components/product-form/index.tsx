@@ -161,7 +161,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ product }) => {
               <Icons.chevronLeft className="size-4" />
               <span className="sr-only">Back</span>
             </Link>
-            <h1 className="max-w-64 truncate text-xl font-semibold tracking-tight md:max-w-72 lg:max-w-[60%]">
+            <h1 className="max-w-44 truncate text-lg font-semibold tracking-tight md:max-w-72 md:text-xl lg:max-w-[60%]">
               {product?.title ?? "Add Product"}
             </h1>
             {editing ? (
@@ -184,6 +184,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ product }) => {
                 size="sm"
                 type="button"
                 disabled={isUpdating}
+                onClick={() => router.push("/admin/products")}
               >
                 Discard
               </Button>
@@ -212,28 +213,32 @@ const ProductForm: React.FC<ProductFormProps> = ({ product }) => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuSeparator />
+                <DropdownMenuLabel className="text-xs">
+                  Actions
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator className="my-0" />
                 <DropdownMenuItem
                   onClick={form.handleSubmit(onSubmit)}
                   disabled={isUpdating || isCreating || !form.formState.isDirty}
+                  className="text-xs"
                 >
-                  <Icons.save className="mr-2 size-4" />
                   {editing ? "Save" : "Create"}
                   {isCreating || isUpdating ? (
-                    <Icons.spinner className="ml-auto size-4" />
+                    <Icons.spinner className="ml-auto size-3" />
                   ) : null}
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem disabled={isUpdating}>
-                  <Icons.multiply className="mr-2 size-4" />
-                  Cancel
+                <DropdownMenuItem
+                  disabled={isUpdating}
+                  className="text-xs"
+                  onClick={() => router.push("/admin/products")}
+                >
+                  Discard
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </div>
-        <ScrollArea className="max-h-[calc(100vh-125px)] w-full px-4 lg:px-6">
+        <ScrollArea className="max-h-[calc(100vh-117px)] w-full px-4 lg:max-h-[calc(100vh-125px)] lg:px-6">
           <div className="mx-auto my-4 grid max-w-6xl gap-4 md:grid-cols-[1fr_250px] lg:my-6 lg:grid-cols-3 lg:gap-8">
             <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
               <ProductDetailsForm />
