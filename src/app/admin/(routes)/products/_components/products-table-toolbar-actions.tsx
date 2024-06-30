@@ -5,12 +5,12 @@ import { useSearchParams } from "next/navigation"
 import { DownloadIcon } from "@radix-ui/react-icons"
 import { type Table } from "@tanstack/react-table"
 
+import type { TableProduct } from "~/types"
 import { exportTableToCSV } from "~/lib/export"
 import { cn } from "~/lib/utils"
 import { Button, buttonVariants } from "~/components/ui/button"
 import { DateRangePicker } from "~/components/date-range-picker"
 import { Icons } from "~/components/icons"
-import type { TableProduct } from "~/types"
 
 import { DeleteProductsAlertDialog } from "./delete-products-alert-dialog"
 

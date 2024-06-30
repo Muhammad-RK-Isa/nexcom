@@ -2,6 +2,7 @@ import * as React from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import type { Table } from "@tanstack/react-table"
 
+import type { DataTableFilterOption } from "~/types"
 import { dataTableConfig } from "~/config/data-table"
 import { useDebounce } from "~/lib/hooks/use-debounce"
 import { cn } from "~/lib/utils"
@@ -21,7 +22,6 @@ import {
   SelectValue,
 } from "~/components/ui/select"
 import { Icons } from "~/components/icons"
-import type { DataTableFilterOption } from "~/types"
 
 import { DataTableAdvancedFacetedFilter } from "./data-table-advanced-faceted-filter"
 

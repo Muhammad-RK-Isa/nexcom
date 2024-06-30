@@ -6,12 +6,12 @@ import { useSearchParams } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { DEFAULT_LOGIN_REDIRECT } from "~/routes"
 import { createUserSchema } from "~/server/db/schema"
-import { api } from "~/trpc/react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next-nprogress-bar"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
+import type { CreateUserInput } from "~/types"
 import { Paths } from "~/lib/constants"
 import { AnimatedInput } from "~/components/ui/animated-input"
 import { Button } from "~/components/ui/button"
@@ -23,7 +23,7 @@ import {
   FormLabel,
 } from "~/components/ui/form"
 import { Icons } from "~/components/icons"
-import type { CreateUserInput } from "~/types"
+import { api } from "~/trpc/react"
 
 export const SignUpForm = () => {
   const searchParams = useSearchParams()

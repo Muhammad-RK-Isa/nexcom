@@ -1,6 +1,7 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
 
+import type { UpdateProductInput } from "~/types"
 import { slugify } from "~/lib/utils"
 import { Button } from "~/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
@@ -15,7 +16,6 @@ import { Input } from "~/components/ui/input"
 import { Textarea } from "~/components/ui/textarea"
 import { ImageSelectModal } from "~/components/image-select-modal"
 import Images from "~/components/images"
-import type { UpdateProductInput } from "~/types"
 
 const ProductDetailsForm = () => {
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false)

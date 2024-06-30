@@ -1,8 +1,8 @@
 import React from "react"
 import { motion } from "framer-motion"
 
-import { cn } from "~/lib/utils"
 import type { Image } from "~/types"
+import { cn } from "~/lib/utils"
 
 import { Icons } from "./icons"
 import { FileCard } from "./image-uploader"

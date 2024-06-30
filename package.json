@@ -71,6 +71,8 @@
     "dotenv-cli": "^7.4.2",
     "drizzle-orm": "0.30.10",
     "drizzle-zod": "^0.5.1",
+    "embla-carousel": "^8.1.5",
+    "embla-carousel-react": "^8.1.5",
     "framer-motion": "^11.2.4",
     "input-otp": "^1.2.4",
     "lodash": "^4.17.21",

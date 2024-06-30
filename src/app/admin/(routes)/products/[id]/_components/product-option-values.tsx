@@ -1,6 +1,7 @@
 import React from "react"
 import { useFieldArray, useFormContext, type Control } from "react-hook-form"
 
+import type { UpdateProductInput } from "~/types"
 import { generateId } from "~/lib/utils"
 import { Button } from "~/components/ui/button"
 import {
@@ -17,7 +18,6 @@ import {
   SortableItem,
 } from "~/components/ui/sortable"
 import { Icons } from "~/components/icons"
-import type { UpdateProductInput } from "~/types"
 
 interface ProductOptionValuesProps {
   optionIdx: number

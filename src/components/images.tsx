@@ -1,9 +1,9 @@
 import NextImage from "next/image"
 
+import type { Image } from "~/types"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area"
 import { EmptyCard } from "~/components/empty-card"
-import type { Image } from "~/types"
 
 interface FilesProps {
   files: Image[]

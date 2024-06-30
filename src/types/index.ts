@@ -102,7 +102,10 @@ export type ProductVariant = z.infer<typeof productVariantSchema>
 export type ProductOptionValue = z.infer<typeof optionValueSchema>
 
 // This type infers the return from getProducts() - meaning it will include any joins
-export type CompleteProduct = Awaited<ReturnType<typeof getProductBySlug>>
+export type CompleteProduct = NonNullable<
+  Awaited<ReturnType<typeof getProductBySlug>>
+>
+export type EditableProduct = Awaited<ReturnType<typeof getProductById>>
 export type CompleteTableProducts = Awaited<ReturnType<typeof getTableProducts>>
 export type Product = typeof products.$inferSelect
 export type TableProducts = Awaited<ReturnType<typeof getTableProducts>>

@@ -2,9 +2,9 @@
 
 import React from "react"
 import NextImage from "next/image"
-import { api } from "~/trpc/react"
 import { toast } from "sonner"
 
+import type { Image, TableImageParams } from "~/types"
 import { useUploadFile } from "~/lib/hooks/use-upload-files"
 import { cn } from "~/lib/utils"
 import { Button, buttonVariants } from "~/components/ui/button"
@@ -22,7 +22,7 @@ import {
 import { ScrollArea } from "~/components/ui/scroll-area"
 import { EmptyCard } from "~/components/empty-card"
 import { Icons } from "~/components/icons"
-import type { Image, TableImageParams } from "~/types"
+import { api } from "~/trpc/react"
 
 import { ImageUploader } from "./image-uploader"
 import {

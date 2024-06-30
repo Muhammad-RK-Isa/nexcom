@@ -2,10 +2,10 @@
 
 import * as React from "react"
 import { type Row } from "@tanstack/react-table"
-import { api } from "~/trpc/react"
 import { useRouter } from "next-nprogress-bar"
 import { toast } from "sonner"
 
+import { type TableProduct } from "~/types"
 import { cn } from "~/lib/utils"
 import {
   AlertDialog,
@@ -19,7 +19,7 @@ import {
 } from "~/components/ui/alert-dialog"
 import { Button, buttonVariants } from "~/components/ui/button"
 import { Icons } from "~/components/icons"
-import { type TableProduct } from "~/types"
+import { api } from "~/trpc/react"
 
 interface DeleteProductsAlertDialogProps
   extends React.ComponentPropsWithoutRef<typeof AlertDialog> {

@@ -4,7 +4,6 @@ import { db } from "~/server/db"
 import { products } from "~/server/db/schema"
 import { and, asc, count, desc, gte, lte, or, sql, type SQL } from "drizzle-orm"
 
-import { filterColumn } from "~/lib/filter-column"
 import type {
   DrizzleWhere,
   Product,
@@ -13,6 +12,7 @@ import type {
   SearchProductParams,
   TableProductsParams,
 } from "~/types"
+import { filterColumn } from "~/lib/filter-column"
 
 export const getProducts = async (input: SearchProductParams) => {
   const { page, per_page, sort, title, bestSelling, featured } = input

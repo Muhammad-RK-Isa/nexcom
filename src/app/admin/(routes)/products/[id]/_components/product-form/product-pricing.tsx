@@ -1,5 +1,6 @@
 import { useFormContext } from "react-hook-form"
 
+import type { UpdateProductInput } from "~/types"
 import { cn } from "~/lib/utils"
 import { buttonVariants } from "~/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
@@ -16,7 +17,6 @@ import {
   HoverCardTrigger,
 } from "~/components/ui/hover-card"
 import { Input } from "~/components/ui/input"
-import type { UpdateProductInput } from "~/types"
 
 const ProductPricingForm = () => {
   const form = useFormContext<UpdateProductInput>()

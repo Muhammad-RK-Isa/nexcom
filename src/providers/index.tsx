@@ -2,12 +2,12 @@
 
 import React from "react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
-import { TRPCReactProvider } from "~/trpc/react"
 import { SessionProvider } from "next-auth/react"
 
 import { useMediaQuery } from "~/lib/hooks/use-media-query"
 import { Toaster } from "~/components/ui/sonner"
 import { TooltipProvider } from "~/components/ui/tooltip"
+import { TRPCReactProvider } from "~/trpc/react"
 
 import ProgressBarProvider from "./progress-bar-provider"
 import { ThemeProvider } from "./theme-provider"

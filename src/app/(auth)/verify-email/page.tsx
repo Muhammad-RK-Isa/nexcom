@@ -1,6 +1,8 @@
 import React from "react"
 import { redirect } from "next/navigation"
 
+// import { VerifyCode } from "./verify-code";
+import { type SearchParams } from "~/types"
 import { Paths } from "~/lib/constants"
 import {
   Card,
@@ -9,8 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card"
-// import { VerifyCode } from "./verify-code";
-import { type SearchParams } from "~/types"
 
 export const metadata = {
   title: "Verify Email",

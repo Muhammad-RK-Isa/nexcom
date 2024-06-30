@@ -1,7 +1,7 @@
 import { productStatuses } from "~/schema"
 
-import { Icons } from "~/components/icons"
 import type { TableProduct } from "~/types"
+import { Icons } from "~/components/icons"
 
 /**
  * Returns the appropriate status icon based on the provided status.

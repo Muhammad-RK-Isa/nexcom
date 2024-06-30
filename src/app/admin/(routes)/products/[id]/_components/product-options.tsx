@@ -1,11 +1,11 @@
 import React from "react"
 import { useFieldArray, useFormContext } from "react-hook-form"
 
+import type { UpdateProductInput } from "~/types"
 import { generateId } from "~/lib/utils"
 import { Button } from "~/components/ui/button"
 import { Sortable } from "~/components/ui/sortable"
 import { Icons } from "~/components/icons"
-import type { UpdateProductInput } from "~/types"
 
 import { generateVariants } from "../_lib/utils"
 import { ProductOption } from "./product-option"

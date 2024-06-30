@@ -2,6 +2,7 @@ import React from "react"
 import Image from "next/image"
 import { useFormContext } from "react-hook-form"
 
+import type { UpdateProductInput } from "~/types"
 import { cn } from "~/lib/utils"
 import { Badge } from "~/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
@@ -9,7 +10,6 @@ import { FormControl, FormField, FormItem } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
 import { Icons } from "~/components/icons"
 import { ImageSelectModal } from "~/components/image-select-modal"
-import type { UpdateProductInput } from "~/types"
 
 import { ProductOptions } from "./product-options"
 

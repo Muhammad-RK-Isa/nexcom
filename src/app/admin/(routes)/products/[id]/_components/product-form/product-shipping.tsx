@@ -1,6 +1,7 @@
 import { sizeUnits, weightUnits } from "~/schema"
 import { useFormContext } from "react-hook-form"
 
+import type { UpdateProductInput } from "~/types"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import {
   FormControl,
@@ -17,7 +18,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select"
-import type { UpdateProductInput } from "~/types"
 
 const ProductShippingForm = () => {
   const form = useFormContext<UpdateProductInput>()

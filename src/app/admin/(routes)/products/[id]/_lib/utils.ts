@@ -1,7 +1,7 @@
 import { isEqual } from "lodash"
 
-import { generateId } from "~/lib/utils"
 import type { ProductOption, ProductVariant } from "~/types"
+import { generateId } from "~/lib/utils"
 
 interface VariantCombo {
   optionId: string

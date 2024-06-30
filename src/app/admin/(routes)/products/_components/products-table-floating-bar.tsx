@@ -2,10 +2,10 @@ import * as React from "react"
 import { SelectTrigger } from "@radix-ui/react-select"
 import { type Table } from "@tanstack/react-table"
 import { productStatuses } from "~/schema"
-import { api } from "~/trpc/react"
 import { useRouter } from "next-nprogress-bar"
 import { toast } from "sonner"
 
+import type { TableProduct } from "~/types"
 import { exportTableToCSV } from "~/lib/export"
 import {
   AlertDialog,
@@ -32,7 +32,7 @@ import {
 } from "~/components/ui/tooltip"
 import { Icons } from "~/components/icons"
 import { Kbd } from "~/components/kbd"
-import type { TableProduct } from "~/types"
+import { api } from "~/trpc/react"
 
 interface ProductsTableFloatingBarProps {
   table: Table<TableProduct>

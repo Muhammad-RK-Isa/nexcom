@@ -4,11 +4,15 @@ import React from "react"
 import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { insertProductSchema, productStatuses } from "~/schema"
-import { api } from "~/trpc/react"
 import { useRouter } from "next-nprogress-bar"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
+import type {
+  CreateProductInput,
+  EditableProduct,
+  UpdateProductInput,
+} from "~/types"
 import { cn } from "~/lib/utils"
 import { Badge } from "~/components/ui/badge"
 import { Button, buttonVariants } from "~/components/ui/button"
@@ -40,11 +44,7 @@ import {
 } from "~/components/ui/select"
 import { Icons } from "~/components/icons"
 import KeywordsInput from "~/components/keywords-input"
-import type {
-  CompleteProduct,
-  CreateProductInput,
-  UpdateProductInput,
-} from "~/types"
+import { api } from "~/trpc/react"
 
 import { getStatusIcon } from "../../../_lib/utils"
 import { ProductVariantsForm } from "../variants"
@@ -54,7 +54,7 @@ import ProductPricingForm from "./product-pricing"
 import ProductShippingForm from "./product-shipping"
 
 interface ProductFormProps {
-  product?: CompleteProduct
+  product?: EditableProduct
 }
 
 const ProductForm: React.FC<ProductFormProps> = ({ product }) => {

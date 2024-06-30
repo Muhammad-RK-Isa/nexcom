@@ -8,6 +8,7 @@ import {
   TextIcon,
 } from "@radix-ui/react-icons"
 
+import type { DataTableFilterOption } from "~/types"
 import { Button } from "~/components/ui/button"
 import {
   Command,
@@ -23,7 +24,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover"
-import type { DataTableFilterOption } from "~/types"
 
 interface DataTableFilterComboboxProps<TData> {
   options: DataTableFilterOption<TData>[]

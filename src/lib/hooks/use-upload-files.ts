@@ -1,12 +1,12 @@
 import * as React from "react"
-import { api } from "~/trpc/react"
 import { toast } from "sonner"
 import type { UploadFilesOptions } from "uploadthing/types"
 
+import type { Image } from "~/types"
 import { getErrorMessage } from "~/lib/handle-error"
 import { uploadFiles } from "~/lib/uploadthing"
 import { type OurFileRouter } from "~/app/api/uploadthing/core"
-import type { Image } from "~/types"
+import { api } from "~/trpc/react"
 
 interface UseUploadFileProps
   extends Pick<

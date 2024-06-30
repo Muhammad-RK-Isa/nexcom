@@ -3,15 +3,15 @@
 import * as React from "react"
 import { productStatuses } from "~/schema"
 
-import { useDataTable } from "~/lib/hooks/use-data-table"
-import { DataTableAdvancedToolbar } from "~/components/data-table/advanced/data-table-advanced-toolbar"
-import { DataTable } from "~/components/data-table/data-table"
-import { DataTableToolbar } from "~/components/data-table/data-table-toolbar"
 import type {
   CompleteTableProducts,
   DataTableFilterField,
   TableProduct,
 } from "~/types"
+import { useDataTable } from "~/lib/hooks/use-data-table"
+import { DataTableAdvancedToolbar } from "~/components/data-table/advanced/data-table-advanced-toolbar"
+import { DataTable } from "~/components/data-table/data-table"
+import { DataTableToolbar } from "~/components/data-table/data-table-toolbar"
 
 import { getStatusIcon } from "../_lib/utils"
 import { getColumns } from "./products-table-columns"

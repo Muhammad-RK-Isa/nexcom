@@ -1,6 +1,7 @@
 import React from "react"
 import { useFormContext, type Control } from "react-hook-form"
 
+import type { UpdateProductInput } from "~/types"
 import { cn } from "~/lib/utils"
 import { Badge } from "~/components/ui/badge"
 import { Button } from "~/components/ui/button"
@@ -14,7 +15,6 @@ import {
 import { Input } from "~/components/ui/input"
 import { SortableDragHandle, SortableItem } from "~/components/ui/sortable"
 import { Icons } from "~/components/icons"
-import type { UpdateProductInput } from "~/types"
 
 import { generateVariants } from "../_lib/utils"
 import { ProductOptionValues } from "./product-option-values"

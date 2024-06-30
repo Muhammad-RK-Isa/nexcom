@@ -11,6 +11,7 @@ import { useRouter } from "next-nprogress-bar"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
+import type { SignInInput } from "~/types"
 import { AnimatedInput } from "~/components/ui/animated-input"
 import { Button } from "~/components/ui/button"
 import {
@@ -21,7 +22,6 @@ import {
   FormLabel,
 } from "~/components/ui/form"
 import { Icons } from "~/components/icons"
-import type { SignInInput } from "~/types"
 
 export const SignInForm = () => {
   const searchParams = useSearchParams()

@@ -1,5 +1,6 @@
 import type { Column } from "@tanstack/react-table"
 
+import type { DataTableFilterOption, Option } from "~/types"
 import { cn } from "~/lib/utils"
 import {
   Command,
@@ -11,7 +12,6 @@ import {
   CommandSeparator,
 } from "~/components/ui/command"
 import { Icons } from "~/components/icons"
-import type { DataTableFilterOption, Option } from "~/types"
 
 interface DataTableAdvancedFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>

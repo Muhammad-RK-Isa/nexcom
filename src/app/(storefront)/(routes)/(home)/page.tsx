@@ -1,8 +1,8 @@
 import React from "react"
-import { api } from "~/trpc/server"
 
-import ProductsCollection from "~/components/shop/product/products-collection"
 import type { SearchProductParams } from "~/types"
+import ProductsCollection from "~/components/shop/product/products-collection"
+import { api } from "~/trpc/server"
 
 interface StorefrontHomepageProps {
   searchParams: SearchProductParams

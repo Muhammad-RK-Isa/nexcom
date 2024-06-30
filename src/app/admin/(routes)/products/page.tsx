@@ -1,9 +1,9 @@
 import React from "react"
 import { searchProductParamsSchema } from "~/schema"
-import { api } from "~/trpc/server"
 
-import { DataTableSkeleton } from "~/components/skeletons/data-table-skeleton"
 import type { SearchParams } from "~/types"
+import { DataTableSkeleton } from "~/components/skeletons/data-table-skeleton"
+import { api } from "~/trpc/server"
 
 import { ProductsTable } from "./_components/products-table"
 import { ProductsTableProvider } from "./_components/products-table-provider"
