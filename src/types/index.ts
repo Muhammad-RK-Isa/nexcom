@@ -26,7 +26,7 @@ import type {
 } from "~/server/db/schema/users"
 import { type SQL } from "drizzle-orm"
 import type { ClientUploadedFileData } from "uploadthing/types"
-import { TypeOf, type z } from "zod"
+import { type z } from "zod"
 
 import type { getImageById, getTableImages } from "~/lib/api/images/queries"
 import {
@@ -40,7 +40,7 @@ export interface SearchParams {
   [key: string]: string | string[] | undefined
 }
 
-export interface UploadedFile<T = unknown> extends ClientUploadedFileData<T> {}
+export interface UploadedFile<T = unknown> extends ClientUploadedFileData<T> { }
 
 export type Image = z.infer<typeof imageSchema>
 

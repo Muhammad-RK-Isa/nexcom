@@ -5,11 +5,10 @@ import Image from "next/image"
 import useEmblaCarousel from "embla-carousel-react"
 
 import type { CompleteProduct } from "~/types"
-import { cn } from "~/lib/utils"
 import { Icons } from "~/components/icons"
 
-import Slide from "./slide"
 import Thumb from "./thumb"
+import ZoomableImageViewer from "./zoomable-image-viewer"
 
 interface ProductImageViewerProps {
   images: CompleteProduct["images"]
@@ -17,10 +16,10 @@ interface ProductImageViewerProps {
 
 const ProductImageViewer: React.FC<ProductImageViewerProps> = ({ images }) => {
   const [selectedImage, setSelectedImage] = React.useState(images[0])
-  const [emblaMainRef, emblaMainApi] = useEmblaCarousel({})
+  const [emblaMainRef, emblaMainApi] = useEmblaCarousel()
   const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
-    containScroll: "trimSnaps",
-    dragFree: false,
+    containScroll: "keepSnaps",
+    dragFree: true,
   })
 
   const onThumbClick = React.useCallback(
@@ -45,19 +44,22 @@ const ProductImageViewer: React.FC<ProductImageViewerProps> = ({ images }) => {
   }, [emblaMainApi, onSelect])
 
   return (
-    <div className="flex w-full max-w-[calc(100vw-2rem)] flex-col gap-2">
+    <div className="relative flex w-full max-w-[calc(100vw-2rem)] flex-col gap-2">
       {images.length > 1 ? (
         <div className="overflow-hidden rounded-md" ref={emblaMainRef}>
           <div className="flex aspect-square touch-pan-y">
             {images.map((image, idx) => (
-              <Slide
+              <div
                 key={idx}
-                image={image}
-                selected={
-                  idx ===
-                  images.findIndex((img) => img.id === selectedImage?.id)
-                }
-              />
+                className="relative min-w-0 shrink-0 grow-0 basis-full overflow-hidden"
+              >
+                <Image
+                  src={image.url}
+                  alt={image.name}
+                  fill
+                  className="rounded-sm object-cover"
+                />
+              </div>
             ))}
           </div>
         </div>
@@ -75,6 +77,11 @@ const ProductImageViewer: React.FC<ProductImageViewerProps> = ({ images }) => {
           )}
         </div>
       )}
+      <ZoomableImageViewer
+        selectedImage={selectedImage}
+        setSelectedImage={setSelectedImage}
+        images={images}
+      />
       {images.length > 1 ? (
         <div className="overflow-hidden rounded-sm" ref={emblaThumbsRef}>
           <div className="flex h-24 touch-pan-y gap-2">
