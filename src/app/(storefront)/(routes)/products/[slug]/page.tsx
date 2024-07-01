@@ -19,7 +19,7 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
   if (!product) return notFound()
 
   return (
-    <div className="mx-auto w-full max-w-screen-xl p-4 md:pt-6 lg:p-6 lg:pt-8">
+    <div className="mx-auto w-full p-4 md:pt-6 lg:max-w-screen-xl lg:p-6 lg:pt-8">
       <div className="grid gap-4 md:grid-cols-2 md:gap-6 lg:gap-8 xl:gap-12">
         <div className="relative aspect-square w-full">
           {product.images[0]?.url ? (

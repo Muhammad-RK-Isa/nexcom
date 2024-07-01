@@ -46,22 +46,7 @@ const Slide: React.FC<SlideProps> = ({ image, selected }) => {
             <TransformWrapper>
               {({ zoomIn, zoomOut, resetTransform }) => (
                 <>
-                  <div className="absolute bottom-6 right-1/2 z-20 flex translate-x-1/2 items-center space-x-4">
-                    <Button
-                      variant="secondary"
-                      size="icon"
-                      onClick={() => zoomIn()}
-                      className="rounded-full"
-                    >
-                      <Icons.zoomIn className="size-4" />
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      onClick={() => resetTransform()}
-                      className="rounded-full"
-                    >
-                      Center
-                    </Button>
+                  <div className="absolute bottom-6 right-1/2 z-20 flex translate-x-1/2 items-center space-x-2.5">
                     <Button
                       variant="secondary"
                       size="icon"
@@ -69,6 +54,21 @@ const Slide: React.FC<SlideProps> = ({ image, selected }) => {
                       className="rounded-full"
                     >
                       <Icons.zoomOut className="size-4" />
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      onClick={() => resetTransform()}
+                      className="rounded-full"
+                    >
+                      Reset
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="icon"
+                      onClick={() => zoomIn()}
+                      className="rounded-full"
+                    >
+                      <Icons.zoomIn className="size-4" />
                     </Button>
                   </div>
                   <TransformComponent
