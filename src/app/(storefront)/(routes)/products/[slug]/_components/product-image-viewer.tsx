@@ -2,24 +2,25 @@
 
 import React from "react"
 import Image from "next/image"
-import { EmblaOptionsType } from "embla-carousel"
 import useEmblaCarousel from "embla-carousel-react"
 
 import type { CompleteProduct } from "~/types"
 import { cn } from "~/lib/utils"
+import { Icons } from "~/components/icons"
 
-import SliderThumb from "./slider-thumb"
+import Slide from "./slide"
+import Thumb from "./thumb"
 
-interface ProductImageSliderProps {
+interface ProductImageViewerProps {
   images: CompleteProduct["images"]
 }
 
-const ProductImageSlider: React.FC<ProductImageSliderProps> = ({ images }) => {
+const ProductImageViewer: React.FC<ProductImageViewerProps> = ({ images }) => {
   const [selectedImage, setSelectedImage] = React.useState(images[0])
   const [emblaMainRef, emblaMainApi] = useEmblaCarousel({})
   const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
-    containScroll: "keepSnaps",
-    dragFree: true,
+    containScroll: "trimSnaps",
+    dragFree: false,
   })
 
   const onThumbClick = React.useCallback(
@@ -45,31 +46,40 @@ const ProductImageSlider: React.FC<ProductImageSliderProps> = ({ images }) => {
 
   return (
     <div className="flex w-full max-w-[calc(100vw-2rem)] flex-col gap-2">
-      <div className="overflow-hidden rounded-md" ref={emblaMainRef}>
-        <div className="flex aspect-square touch-pan-y">
-          {images.map((image, idx) => (
-            <div
-              className="relative min-w-0 shrink-0 grow-0 basis-full overflow-hidden"
-              key={idx}
-            >
-              <Image
-                src={image.url}
-                alt={image.name}
-                fill
-                className={cn(
-                  "rounded-sm object-cover",
-                  image.id === selectedImage?.id && "border-primary/10"
-                )}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
       {images.length > 1 ? (
-        <div className="overflow-hidden" ref={emblaThumbsRef}>
+        <div className="overflow-hidden rounded-md" ref={emblaMainRef}>
+          <div className="flex aspect-square touch-pan-y">
+            {images.map((image, idx) => (
+              <Slide
+                key={idx}
+                image={image}
+                selected={
+                  idx ===
+                  images.findIndex((img) => img.id === selectedImage?.id)
+                }
+              />
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="relative aspect-square">
+          {images[0]?.url ? (
+            <Image
+              src={images[0]?.url}
+              alt={images[0]?.name}
+              fill
+              className="rounded-sm object-cover"
+            />
+          ) : (
+            <Icons.image className="h-full w-full text-muted-foreground" />
+          )}
+        </div>
+      )}
+      {images.length > 1 ? (
+        <div className="overflow-hidden rounded-sm" ref={emblaThumbsRef}>
           <div className="flex h-24 touch-pan-y gap-2">
             {images.map((image, idx) => (
-              <SliderThumb
+              <Thumb
                 key={idx}
                 image={image}
                 onClick={() => onThumbClick(idx)}
@@ -86,4 +96,4 @@ const ProductImageSlider: React.FC<ProductImageSliderProps> = ({ images }) => {
   )
 }
 
-export default ProductImageSlider
+export default ProductImageViewer

@@ -4,17 +4,13 @@ import Image from "next/image"
 import type { CompleteProduct } from "~/types"
 import { cn } from "~/lib/utils"
 
-interface SliderThumbProps {
+interface ThumbProps {
   image: CompleteProduct["images"][number]
   selected: boolean
   onClick: () => void
 }
 
-const SliderThumb: React.FC<SliderThumbProps> = ({
-  image,
-  selected,
-  onClick,
-}) => {
+const Thumb: React.FC<ThumbProps> = ({ image, selected, onClick }) => {
   return (
     <button
       onClick={onClick}
@@ -35,4 +31,4 @@ const SliderThumb: React.FC<SliderThumbProps> = ({
   )
 }
 
-export default SliderThumb
+export default Thumb

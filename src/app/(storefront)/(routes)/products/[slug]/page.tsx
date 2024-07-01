@@ -5,7 +5,7 @@ import { notFound } from "next/navigation"
 import { Icons } from "~/components/icons"
 import { api } from "~/trpc/server"
 
-import ProductImageSlider from "./_components/product-image-slider"
+import ProductImageSlider from "./_components/product-image-viewer"
 
 interface ProductPageProps {
   params: {
@@ -29,7 +29,9 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
           )}
         </div>
         <div className="flex flex-col space-y-4">
-          <h1 className="text-3xl font-medium">{product.title}</h1>
+          <h1 className="line-clamp-3 break-words text-3xl font-medium">
+            {product.title}
+          </h1>
           <h2 className="text-2xl">
             {"৳"}
             {product.price.toFixed(2)}
