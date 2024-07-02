@@ -12,18 +12,15 @@ import ZoomableImageViewer from "./zoomable-image-viewer"
 
 interface ProductImageViewerProps {
   images: CompleteProduct["images"]
-  selectedImage?: CompleteProduct["images"][number]
-  setSelectedImage: (image?: CompleteProduct["images"][number]) => void
+  selectedVariant?: CompleteProduct["variants"][number]
 }
 
 const ProductImageViewer: React.FC<ProductImageViewerProps> = ({
   images,
-  selectedImage,
-  setSelectedImage,
+  selectedVariant,
 }) => {
-  const [emblaMainRef, emblaMainApi] = useEmblaCarousel({
-    startIndex: images.findIndex((img) => img.id === selectedImage?.id),
-  })
+  const [selectedImage, setSelectedImage] = React.useState(images[0])
+  const [emblaMainRef, emblaMainApi] = useEmblaCarousel()
   const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
     containScroll: "keepSnaps",
     dragFree: true,
@@ -49,6 +46,13 @@ const ProductImageViewer: React.FC<ProductImageViewerProps> = ({
 
     emblaMainApi.on("select", onSelect).on("reInit", onSelect)
   }, [emblaMainApi, onSelect])
+
+  React.useEffect(() => {
+    if (!emblaMainApi) return
+    emblaMainApi.scrollTo(
+      images.findIndex((img) => img.id === selectedVariant?.imageId)
+    )
+  }, [selectedVariant, emblaMainApi, images])
 
   return (
     <div className="relative flex w-full flex-col gap-2">

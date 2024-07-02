@@ -78,12 +78,12 @@ const ZoomableImageViewer: React.FC<ZoomableImageViewerProps> = ({
                       wrapperStyle={{ height: "100%", width: "100%" }}
                       contentStyle={{ height: "100%", width: "100%" }}
                     >
-                      <div className="relative aspect-square w-full">
+                      <div className="relative aspect-square w-full cursor-all-scroll">
                         <Image
                           src={selectedImage.url}
                           alt={selectedImage.name}
                           fill
-                          className="size-full rounded-sm object-cover"
+                          className="size-full rounded-sm object-contain"
                         />
                       </div>
                     </TransformComponent>

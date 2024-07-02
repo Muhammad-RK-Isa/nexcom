@@ -16,7 +16,6 @@ interface ProductClientProps {
 
 const ProductClient: React.FC<ProductClientProps> = ({ product }) => {
   const { variants, options, images } = product
-  const [selectedImage, setSelectedImage] = React.useState(images[0])
   const [selectedOptions, setSelectedOptions] = React.useState<
     Record<string, string>
   >({})
@@ -58,10 +57,9 @@ const ProductClient: React.FC<ProductClientProps> = ({ product }) => {
         break
       }
     }
-    const v = variants.find((v) => v.id === variantId)
-    setSelectedImage(images.find((img) => img.id === v?.imageId))
-    return v
-  }, [selectedOptions, variantRecord, variants, images])
+
+    return variants.find((v) => v.id === variantId)
+  }, [selectedOptions, variantRecord, variants])
 
   const handleOptionChange = (optionId: string, value: string) => {
     setSelectedOptions((prev) => ({
@@ -75,8 +73,7 @@ const ProductClient: React.FC<ProductClientProps> = ({ product }) => {
         {images[0]?.url ? (
           <ProductImageViewer
             images={product.images}
-            selectedImage={selectedImage}
-            setSelectedImage={setSelectedImage}
+            selectedVariant={selectedVariant}
           />
         ) : (
           <Icons.image className="size-full" />
