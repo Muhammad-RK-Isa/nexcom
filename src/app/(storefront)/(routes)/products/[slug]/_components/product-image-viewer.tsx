@@ -44,7 +44,7 @@ const ProductImageViewer: React.FC<ProductImageViewerProps> = ({ images }) => {
   }, [emblaMainApi, onSelect])
 
   return (
-    <div className="relative flex w-full max-w-[calc(100vw-2rem)] flex-col gap-2">
+    <div className="relative flex w-full flex-col gap-2">
       {images.length > 1 ? (
         <div className="overflow-hidden rounded-md" ref={emblaMainRef}>
           <div className="flex aspect-square touch-pan-y">
@@ -77,11 +77,13 @@ const ProductImageViewer: React.FC<ProductImageViewerProps> = ({ images }) => {
           )}
         </div>
       )}
-      <ZoomableImageViewer
-        selectedImage={selectedImage}
-        setSelectedImage={setSelectedImage}
-        images={images}
-      />
+      {selectedImage ? (
+        <ZoomableImageViewer
+          selectedImage={selectedImage}
+          setSelectedImage={setSelectedImage}
+          images={images}
+        />
+      ) : null}
       {images.length > 1 ? (
         <div className="overflow-hidden rounded-sm" ref={emblaThumbsRef}>
           <div className="flex h-24 touch-pan-y gap-2">

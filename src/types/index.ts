@@ -40,7 +40,7 @@ export interface SearchParams {
   [key: string]: string | string[] | undefined
 }
 
-export interface UploadedFile<T = unknown> extends ClientUploadedFileData<T> { }
+export interface UploadedFile<T = unknown> extends ClientUploadedFileData<T> {}
 
 export type Image = z.infer<typeof imageSchema>
 

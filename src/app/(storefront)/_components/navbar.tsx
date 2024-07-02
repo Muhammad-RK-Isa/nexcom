@@ -25,7 +25,7 @@ const Navbar = () => {
   const pathName = usePathname()
   const { scrollY } = useScroll()
 
-  const padding = useTransform(scrollY, [0, 300], ["2rem", "1.5rem"])
+  const padding = useTransform(scrollY, [0, 300], ["1.75rem", "1.25rem"])
 
   const logoFontSizeDesktop = useTransform(
     scrollY,
@@ -37,6 +37,7 @@ const Navbar = () => {
     [0, 300],
     ["1.75rem", "1.5rem"]
   )
+
   const border = useTransform(
     scrollY,
     [0, 300],
@@ -60,7 +61,9 @@ const Navbar = () => {
 
   return (
     <motion.nav
-      className={cn("sticky top-0 z-50 w-full bg-card px-10")}
+      className={cn(
+        "sticky top-0 z-50 flex w-full items-center justify-between bg-card px-10"
+      )}
       style={{
         paddingTop: padding,
         paddingBottom: padding,
@@ -122,65 +125,6 @@ const Navbar = () => {
               )}
             </NavigationMenuItem>
           ))}
-          {/* <NavigationMenuItem>
-            <NavigationMenuTrigger
-              variant={"transparent"}
-              showIndicator={false}
-              className="md:text-base lg:text-md"
-            >
-              Getting started
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <ul className="grid gap-3 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr] p-4">
-                <li className="row-span-3">
-                  <NavigationMenuLink asChild>
-                    <a
-                      className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                      href="/"
-                    >
-                      <Icons.logo className="h-6 w-6" />
-                      <div className="mb-2 mt-4 text-lg font-medium">
-                        shadcn/ui
-                      </div>
-                      <p className="text-sm leading-tight text-muted-foreground">
-                        Beautifully designed components built with Radix UI and
-                        Tailwind CSS.
-                      </p>
-                    </a>
-                  </NavigationMenuLink>
-                </li>
-                <ListItem href="/docs" title="Introduction">
-                  Re-usable components built using Radix UI and Tailwind CSS.
-                </ListItem>
-                <ListItem href="/docs/installation" title="Installation">
-                  How to install dependencies and structure your app.
-                </ListItem>
-                <ListItem href="/docs/primitives/typography" title="Typography">
-                  Styles for headings, paragraphs, lists...etc
-                </ListItem>
-              </ul>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger
-              variant={"transparent"}
-              showIndicator={false}
-              className="md:text-base lg:text-md"
-            >
-              Footwear
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link href="/docs" legacyBehavior passHref>
-              <NavigationMenuLink
-                className={cn(navigationMenuTriggerStyle({ variant: "transparent" }))}
-              >
-                Documentation
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem> */}
         </NavigationMenuList>
       </NavigationMenu>
       <Link href="/">
@@ -193,7 +137,9 @@ const Navbar = () => {
           {APP_TITLE}
         </motion.span>
       </Link>
-      <div className="flex items-center space-x-6 md:space-x-8 lg:space-x-10"></div>
+      <div className="flex items-center space-x-6 md:space-x-8 lg:space-x-10">
+        <Icons.search className="size-4" />
+      </div>
     </motion.nav>
   )
 }

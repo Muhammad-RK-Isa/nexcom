@@ -1,11 +1,10 @@
 import React from "react"
-import Image from "next/image"
 import { notFound } from "next/navigation"
 
 import { Icons } from "~/components/icons"
 import { api } from "~/trpc/server"
 
-import ProductImageSlider from "./_components/product-image-viewer"
+import ProductImageViewer from "./_components/product-image-viewer"
 
 interface ProductPageProps {
   params: {
@@ -21,18 +20,18 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
   return (
     <div className="mx-auto w-full p-4 md:pt-6 lg:max-w-screen-xl lg:p-6 lg:pt-8">
       <div className="grid gap-4 md:grid-cols-2 md:gap-6 lg:gap-8 xl:gap-12">
-        <div className="relative aspect-square w-full">
+        <div className="relative aspect-square w-full max-w-[calc(100vw-2rem)]">
           {product.images[0]?.url ? (
-            <ProductImageSlider images={product.images} />
+            <ProductImageViewer images={product.images} />
           ) : (
             <Icons.image className="size-full" />
           )}
         </div>
-        <div className="flex flex-col space-y-4">
-          <h1 className="line-clamp-3 break-words text-3xl font-medium">
+        <div className="flex max-w-[calc(100vw-2rem)] flex-col space-y-4">
+          <h1 className="line-clamp-2 break-words text-2xl font-medium lg:text-3xl">
             {product.title}
           </h1>
-          <h2 className="text-2xl">
+          <h2 className="text-xl lg:text-2xl">
             {"৳"}
             {product.price.toFixed(2)}
           </h2>
