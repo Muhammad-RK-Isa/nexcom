@@ -80,13 +80,21 @@
   width: 0px;
 }
 
+/* Hide spin buttons in Chrome, Safari, Edge, and Opera */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
-  appearance: none;
+  margin: 0;
 }
 
+/* Hide spin buttons in Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+/* For all browsers */
+input[type="number"] {
   appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
 }

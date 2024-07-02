@@ -1,7 +1,7 @@
 import React from "react"
-import { searchProductParamsSchema } from "~/schema"
 
 import type { SearchParams } from "~/types"
+import { searchProductParamsSchema } from "~/lib/validations/product"
 import { DataTableSkeleton } from "~/components/skeletons/data-table-skeleton"
 import { api } from "~/trpc/server"
 

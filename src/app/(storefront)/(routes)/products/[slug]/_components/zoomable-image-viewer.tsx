@@ -2,7 +2,6 @@
 
 import React from "react"
 import Image from "next/image"
-import useEmblaCarousel from "embla-carousel-react"
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch"
 
 import type { CompleteProduct } from "~/types"
@@ -38,7 +37,7 @@ const ZoomableImageViewer: React.FC<ZoomableImageViewerProps> = ({
         <Button
           variant={"secondary"}
           size={"icon"}
-          className="absolute right-2 top-2 rounded-full"
+          className="absolute right-2 top-2 rounded-full rounded-tr-none"
         >
           <Icons.search className="size-4" />
         </Button>
@@ -91,33 +90,37 @@ const ZoomableImageViewer: React.FC<ZoomableImageViewerProps> = ({
                   </>
                 )}
               </TransformWrapper>
-              <Button
-                variant="secondary"
-                size="icon"
-                className="absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full"
-                onClick={prev}
-                disabled={
-                  images.findIndex(
-                    (image) => image.id === selectedImage?.id
-                  ) === 0
-                }
-              >
-                <Icons.chevronLeft className="size-4" />
-              </Button>
-              <Button
-                variant="secondary"
-                size="icon"
-                className="absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full"
-                onClick={next}
-                disabled={
-                  images.findIndex(
-                    (image) => image.id === selectedImage?.id
-                  ) ===
-                  images.length - 1
-                }
-              >
-                <Icons.chevronRight className="size-4" />
-              </Button>
+              {images.length > 1 ? (
+                <>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className="absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full"
+                    onClick={prev}
+                    disabled={
+                      images.findIndex(
+                        (image) => image.id === selectedImage?.id
+                      ) === 0
+                    }
+                  >
+                    <Icons.chevronLeft className="size-4" />
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className="absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full"
+                    onClick={next}
+                    disabled={
+                      images.findIndex(
+                        (image) => image.id === selectedImage?.id
+                      ) ===
+                      images.length - 1
+                    }
+                  >
+                    <Icons.chevronRight className="size-4" />
+                  </Button>
+                </>
+              ) : null}
             </div>
           ) : null}
         </div>

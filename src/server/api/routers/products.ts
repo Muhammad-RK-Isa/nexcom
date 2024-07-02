@@ -1,15 +1,4 @@
 import {
-  insertProductSchema,
-  productIdSchema,
-  productIdsSchema,
-  productSlugSchema,
-  searchProductParamsSchema,
-  searchTableProductParamsSchema,
-  updateProductSchema,
-  updateProductsStatusSchema,
-  updateProductStatusSchema,
-} from "~/schema"
-import {
   adminProcedure,
   createTRPCRouter,
   publicProcedure,
@@ -29,6 +18,17 @@ import {
   getProducts,
   getTableProducts,
 } from "~/lib/api/products/queries"
+import {
+  insertProductSchema,
+  productIdSchema,
+  productIdsSchema,
+  productSlugSchema,
+  searchProductParamsSchema,
+  searchTableProductParamsSchema,
+  updateProductSchema,
+  updateProductsStatusSchema,
+  updateProductStatusSchema,
+} from "~/lib/validations/product"
 
 export const productsRouter = createTRPCRouter({
   getProducts: publicProcedure

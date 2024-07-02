@@ -1,6 +1,5 @@
-import { productStatuses } from "~/schema"
-
 import type { TableProduct } from "~/types"
+import { productStatuses } from "~/lib/validations/product"
 import { Icons } from "~/components/icons"
 
 /**

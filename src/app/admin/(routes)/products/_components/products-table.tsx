@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { productStatuses } from "~/schema"
 
 import type {
   CompleteTableProducts,
@@ -9,6 +8,7 @@ import type {
   TableProduct,
 } from "~/types"
 import { useDataTable } from "~/lib/hooks/use-data-table"
+import { productStatuses } from "~/lib/validations/product"
 import { DataTableAdvancedToolbar } from "~/components/data-table/advanced/data-table-advanced-toolbar"
 import { DataTable } from "~/components/data-table/data-table"
 import { DataTableToolbar } from "~/components/data-table/data-table-toolbar"

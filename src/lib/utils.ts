@@ -8,13 +8,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function generateOrderId() {
-  const timestamp = Date.now()
-  const timeString = timestamp.toString().slice(-10)
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const uuid = uuidv1({ msecs: timestamp })
+export function generateOrderId(): string {
+  const timestamp = uuidv1()
+  const randomPart = uuidv4()
 
-  return `od${uuid.slice(0, 8).toUpperCase()}-${timeString}`
+  const timestampPart = timestamp.split("-")[0]
+  const randomPartSegment = randomPart.split("-")[1]
+
+  const orderId = `ORDER-${timestampPart}-${randomPartSegment}`.toUpperCase()
+  return orderId
 }
 
 export function generateId({ prefix }: { prefix?: string } = {}) {

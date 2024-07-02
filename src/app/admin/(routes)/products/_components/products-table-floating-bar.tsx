@@ -1,12 +1,12 @@
 import * as React from "react"
 import { SelectTrigger } from "@radix-ui/react-select"
 import { type Table } from "@tanstack/react-table"
-import { productStatuses } from "~/schema"
 import { useRouter } from "next-nprogress-bar"
 import { toast } from "sonner"
 
 import type { TableProduct } from "~/types"
 import { exportTableToCSV } from "~/lib/export"
+import { productStatuses } from "~/lib/validations/product"
 import {
   AlertDialog,
   AlertDialogCancel,

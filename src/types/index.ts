@@ -1,20 +1,3 @@
-import type {
-  imageIdSchema,
-  imageSchema,
-  insertImageSchema,
-  insertProductSchema,
-  optionValueSchema,
-  productIdSchema,
-  productOptionSchema,
-  productSlugSchema,
-  productVariantSchema,
-  searchImageParamsSchema,
-  searchProductParamsSchema,
-  searchTableProductParamsSchema,
-  updateProductSchema,
-  updateProductsStatusSchema,
-  updateProductStatusSchema,
-} from "~/schema"
 import type { images, products, UserRole, users } from "~/server/db/schema"
 import type {
   createUserSchema,
@@ -35,6 +18,24 @@ import {
   type getProducts,
   type getTableProducts,
 } from "~/lib/api/products/queries"
+import type { cartItemSchema, checkoutItemSchema } from "~/lib/validations/cart"
+import type {
+  imageIdSchema,
+  imageSchema,
+  insertImageSchema,
+  insertProductSchema,
+  optionValueSchema,
+  productIdSchema,
+  productOptionSchema,
+  productSlugSchema,
+  productVariantSchema,
+  searchImageParamsSchema,
+  searchProductParamsSchema,
+  searchTableProductParamsSchema,
+  updateProductSchema,
+  updateProductsStatusSchema,
+  updateProductStatusSchema,
+} from "~/lib/validations/product"
 
 export interface SearchParams {
   [key: string]: string | string[] | undefined
@@ -125,3 +126,7 @@ export type CompleteTableImages = Awaited<ReturnType<typeof getTableImages>>
 export type TableImage = typeof images.$inferSelect
 
 export type TableImageParams = z.infer<typeof searchImageParamsSchema>
+
+// Types: Cart
+export type CartItem = z.infer<typeof cartItemSchema>
+export type CheckoutItem = z.infer<typeof checkoutItemSchema>

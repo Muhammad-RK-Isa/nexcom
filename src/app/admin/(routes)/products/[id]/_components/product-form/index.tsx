@@ -3,7 +3,6 @@
 import React from "react"
 import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { insertProductSchema, productStatuses } from "~/schema"
 import { useRouter } from "next-nprogress-bar"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -14,6 +13,7 @@ import type {
   UpdateProductInput,
 } from "~/types"
 import { cn } from "~/lib/utils"
+import { insertProductSchema, productStatuses } from "~/lib/validations/product"
 import { Badge } from "~/components/ui/badge"
 import { Button, buttonVariants } from "~/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"

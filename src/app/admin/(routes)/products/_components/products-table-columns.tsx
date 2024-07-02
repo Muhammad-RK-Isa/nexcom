@@ -3,12 +3,12 @@
 import * as React from "react"
 import Image from "next/image"
 import { type ColumnDef } from "@tanstack/react-table"
-import { productStatuses } from "~/schema"
 import { useRouter } from "next-nprogress-bar"
 import { toast } from "sonner"
 
 import type { TableProduct } from "~/types"
 import { formatDate } from "~/lib/utils"
+import { productStatuses } from "~/lib/validations/product"
 import { Badge } from "~/components/ui/badge"
 import { Button } from "~/components/ui/button"
 import { Checkbox } from "~/components/ui/checkbox"

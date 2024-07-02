@@ -12,11 +12,18 @@ import ZoomableImageViewer from "./zoomable-image-viewer"
 
 interface ProductImageViewerProps {
   images: CompleteProduct["images"]
+  selectedImage?: CompleteProduct["images"][number]
+  setSelectedImage: (image?: CompleteProduct["images"][number]) => void
 }
 
-const ProductImageViewer: React.FC<ProductImageViewerProps> = ({ images }) => {
-  const [selectedImage, setSelectedImage] = React.useState(images[0])
-  const [emblaMainRef, emblaMainApi] = useEmblaCarousel()
+const ProductImageViewer: React.FC<ProductImageViewerProps> = ({
+  images,
+  selectedImage,
+  setSelectedImage,
+}) => {
+  const [emblaMainRef, emblaMainApi] = useEmblaCarousel({
+    startIndex: images.findIndex((img) => img.id === selectedImage?.id),
+  })
   const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
     containScroll: "keepSnaps",
     dragFree: true,
@@ -46,7 +53,7 @@ const ProductImageViewer: React.FC<ProductImageViewerProps> = ({ images }) => {
   return (
     <div className="relative flex w-full flex-col gap-2">
       {images.length > 1 ? (
-        <div className="overflow-hidden rounded-md" ref={emblaMainRef}>
+        <div className="overflow-hidden rounded-md bg-card" ref={emblaMainRef}>
           <div className="flex aspect-square touch-pan-y">
             {images.map((image, idx) => (
               <div
@@ -57,7 +64,7 @@ const ProductImageViewer: React.FC<ProductImageViewerProps> = ({ images }) => {
                   src={image.url}
                   alt={image.name}
                   fill
-                  className="rounded-sm object-cover"
+                  className="rounded-sm object-contain"
                 />
               </div>
             ))}
@@ -70,7 +77,7 @@ const ProductImageViewer: React.FC<ProductImageViewerProps> = ({ images }) => {
               src={images[0]?.url}
               alt={images[0]?.name}
               fill
-              className="rounded-sm object-cover"
+              className="rounded-sm object-contain"
             />
           ) : (
             <Icons.image className="h-full w-full text-muted-foreground" />
@@ -80,7 +87,10 @@ const ProductImageViewer: React.FC<ProductImageViewerProps> = ({ images }) => {
       {selectedImage ? (
         <ZoomableImageViewer
           selectedImage={selectedImage}
-          setSelectedImage={setSelectedImage}
+          setSelectedImage={(image) => {
+            if (!image) return
+            emblaMainApi?.scrollTo(images.indexOf(image))
+          }}
           images={images}
         />
       ) : null}

@@ -26,15 +26,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {cardImages[0]?.url ? (
           <AspectRatio
             ratio={1}
-            className="group relative w-full rounded-lg border border-border/10 bg-secondary"
+            className="group relative w-full rounded-lg border border-border/10"
           >
             <Image
               src={cardImages[0]?.url}
               alt={title}
-              layout="fill"
-              objectFit="cover"
+              fill
               className={cn(
-                "rounded-lg",
+                "rounded-lg object-cover",
                 cardImages[1]?.url &&
                   "transition-opacity duration-300 group-hover:opacity-0"
               )}
@@ -43,9 +42,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               <Image
                 src={cardImages[1]?.url}
                 alt={title}
-                layout="fill"
-                objectFit="cover"
-                className="absolute inset-y-0 rounded-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                fill
+                className="absolute inset-y-0 rounded-lg object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
               />
             ) : null}
           </AspectRatio>

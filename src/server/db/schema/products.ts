@@ -16,6 +16,7 @@ import { generateId } from "~/lib/utils"
 import { productOptions } from "./product-options"
 import { productVariants } from "./product-variants"
 import { productsImages } from "./products-images"
+import { lifecycleDates } from "./utils"
 
 export const pgProductStatuses = pgEnum("productStatuses", ["active", "draft"])
 export const pgWeightUnits = pgEnum("weightUnit", ["kg", "g", "lb", "oz"])
@@ -48,11 +49,7 @@ export const products = pgTable(
     weightUnit: pgWeightUnits("weightUnit").notNull().default("kg"),
     heightUnit: pgSizeUnits("heightUnit").notNull().default("m"),
     lengthUnit: pgSizeUnits("lengthUnit").notNull().default("m"),
-    createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
-    updatedAt: timestamp("updated_at", {
-      mode: "date",
-      precision: 3,
-    }).$onUpdate(() => new Date()),
+    ...lifecycleDates,
   },
   (t) => ({
     slugIdx: index("slug_index").on(t.slug),

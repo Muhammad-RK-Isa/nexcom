@@ -15,15 +15,14 @@ const Thumb: React.FC<ThumbProps> = ({ image, selected, onClick }) => {
     <button
       onClick={onClick}
       type="button"
-      className="relative aspect-square min-w-24"
+      className="relative aspect-square min-w-24 bg-card"
     >
       <Image
         src={image.url}
         alt={image.name}
-        layout="fill"
-        objectFit="cover"
+        fill
         className={cn(
-          "rounded-sm border brightness-50 transition-all",
+          "rounded-sm border object-contain brightness-50 transition-all",
           selected && "brightness-100"
         )}
       />

@@ -1,7 +1,7 @@
-import { sizeUnits, weightUnits } from "~/schema"
 import { useFormContext } from "react-hook-form"
 
 import type { UpdateProductInput } from "~/types"
+import { sizeUnits, weightUnits } from "~/lib/validations/product"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import {
   FormControl,

@@ -1,10 +1,4 @@
 import {
-  imageIdSchema,
-  imageIdsSchema,
-  insertImageSchema,
-  searchImageParamsSchema,
-} from "~/schema"
-import {
   adminProcedure,
   createTRPCRouter,
   publicProcedure,
@@ -18,6 +12,12 @@ import {
   getImageById,
   getTableImages,
 } from "~/lib/api/images/queries"
+import {
+  imageIdSchema,
+  imageIdsSchema,
+  insertImageSchema,
+  searchImageParamsSchema,
+} from "~/lib/validations/product"
 
 export const imagesRouter = createTRPCRouter({
   getImageById: publicProcedure

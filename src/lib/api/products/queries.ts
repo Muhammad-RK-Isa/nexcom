@@ -126,13 +126,6 @@ export const getProductById = async ({ id }: ProductId) => {
 
   if (!product) return null
 
-  const variants = product?.variants.map((variant) => ({
-    ...variant,
-    optionValues: product?.variants
-      ?.find((v) => v.id === variant.id)
-      ?.variantsOptionValues.map((vOptVals) => vOptVals.optionValue),
-  }))
-
   const options = product?.options
     .sort((a, b) => a.rank - b.rank)
     .map((opt) => ({
@@ -145,8 +138,10 @@ export const getProductById = async ({ id }: ProductId) => {
     ...image,
   }))
 
+  const { productImages, ...productWithoutImages } = product
+
   return {
-    ...product,
+    ...productWithoutImages,
     weight: {
       value: product?.weight,
       unit: product?.weightUnit,
@@ -159,7 +154,6 @@ export const getProductById = async ({ id }: ProductId) => {
       value: product?.height ?? null,
       unit: product?.heightUnit,
     },
-    variants,
     options,
     images,
   }
@@ -213,8 +207,10 @@ export const getProductBySlug = async ({ slug }: ProductSlug) => {
     ...image,
   }))
 
+  const { productImages, ...productWithoutImages } = product
+
   return {
-    ...product,
+    ...productWithoutImages,
     weight: {
       value: product?.weight,
       unit: product?.weightUnit,
