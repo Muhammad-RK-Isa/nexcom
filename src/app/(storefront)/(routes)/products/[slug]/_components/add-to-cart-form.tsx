@@ -127,7 +127,7 @@ export function AddToCartForm({ productId }: AddToCartFormProps) {
             type="submit"
             variant="secondary"
             size="lg"
-            className="w-full border"
+            className="w-full border dark:border-primary/10"
             aria-label="Add to cart"
           >
             Add to cart

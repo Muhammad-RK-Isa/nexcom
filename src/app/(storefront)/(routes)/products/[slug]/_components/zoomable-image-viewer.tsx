@@ -6,7 +6,12 @@ import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch"
 
 import type { CompleteProduct } from "~/types"
 import { Button } from "~/components/ui/button"
-import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTrigger,
+} from "~/components/ui/dialog"
 import { Icons } from "~/components/icons"
 
 type ProductImage = CompleteProduct["images"][number]
@@ -37,12 +42,18 @@ const ZoomableImageViewer: React.FC<ZoomableImageViewerProps> = ({
         <Button
           variant={"secondary"}
           size={"icon"}
-          className="absolute right-2 top-2 rounded-full rounded-tr-none"
+          className="absolute right-2 top-2 rounded-full"
         >
-          <Icons.search className="size-4" />
+          <Icons.maximize className="size-3.5" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="h-screen w-screen max-w-none bg-background/80 p-0 md:max-w-none lg:max-w-none">
+      <DialogContent
+        className="h-screen w-screen max-w-none bg-background/80 p-0 md:max-w-none lg:max-w-none"
+        showCloseIcon={false}
+      >
+        <DialogClose className="absolute right-6 top-6 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+          <Icons.minimize className="size-6" />
+        </DialogClose>
         <div className="mx-auto my-auto aspect-square w-full max-w-4xl">
           {images.length > 0 ? (
             <div className="relative overflow-hidden rounded-md">

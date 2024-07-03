@@ -22,7 +22,6 @@ import { Icons } from "~/components/icons"
 import { navLinks } from "../_lib/nav-links"
 
 const Navbar = () => {
-  const pathName = usePathname()
   const { scrollY } = useScroll()
 
   const padding = useTransform(scrollY, [0, 300], ["1.75rem", "1.25rem"])
@@ -62,7 +61,7 @@ const Navbar = () => {
   return (
     <motion.nav
       className={cn(
-        "sticky top-0 z-50 flex w-full items-center justify-between bg-card px-10"
+        "sticky top-0 z-50 flex w-full items-center justify-between bg-background px-10"
       )}
       style={{
         paddingTop: padding,
