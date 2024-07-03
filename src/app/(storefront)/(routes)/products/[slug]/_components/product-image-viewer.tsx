@@ -99,8 +99,8 @@ const ProductImageViewer: React.FC<ProductImageViewerProps> = ({
         />
       ) : null}
       {images.length > 1 ? (
-        <div className="overflow-hidden rounded-sm" ref={emblaThumbsRef}>
-          <div className="flex h-24 touch-pan-y gap-2">
+        <div className="overflow-hidden rounded-md" ref={emblaThumbsRef}>
+          <div className="flex touch-pan-y gap-2">
             {images.map((image, idx) => (
               <Thumb
                 key={idx}

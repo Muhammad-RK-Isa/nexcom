@@ -42,7 +42,7 @@ const ZoomableImageViewer: React.FC<ZoomableImageViewerProps> = ({
         <Button
           variant={"secondary"}
           size={"icon"}
-          className="absolute right-2 top-2 rounded-full"
+          className="absolute right-2 top-2 size-8 rounded-full"
         >
           <Icons.maximize className="size-3.5" />
         </Button>

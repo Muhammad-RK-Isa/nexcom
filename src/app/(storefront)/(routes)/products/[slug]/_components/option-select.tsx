@@ -1,6 +1,7 @@
 import React from "react"
 
 import type { CompleteProduct } from "~/types"
+import { cn } from "~/lib/utils"
 import { Button } from "~/components/ui/button"
 
 interface OptionSelectProps {
@@ -26,7 +27,12 @@ const OptionSelect: React.FC<OptionSelectProps> = ({
                 <Button
                   key={v.id}
                   size="sm"
-                  className="w-max"
+                  className={cn(
+                    "w-max border",
+                    selectedOptions[option.id] === v.value
+                      ? "border-primary"
+                      : "border-border"
+                  )}
                   variant={
                     selectedOptions[option.id] === v.value
                       ? "default"

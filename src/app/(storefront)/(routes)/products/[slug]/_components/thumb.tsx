@@ -15,7 +15,7 @@ const Thumb: React.FC<ThumbProps> = ({ image, selected, onClick }) => {
     <button
       onClick={onClick}
       type="button"
-      className="relative aspect-square size-20 bg-card md:size-24"
+      className="relative aspect-square h-20 bg-card md:size-24"
     >
       <div
         className={cn(
@@ -27,7 +27,7 @@ const Thumb: React.FC<ThumbProps> = ({ image, selected, onClick }) => {
         src={image.url}
         alt={image.name}
         fill
-        className="rounded-sm border border-border/80 object-contain"
+        className="rounded-md border border-border/80 object-contain"
       />
     </button>
   )
