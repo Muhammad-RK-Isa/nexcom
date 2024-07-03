@@ -75,7 +75,7 @@ const ProductClient: React.FC<ProductClientProps> = ({ product }) => {
     if (variantId) {
       const newUrl = new URL(window.location.href)
       newUrl.searchParams.set("variant", variantId)
-      router.replace(newUrl.toString())
+      router.replace(newUrl.toString(), { scroll: false })
     }
 
     return variants.find((v) => v.id === variantId)
