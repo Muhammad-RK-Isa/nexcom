@@ -138,6 +138,13 @@ export const getProductById = async ({ id }: ProductId) => {
     ...image,
   }))
 
+  const variants = product?.variants.map((variant) => ({
+    ...variant,
+    optionValues: product?.variants
+      ?.find((v) => v.id === variant.id)
+      ?.variantsOptionValues.map((vOptVals) => vOptVals.optionValue),
+  }))
+
   const { productImages, ...productWithoutImages } = product
 
   return {
@@ -156,6 +163,7 @@ export const getProductById = async ({ id }: ProductId) => {
     },
     options,
     images,
+    variants,
   }
 }
 

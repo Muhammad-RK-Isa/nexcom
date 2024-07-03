@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { isEqual } from "lodash"
 
 import type { CompleteProduct } from "~/types"
@@ -15,6 +16,9 @@ interface ProductClientProps {
 }
 
 const ProductClient: React.FC<ProductClientProps> = ({ product }) => {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
   const { variants, options, images } = product
   const [selectedOptions, setSelectedOptions] = React.useState<
     Record<string, string>
@@ -22,13 +26,23 @@ const ProductClient: React.FC<ProductClientProps> = ({ product }) => {
 
   React.useEffect(() => {
     const optionObj: Record<string, string> = {}
+    const variantId = searchParams.get("variant")
 
     for (const option of options) {
       optionObj[option.id] = ""
     }
 
+    if (variantId) {
+      const variant = variants.find((v) => v.id === variantId)
+      if (variant && variant.optionValues) {
+        variant.optionValues.forEach((ov) => {
+          optionObj[ov.optionId] = ov.value
+        })
+      }
+    }
+
     setSelectedOptions(optionObj)
-  }, [options])
+  }, [options, variants, searchParams])
 
   const variantRecord = React.useMemo(() => {
     const map: Record<string, Record<string, string>> = {}
@@ -58,8 +72,14 @@ const ProductClient: React.FC<ProductClientProps> = ({ product }) => {
       }
     }
 
+    if (variantId) {
+      const newUrl = new URL(window.location.href)
+      newUrl.searchParams.set("variant", variantId)
+      router.replace(newUrl.toString())
+    }
+
     return variants.find((v) => v.id === variantId)
-  }, [selectedOptions, variantRecord, variants])
+  }, [selectedOptions, variantRecord, variants, router])
 
   const handleOptionChange = (optionId: string, value: string) => {
     setSelectedOptions((prev) => ({

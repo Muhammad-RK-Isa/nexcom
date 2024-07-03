@@ -47,11 +47,11 @@ import KeywordsInput from "~/components/keywords-input"
 import { api } from "~/trpc/react"
 
 import { getStatusIcon } from "../../../_lib/utils"
-import { ProductVariantsForm } from "../variants"
 import ProductDetailsForm from "./product-details"
 import ProductInventoryForm from "./product-inventory"
 import ProductPricingForm from "./product-pricing"
 import ProductShippingForm from "./product-shipping"
+import { ProductVariantsForm } from "./product-variants"
 
 interface ProductFormProps {
   product?: EditableProduct
@@ -191,7 +191,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ product }) => {
               <Button
                 size="sm"
                 type="submit"
-                disabled={isUpdating || isCreating || !form.formState.isDirty}
+                disabled={isUpdating || isCreating}
                 loading={isUpdating || isCreating}
               >
                 {editing ? "Save" : "Create"}

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation"
 import { api } from "~/trpc/server"
 
 import ProductForm from "./_components/product-form"
-import ProductFormSkeleton from "./_components/product-form/skeleton"
+import ProductFormSkeleton from "./_components/skeleton"
 
 const ProductPage = async ({ params: { id } }: { params: { id: string } }) => {
   const product =

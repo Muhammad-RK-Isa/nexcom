@@ -16,7 +16,7 @@ import { Input } from "~/components/ui/input"
 import { SortableDragHandle, SortableItem } from "~/components/ui/sortable"
 import { Icons } from "~/components/icons"
 
-import { generateVariants } from "../_lib/utils"
+import { generateVariants } from "../../_lib/utils"
 import { ProductOptionValues } from "./product-option-values"
 
 interface ProductOptionProps {

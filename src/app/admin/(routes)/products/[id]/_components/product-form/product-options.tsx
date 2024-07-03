@@ -7,7 +7,7 @@ import { Button } from "~/components/ui/button"
 import { Sortable } from "~/components/ui/sortable"
 import { Icons } from "~/components/icons"
 
-import { generateVariants } from "../_lib/utils"
+import { generateVariants } from "../../_lib/utils"
 import { ProductOption } from "./product-option"
 
 export const ProductOptions = () => {

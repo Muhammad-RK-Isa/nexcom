@@ -1,4 +1,4 @@
-import ProductFormSkeleton from "./_components/product-form/skeleton"
+import ProductFormSkeleton from "./_components/skeleton"
 
 const loading = () => {
   return (

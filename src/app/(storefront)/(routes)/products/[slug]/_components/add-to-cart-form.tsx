@@ -53,16 +53,23 @@ export function AddToCartForm({ productId }: AddToCartFormProps) {
     }
   }
 
+  const onSubmit = (values: Inputs) => {
+    toast.info("Cart function has not been implemented yet")
+  }
+
   return (
     <Form {...form}>
-      <form className={cn("flex flex-col space-y-4")}>
+      <form
+        className={cn("flex flex-col space-y-4")}
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
         <div className="flex w-max items-center rounded-md border">
           <button
             id={`${id}-decrement`}
             type="button"
             onClick={decreaseQuantity}
             disabled={quantity <= 1}
-            className="flex size-10 shrink-0 items-center justify-center rounded-md transition-colors hover:bg-accent/60 active:scale-90 disabled:pointer-events-none disabled:opacity-50"
+            className="flex size-8 shrink-0 items-center justify-center rounded-md transition-colors hover:bg-accent/60 active:scale-90 disabled:pointer-events-none disabled:opacity-50"
           >
             <Icons.chevronLeft className="size-3.5" aria-hidden="true" />
             <span className="sr-only">Remove one item</span>
@@ -78,7 +85,7 @@ export function AddToCartForm({ productId }: AddToCartFormProps) {
                     type="number"
                     inputMode="numeric"
                     min={1}
-                    className="w-14 rounded-none border-x-0 border-none text-center shadow-none"
+                    className="h-8 w-14 rounded-none border-x-0 border-none text-center shadow-none"
                     {...field}
                     onBlur={(e) => {
                       const value = parseInt(e.target.value)
@@ -101,7 +108,7 @@ export function AddToCartForm({ productId }: AddToCartFormProps) {
             type="button"
             onClick={increaseQuantity}
             disabled={quantity >= 10}
-            className="flex size-10 shrink-0 items-center justify-center rounded-md transition-colors hover:bg-accent/60 active:scale-90 disabled:pointer-events-none disabled:opacity-50"
+            className="flex size-8 shrink-0 items-center justify-center rounded-md transition-colors hover:bg-accent/60 active:scale-90 disabled:pointer-events-none disabled:opacity-50"
           >
             <Icons.chevronRight className="size-3.5" aria-hidden="true" />
             <span className="sr-only">Add one item</span>
