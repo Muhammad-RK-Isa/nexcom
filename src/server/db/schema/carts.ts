@@ -6,7 +6,7 @@ import { generateId } from "~/lib/utils"
 import { lifecycleDates } from "./utils"
 
 export const carts = pgTable("carts", {
-  id: varchar("id", { length: 30 })
+  id: varchar("id", { length: 255 })
     .$defaultFn(() => generateId({ prefix: "cart" }))
     .primaryKey(),
   paymentIntentId: varchar("payment_intent_id", { length: 256 }),

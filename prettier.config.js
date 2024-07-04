@@ -6,6 +6,8 @@ const config = {
   tabWidth: 2,
   trailingComma: "es5",
   importOrder: [
+    "^server-only$",
+    "",
     "^(react/(.*)$)|^(react$)",
     "^(next/(.*)$)|^(next$)",
     "<THIRD_PARTY_MODULES>",

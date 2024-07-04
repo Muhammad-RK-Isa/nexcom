@@ -43,6 +43,7 @@ export async function generateMetadata({
 
 const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
   const product = await api.products.getProductBySlug(params)
+  const cart = await api.carts.getCart()
 
   if (!product) return notFound()
 
@@ -50,7 +51,7 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
     <div className="mx-auto w-full p-4 pt-0 md:pt-6 lg:max-w-screen-xl lg:p-6 lg:pt-8">
       <div className="grid gap-4 md:grid-cols-2 md:gap-6 lg:gap-8 xl:gap-12">
         <React.Suspense>
-          <ProductClient product={product} />
+          <ProductClient product={product} cartItems={cart?.items} />
         </React.Suspense>
       </div>
     </div>

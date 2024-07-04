@@ -26,26 +26,25 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {cardImages[0]?.url ? (
           <AspectRatio
             ratio={1}
-            className="group relative w-full rounded-lg border border-border/10"
+            className="group relative w-full overflow-hidden rounded-lg border border-border/10"
           >
-            <Image
-              src={cardImages[0]?.url}
-              alt={title}
-              fill
-              className={cn(
-                "rounded-lg object-cover",
-                cardImages[1]?.url &&
-                  "transition-opacity duration-300 group-hover:opacity-0"
-              )}
-            />
             {cardImages[1]?.url ? (
               <Image
                 src={cardImages[1]?.url}
                 alt={title}
                 fill
-                className="absolute inset-y-0 rounded-lg object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                className="absolute inset-y-0 rounded-lg object-cover opacity-0 transition-all duration-500 group-hover:scale-110 group-hover:opacity-100"
               />
             ) : null}
+            <Image
+              src={cardImages[0]?.url}
+              alt={title}
+              fill
+              className={cn(
+                "rounded-lg object-cover transition-all duration-500 group-hover:scale-110",
+                cardImages[1]?.url && "group-hover:opacity-0"
+              )}
+            />
           </AspectRatio>
         ) : (
           <Icons.image className="size-full" />

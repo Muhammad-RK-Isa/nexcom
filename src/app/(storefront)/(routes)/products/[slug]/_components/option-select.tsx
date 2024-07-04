@@ -26,9 +26,8 @@ const OptionSelect: React.FC<OptionSelectProps> = ({
               {option.values.map((v) => (
                 <Button
                   key={v.id}
-                  size="sm"
                   className={cn(
-                    "w-max border",
+                    "h-8 w-max border text-xs lg:h-10 lg:text-sm",
                     selectedOptions[option.id] === v.value
                       ? "border-primary"
                       : "border-border"

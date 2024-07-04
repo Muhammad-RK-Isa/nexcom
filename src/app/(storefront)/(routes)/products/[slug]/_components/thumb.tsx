@@ -15,7 +15,7 @@ const Thumb: React.FC<ThumbProps> = ({ image, selected, onClick }) => {
     <button
       onClick={onClick}
       type="button"
-      className="relative aspect-square h-20 bg-card md:size-24"
+      className="relative aspect-square h-20 bg-card md:h-24"
     >
       <div
         className={cn(

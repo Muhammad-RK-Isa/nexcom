@@ -6,7 +6,6 @@ export const cartItemSchema = z.object({
   quantity: z.coerce
     .number()
     .nonnegative({ message: "Quantity must be a positive number" }),
-  subcategoryId: z.string().optional(),
 })
 
 export const checkoutItemSchema = cartItemSchema.extend({

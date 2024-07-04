@@ -101,6 +101,12 @@ const config = {
           "0%": { transform: "scale(1.5)", borderRadius: "0.5rem" },
           "100%": { transform: "scale(1)", borderRadius: "50%" },
         },
+        ping: {
+          "75%, 100%": {
+            transform: "scale(2)",
+            opacity: "0",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -109,6 +115,7 @@ const config = {
         "loader-spin": "loader-spin 0.75s step-end infinite",
         "expand-widget": "expand-widget 0.3s ease-out forwards",
         "collapse-widget": "collapse-widget 0.3s ease-in forwards",
+        ping: "ping 1s cubic-bezier(0, 0, 0.2, 1) infinite",
       },
     },
   },
