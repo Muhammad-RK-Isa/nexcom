@@ -7,14 +7,9 @@ import { useRouter } from "next-nprogress-bar"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
-import type {
-  CreateProductInput,
-  EditableProduct,
-  UpdateProductInput,
-} from "~/types"
+import type { CreateProductInput } from "~/types"
 import { cn } from "~/lib/utils"
 import { insertProductSchema, productStatuses } from "~/lib/validations/product"
-import { Badge } from "~/components/ui/badge"
 import { Button, buttonVariants } from "~/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import {
@@ -50,57 +45,49 @@ import { getStatusIcon } from "../../../_lib/utils"
 import ProductDetailsForm from "./product-details"
 import ProductInventoryForm from "./product-inventory"
 import ProductPricingForm from "./product-pricing"
+import ProductSEOForm from "./product-seo"
 import ProductShippingForm from "./product-shipping"
 import { ProductVariantsForm } from "./product-variants"
 
-interface ProductFormProps {
-  product?: EditableProduct
-}
-
-const ProductForm: React.FC<ProductFormProps> = ({ product }) => {
-  const editing = !!product?.id
-
+const ProductForm = () => {
   const router = useRouter()
+
   const [isActionMenuOpen, setIsActionMenuOpen] = React.useState(false)
 
-  const form = useForm<UpdateProductInput>({
+  const form = useForm<CreateProductInput>({
     resolver: zodResolver(insertProductSchema),
-    defaultValues: product
-      ? {
-          ...product,
-          options: product.options?.sort((a, b) => a.rank - b.rank),
-          images: product.images
-            ?.sort((a, b) => a.rank - b.rank)
-            .flatMap(({ id, name, url }) => ({
-              id,
-              name,
-              url,
-            })),
-        }
-      : {
-          title: "",
-          slug: "",
-          description: "",
-          inventoryQuantity: 0,
-          manageInventory: true,
-          allowBackorder: false,
-          weight: {
-            value: undefined,
-            unit: "kg",
-          },
-          length: {
-            value: undefined,
-            unit: "m",
-          },
-          height: {
-            value: undefined,
-            unit: "m",
-          },
-          status: "active",
-          options: [],
-          variants: [],
-          images: [],
-        },
+    defaultValues: {
+      title: "",
+      slug: "",
+      description: "",
+      inventoryQuantity: 0,
+      manageInventory: true,
+      allowBackorder: false,
+      weight: {
+        value: undefined,
+        unit: "kg",
+      },
+      length: {
+        value: undefined,
+        unit: "m",
+      },
+      height: {
+        value: undefined,
+        unit: "m",
+      },
+      width: {
+        value: undefined,
+        unit: "m",
+      },
+      status: "active",
+      options: [],
+      variants: [],
+      images: [],
+      originCountry: "",
+      content: "",
+      metaTitle: "",
+      material: "",
+    },
   })
 
   const { mutate: createProduct, isPending: isCreating } =
@@ -116,28 +103,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ product }) => {
       },
     })
 
-  const { mutate: updateProduct, isPending: isUpdating } =
-    api.products.updateProduct.useMutation({
-      onSuccess: () => {
-        toast.success("Product updated")
-        setIsActionMenuOpen(false)
-        router.refresh()
-      },
-      onError: (err) => {
-        toast.error(err.message)
-      },
-    })
-
   const onSubmit = (values: CreateProductInput) => {
-    if (!!product?.id) {
-      updateProduct({
-        ...values,
-        id: product.id,
-      })
-    } else {
-      createProduct(values)
-      return
-    }
+    createProduct(values)
   }
 
   return (
@@ -162,28 +129,13 @@ const ProductForm: React.FC<ProductFormProps> = ({ product }) => {
               <span className="sr-only">Back</span>
             </Link>
             <h1 className="max-w-40 truncate text-lg font-semibold tracking-tight md:max-w-72 md:text-xl lg:max-w-[60%]">
-              {product?.title ?? "Add Product"}
+              Add Product
             </h1>
-            {editing ? (
-              <Badge
-                variant={
-                  product.status === productStatuses.Values.active
-                    ? "secondary"
-                    : product.status === productStatuses.Values.draft
-                      ? "outline"
-                      : "secondary"
-                }
-                className="capitalize"
-              >
-                {product.status}
-              </Badge>
-            ) : null}
             <div className="hidden items-center gap-2 sm:ml-auto sm:flex">
               <Button
                 variant="outline"
                 size="sm"
                 type="button"
-                disabled={isUpdating}
                 onClick={() => router.push("/admin/products")}
               >
                 Discard
@@ -191,10 +143,10 @@ const ProductForm: React.FC<ProductFormProps> = ({ product }) => {
               <Button
                 size="sm"
                 type="submit"
-                disabled={isUpdating || isCreating}
-                loading={isUpdating || isCreating}
+                disabled={isCreating}
+                loading={isCreating}
               >
-                {editing ? "Save" : "Create"}
+                Create
               </Button>
             </div>
             <DropdownMenu
@@ -218,17 +170,17 @@ const ProductForm: React.FC<ProductFormProps> = ({ product }) => {
                 <DropdownMenuSeparator className="my-0" />
                 <DropdownMenuItem
                   onClick={form.handleSubmit(onSubmit)}
-                  disabled={isUpdating || isCreating || !form.formState.isDirty}
+                  disabled={isCreating || !form.formState.isDirty}
                   className="text-xs"
                 >
-                  {editing ? "Save" : "Create"}
-                  {isCreating || isUpdating ? (
+                  Save
+                  {isCreating ? (
                     <Icons.spinner className="ml-auto size-3" />
                   ) : null}
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  disabled={isUpdating}
                   className="text-xs"
+                  disabled={isCreating || !form.formState.isDirty}
                   onClick={() => router.push("/admin/products")}
                 >
                   Discard
@@ -245,6 +197,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ product }) => {
               <ProductInventoryForm />
               <ProductShippingForm />
               <ProductVariantsForm />
+              <ProductSEOForm />
             </div>
             <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
               <Card>

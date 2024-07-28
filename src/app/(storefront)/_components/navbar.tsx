@@ -1,11 +1,10 @@
 "use client"
 
 import * as React from "react"
-import Image from "next/image"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
 import { motion, useScroll, useTransform } from "framer-motion"
 
+import type { CartLineItem } from "~/types"
 import { APP_TITLE } from "~/lib/constants"
 import { cn } from "~/lib/utils"
 import {
@@ -17,14 +16,19 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "~/components/ui/navigation-menu"
+import CartSheet from "~/components/checkout/cart-sheet"
 import { Icons } from "~/components/icons"
 
 import { navLinks } from "../_lib/nav-links"
 
-const Navbar = () => {
+interface NavbarProps {
+  cartLineItems: CartLineItem[]
+}
+
+const Navbar: React.FC<NavbarProps> = ({ cartLineItems }) => {
   const { scrollY } = useScroll()
 
-  const padding = useTransform(scrollY, [0, 300], ["1.75rem", "1.25rem"])
+  const padding = useTransform(scrollY, [0, 300], ["1.5rem", "1.25rem"])
 
   const logoFontSizeDesktop = useTransform(
     scrollY,
@@ -55,8 +59,6 @@ const Navbar = () => {
 
     return () => window.removeEventListener("resize", handleResize)
   }, [])
-
-  console.log(scrollY.get())
 
   return (
     <motion.nav
@@ -138,6 +140,7 @@ const Navbar = () => {
       </Link>
       <div className="flex items-center space-x-6 md:space-x-8 lg:space-x-10">
         <Icons.search className="size-4" />
+        <CartSheet cartLineItems={cartLineItems} />
       </div>
     </motion.nav>
   )

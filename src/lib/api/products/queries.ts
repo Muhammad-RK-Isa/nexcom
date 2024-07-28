@@ -161,6 +161,10 @@ export const getProductById = async ({ id }: ProductId) => {
       value: product?.height ?? null,
       unit: product?.heightUnit,
     },
+    width: {
+      value: product?.width ?? null,
+      unit: product?.widthUnit,
+    },
     options,
     images,
     variants,

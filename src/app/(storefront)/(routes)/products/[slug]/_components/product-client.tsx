@@ -28,8 +28,32 @@ const ProductClient: React.FC<ProductClientProps> = ({
     Record<string, string>
   >({})
 
+  // Helper function to get default options
+  const getDefaultOptions = (options: any[]): Record<string, string> => {
+    const defaultOptions: Record<string, string> = {}
+    options.forEach((option) => {
+      const sortedValues = option.values.sort(
+        (a: any, b: any) => a.rank - b.rank
+      )
+      defaultOptions[option.id] = sortedValues[0]?.value || ""
+    })
+    return defaultOptions
+  }
+
+  // Helper function to find variant by options
+  const findVariantByOptions = React.useCallback(
+    (options: Record<string, string>): string | undefined => {
+      return variants.find(
+        (variant) =>
+          variant.optionValues &&
+          variant.optionValues.every((ov) => ov.value === options[ov.optionId])
+      )?.id
+    },
+    [variants]
+  )
+
   React.useEffect(() => {
-    const optionObj: Record<string, string> = {}
+    let optionObj: Record<string, string> = {}
     const variantId = searchParams.get("variant")
 
     for (const option of options) {
@@ -43,10 +67,18 @@ const ProductClient: React.FC<ProductClientProps> = ({
           optionObj[ov.optionId] = ov.value
         })
       }
+    } else {
+      optionObj = getDefaultOptions(options)
+      const defaultVariantId = findVariantByOptions(optionObj)
+      if (defaultVariantId) {
+        const newUrl = new URL(window.location.href)
+        newUrl.searchParams.set("variant", defaultVariantId)
+        router.replace(newUrl.toString(), { scroll: false })
+      }
     }
 
     setSelectedOptions(optionObj)
-  }, [options, variants, searchParams])
+  }, [options, variants, searchParams, router, findVariantByOptions])
 
   const variantRecord = React.useMemo(() => {
     const map: Record<string, Record<string, string>> = {}
@@ -96,6 +128,12 @@ const ProductClient: React.FC<ProductClientProps> = ({
     (item) =>
       item.productId === product.id && item.variantId === selectedVariant?.id
   )?.quantity
+
+  const inventoryQuantity = product.variants.length
+    ? product.variants.find((variant) => variant.id === selectedVariant?.id)
+        ?.inventoryQuantity ?? 0
+    : product.inventoryQuantity
+
   return (
     <>
       <div className="relative aspect-square w-full max-w-[calc(100vw-2rem)]">
@@ -131,6 +169,8 @@ const ProductClient: React.FC<ProductClientProps> = ({
           cartQuantity={cartQuantity}
           variantRequired={product.variants.length >= 1 && !selectedVariant}
           options={options}
+          inventoryQuantity={inventoryQuantity}
+          allowBackorder={product.allowBackorder}
         />
       </div>
     </>

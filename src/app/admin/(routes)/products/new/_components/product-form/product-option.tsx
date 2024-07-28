@@ -16,14 +16,12 @@ import { Input } from "~/components/ui/input"
 import { SortableDragHandle, SortableItem } from "~/components/ui/sortable"
 import { Icons } from "~/components/icons"
 
-import { generateVariants } from "../../_lib/utils"
 import { ProductOptionValues } from "./product-option-values"
 
 interface ProductOptionProps {
   control: Control<UpdateProductInput>
   optionIndex: number
   optionId: string
-  updateVariants: () => void
   defaultExpanded?: boolean
 }
 
@@ -31,7 +29,6 @@ export const ProductOption: React.FC<ProductOptionProps> = ({
   control,
   optionIndex,
   optionId,
-  updateVariants,
   defaultExpanded = false,
 }) => {
   const [isExpanded, setIsExpanded] = React.useState(defaultExpanded)
@@ -87,12 +84,6 @@ export const ProductOption: React.FC<ProductOptionProps> = ({
                             (o) => o.id !== optionId
                           )
                           form.setValue("options", newOpts)
-                          const newVars = generateVariants({
-                            options: newOpts,
-                            existingVariants: variants,
-                          })
-                          form.setValue("variants", [])
-                          form.setValue("variants", newVars)
                         }}
                         className="absolute right-0 top-0"
                         aria-hidden="true"
@@ -110,8 +101,7 @@ export const ProductOption: React.FC<ProductOptionProps> = ({
               optionIdx={optionIndex}
               optionId={optionId}
               control={control}
-              updateVariants={() => updateVariants()}
-              onFinishEdit={() => handleCollapse()}
+              onFinishEditing={() => handleCollapse()}
             />
           </div>
         ) : (

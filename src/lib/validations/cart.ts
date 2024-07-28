@@ -1,3 +1,5 @@
+import { images } from "~/server/db/schema"
+import { createSelectSchema } from "drizzle-zod"
 import * as z from "zod"
 
 export const cartItemSchema = z.object({
@@ -14,25 +16,25 @@ export const checkoutItemSchema = cartItemSchema.extend({
 
 export const cartLineItemSchema = z.object({
   id: z.string(),
-  name: z.string(),
-  images: z
-    .array(
-      z.object({
-        id: z.string(),
-        name: z.string(),
-        url: z.string(),
-      })
-    )
-    .optional()
-    .nullable(),
-  category: z.string().optional().nullable(),
-  subcategory: z.string().optional().nullable(),
-  price: z.string().regex(/^\d+(\.\d{1,2})?$/),
-  inventory: z.number().default(0),
+  title: z.string(),
+  images: z.array(createSelectSchema(images)),
+  price: z.number(),
+  inventory: z.number(),
   quantity: z.number(),
-  storeId: z.string(),
-  storeName: z.string().optional().nullable(),
-  storeStripeAccountId: z.string().optional().nullable(),
+  variant: z.object({
+    id: z.string(),
+    price: z.number(),
+    image: createSelectSchema(images),
+    inventoryQuantity: z.number(),
+    optionValues: z
+      .array(
+        z.object({
+          value: z.string(),
+          rank: z.number(),
+        })
+      )
+      .default([]),
+  }),
 })
 
 export const deleteCartItemSchema = z.object({

@@ -24,7 +24,7 @@ export async function generateMetadata({
 
   const product = await db.query.products.findFirst({
     columns: {
-      title: true,
+      metaTitle: true,
       description: true,
     },
     where: eq(products.slug, slug),
@@ -36,7 +36,7 @@ export async function generateMetadata({
 
   return {
     metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
-    title: toTitleCase(product.title),
+    title: toTitleCase(product.metaTitle),
     description: product.description,
   }
 }

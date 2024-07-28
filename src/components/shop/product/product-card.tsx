@@ -24,10 +24,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     <div className="flex flex-col justify-between space-y-4 rounded-lg border bg-card p-3 sm:p-3.5 md:p-4">
       <Link href={`/products/${product.slug}`}>
         {cardImages[0]?.url ? (
-          <AspectRatio
-            ratio={1}
-            className="group relative w-full overflow-hidden rounded-lg border border-border/10"
-          >
+          <div className="group relative aspect-square w-full overflow-hidden rounded-lg border border-border/50">
             {cardImages[1]?.url ? (
               <Image
                 src={cardImages[1]?.url}
@@ -45,12 +42,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 cardImages[1]?.url && "group-hover:opacity-0"
               )}
             />
-          </AspectRatio>
+          </div>
         ) : (
           <Icons.image className="size-full" />
         )}
         <div className="mt-4 flex flex-col space-y-1 text-sm md:text-lg">
-          <h3 className="line-clamp-2 overflow-hidden text-ellipsis break-all font-medium">
+          <h3 className="line-clamp-1 overflow-hidden text-ellipsis break-all font-medium">
             {title}
           </h3>
           <p className="tracking-wide">
@@ -62,7 +59,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       <div className="flex items-center justify-between space-x-2">
         <Button
           variant="secondary"
-          className="h-8 flex-1 border text-xs sm:h-9 sm:text-sm"
+          className="h-8 flex-1 border bg-secondary/50 text-xs sm:h-9 sm:text-sm"
         >
           <Icons.cart className="mr-2 size-3.5 sm:size-4" />
           <span className="inline sm:hidden">Add</span>

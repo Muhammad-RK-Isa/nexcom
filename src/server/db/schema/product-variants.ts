@@ -1,10 +1,11 @@
 import { relations } from "drizzle-orm"
-import { integer, pgTable, real, timestamp, varchar } from "drizzle-orm/pg-core"
+import { pgTable, varchar } from "drizzle-orm/pg-core"
 
 import { generateId } from "~/lib/utils"
 
 import { images } from "./images"
 import { products } from "./products"
+import { lifecycleDates, productFields } from "./utils"
 import { variantsOptionValues } from "./variants-option-values"
 
 export const productVariants = pgTable("product_variants", {
@@ -12,16 +13,15 @@ export const productVariants = pgTable("product_variants", {
     .notNull()
     .primaryKey()
     .$defaultFn(() => generateId({ prefix: "variant" })),
-  price: real("price").notNull().default(0),
-  inventoryQuantity: integer("inventory_quantity").notNull().default(0),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
+  title: varchar("title", { length: 255 }),
   productId: varchar("product_id", { length: 255 })
     .notNull()
     .references(() => products.id, { onDelete: "cascade" }),
   imageId: varchar("image_id", { length: 255 }).references(() => images.id, {
     onDelete: "set null",
   }),
+  ...productFields,
+  ...lifecycleDates,
 })
 
 export const variantsRelations = relations(

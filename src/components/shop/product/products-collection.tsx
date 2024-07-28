@@ -2,7 +2,7 @@ import React from "react"
 
 import type { SearchedProducts } from "~/types"
 
-import ProductCard from "./card"
+import ProductCard from "./product-card"
 
 interface ProductsCollectionProps {
   products: SearchedProducts["data"]

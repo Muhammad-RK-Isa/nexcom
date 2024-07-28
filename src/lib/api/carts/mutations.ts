@@ -1,6 +1,6 @@
 import "server-only"
 
-import { revalidatePath} from "next/cache"
+import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 import { db } from "~/server/db"
 import { products } from "~/server/db/schema"
@@ -38,10 +38,10 @@ export const addToCart = async ({ input }: { input: CartItem }) => {
       ? productVariant.inventoryQuantity
       : product.inventoryQuantity
 
-    const maxPurchasableQuantity = Math.min(availableQuantity, 10)
+    const maxorderQuantity = Math.min(availableQuantity, 10)
 
-    if (input.quantity > maxPurchasableQuantity) {
-      throw new Error(`Maximum order quantity is ${maxPurchasableQuantity}.`)
+    if (input.quantity > maxorderQuantity) {
+      throw new Error(`Maximum order quantity is ${maxorderQuantity}.`)
     }
 
     if (availableQuantity < input.quantity) {
@@ -108,10 +108,8 @@ export const addToCart = async ({ input }: { input: CartItem }) => {
     if (cartItem) {
       const newQuantity = cartItem.quantity + input.quantity
 
-      if (newQuantity > maxPurchasableQuantity) {
-        throw new Error(
-          `Maximum purchasable quantity is ${maxPurchasableQuantity}.`
-        )
+      if (newQuantity > maxorderQuantity) {
+        throw new Error(`Maximum order quantity is ${maxorderQuantity}.`)
       }
 
       cartItem.quantity = newQuantity

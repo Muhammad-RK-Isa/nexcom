@@ -23,16 +23,14 @@ interface ProductOptionValuesProps {
   optionIdx: number
   optionId?: string
   control: Control<UpdateProductInput>
-  updateVariants: () => void
-  onFinishEdit: () => void
+  onFinishEditing: () => void
 }
 
 export const ProductOptionValues: React.FC<ProductOptionValuesProps> = ({
   optionIdx,
   optionId = "",
   control,
-  updateVariants,
-  onFinishEdit,
+  onFinishEditing,
 }) => {
   const form = useFormContext<UpdateProductInput>()
 
@@ -88,7 +86,6 @@ export const ProductOptionValues: React.FC<ProductOptionValuesProps> = ({
                                 form.clearErrors(
                                   `options.${optionIdx}.values.${k}.value`
                                 )
-                                updateVariants()
                               }}
                             />
                             {optionValues.length > 1 ? (
@@ -96,10 +93,7 @@ export const ProductOptionValues: React.FC<ProductOptionValuesProps> = ({
                                 type={"button"}
                                 variant={"tone"}
                                 size={"icon"}
-                                onClick={() => {
-                                  remove(k)
-                                  updateVariants()
-                                }}
+                                onClick={() => remove(k)}
                                 className="absolute right-0 top-0"
                                 aria-hidden="true"
                               >
@@ -131,7 +125,6 @@ export const ProductOptionValues: React.FC<ProductOptionValuesProps> = ({
                 rank: optionValues.length + 1,
                 optionId,
               })
-              updateVariants()
               form.clearErrors(`options.${optionIdx}.values`)
             }}
             className="flex-1"
@@ -143,12 +136,9 @@ export const ProductOptionValues: React.FC<ProductOptionValuesProps> = ({
             type="button"
             size={"sm"}
             variant={"outline"}
-            onClick={() => {
-              updateVariants()
-              onFinishEdit()
-            }}
+            onClick={() => onFinishEditing()}
           >
-            <Icons.check className="mr-2 size-4" />
+            <Icons.check className="mr-1.5 size-4" />
             Done
           </Button>
         </div>

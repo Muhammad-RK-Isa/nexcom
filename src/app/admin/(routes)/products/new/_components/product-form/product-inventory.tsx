@@ -36,10 +36,16 @@ const ProductInventoryForm = () => {
                 <FormControl>
                   <Checkbox
                     checked={field.value}
-                    onCheckedChange={field.onChange}
+                    onCheckedChange={(v) => {
+                      field.onChange(v)
+                      if (Boolean(!v)) {
+                        form.setValue("inventoryQuantity", 0)
+                        form.setValue("allowBackorder", false)
+                      }
+                    }}
                   />
                 </FormControl>
-                <FormLabel className="flex w-full items-center p-4 pl-0">
+                <FormLabel className="flex w-full cursor-pointer items-center p-4 pl-0">
                   Manage inventory
                   <FormMessage />
                   <HoverCard openDelay={100}>
@@ -77,7 +83,7 @@ const ProductInventoryForm = () => {
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
-                    <FormLabel className="w-full p-4 pl-0">
+                    <FormLabel className="w-full cursor-pointer p-4 pl-0">
                       Continue selling when out of stock
                       <FormMessage />
                     </FormLabel>

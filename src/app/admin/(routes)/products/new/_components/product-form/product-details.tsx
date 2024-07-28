@@ -1,5 +1,6 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
+import { toast } from "sonner"
 
 import type { UpdateProductInput } from "~/types"
 import { slugify } from "~/lib/utils"
@@ -13,13 +14,15 @@ import {
   FormMessage,
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
-import { Textarea } from "~/components/ui/textarea"
+import { Icons } from "~/components/icons"
 import { ImageSelectModal } from "~/components/image-select-modal"
 import Images from "~/components/images"
 
 const ProductDetailsForm = () => {
-  const [isImageModalOpen, setIsImageModalOpen] = React.useState(false)
   const form = useFormContext<UpdateProductInput>()
+  const { title } = form.watch()
+
+  const [isImageModalOpen, setIsImageModalOpen] = React.useState(false)
   return (
     <Card>
       <CardHeader>
@@ -37,11 +40,7 @@ const ProductDetailsForm = () => {
                   <Input
                     {...field}
                     placeholder="Product title"
-                    onChange={(e) => {
-                      const value = e.target.value
-                      field.onChange(value)
-                      form.setValue("slug", slugify(value))
-                    }}
+                    onChange={field.onChange}
                   />
                 </FormControl>
                 <FormMessage />
@@ -53,15 +52,32 @@ const ProductDetailsForm = () => {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Slug</FormLabel>
+                <div className="-mb-1 flex items-center justify-between">
+                  <FormLabel>Slug</FormLabel>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    type="button"
+                    onClick={() => {
+                      if (Boolean(!title)) {
+                        toast.info("Please enter a title first")
+                        return
+                      }
+                      field.onChange(slugify(title))
+                    }}
+                  >
+                    <Icons.sparkles className="mr-1.5 size-3 text-muted-foreground" />
+                    Auto generate
+                  </Button>
+                </div>
                 <FormControl>
-                  <Input {...field} disabled />
+                  <Input {...field} autoCorrect="off" spellCheck="false" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <FormField
+          {/* <FormField
             name="description"
             control={form.control}
             render={({ field }) => (
@@ -75,7 +91,7 @@ const ProductDetailsForm = () => {
                 />
               </FormItem>
             )}
-          />
+          /> */}
           <FormField
             control={form.control}
             name="images"

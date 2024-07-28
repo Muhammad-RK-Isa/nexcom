@@ -51,11 +51,11 @@ export const AdminHeader = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="ml-auto size-6 rounded-full"
+            className="ml-auto size-7 rounded-full"
           >
             <Avatar className="size-full">
               <AvatarImage src={user?.image ?? ""} alt="User avater" />
-              <AvatarFallback className="text-xs">
+              <AvatarFallback className="text-sm">
                 {avatarFallback}
               </AvatarFallback>
             </Avatar>

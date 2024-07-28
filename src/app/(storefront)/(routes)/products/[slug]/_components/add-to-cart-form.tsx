@@ -25,9 +25,11 @@ import { api } from "~/trpc/react"
 
 interface AddToCartFormProps {
   productId: string
-  variantId?: string
   cartQuantity?: number
   variantRequired?: boolean
+  allowBackorder: boolean
+  inventoryQuantity: number
+  variantId?: string
   options?: CompleteProduct["options"]
 }
 
@@ -37,8 +39,10 @@ export function AddToCartForm({
   productId,
   variantId,
   cartQuantity,
-  variantRequired = false,
+  inventoryQuantity,
   options,
+  variantRequired = false,
+  allowBackorder,
 }: AddToCartFormProps) {
   const router = useRouter()
   const id = React.useId()
@@ -67,6 +71,7 @@ export function AddToCartForm({
   const { mutate: addToCart, isPending } = api.carts.addToCart.useMutation({
     onSuccess: () => {
       toast.success("Product added to cart")
+      form.reset()
       router.refresh()
     },
     onError: (err) => {
@@ -93,6 +98,8 @@ export function AddToCartForm({
     })
   }
 
+  const inStock = allowBackorder ? true : inventoryQuantity > 0
+
   return (
     <Form {...form}>
       <form
@@ -105,7 +112,7 @@ export function AddToCartForm({
               id={`${id}-decrement`}
               type="button"
               onClick={decreaseQuantity}
-              disabled={quantity <= 1 || isPending}
+              disabled={quantity <= 1 || isPending || !inStock}
               className="flex size-9 shrink-0 items-center justify-center rounded-md transition-colors hover:bg-accent/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring active:scale-90 disabled:pointer-events-none disabled:opacity-30 lg:size-12"
             >
               <Icons.chevronLeft
@@ -125,19 +132,20 @@ export function AddToCartForm({
                       type="number"
                       inputMode="numeric"
                       min={1}
-                      className="h-9 w-14 rounded-none border-x-0 border-none text-center shadow-none"
+                      className="h-9 w-14 rounded-none border-x-0 border-none text-center shadow-none lg:h-12"
                       {...field}
-                      disabled={isPending}
+                      disabled={isPending || !inStock}
                       onBlur={(e) => {
                         const value = parseInt(e.target.value)
                         if (value > 10) {
                           form.setValue("quantity", 10)
                         } else if (value < 1) {
                           form.setValue("quantity", 1)
-                        } else {
+                        } else if (isNaN(value)) {
                           form.setValue("quantity", 1)
                         }
                       }}
+                      onSubmit={(e) => e.preventDefault()}
                     />
                   </FormControl>
                   <FormMessage />
@@ -148,7 +156,7 @@ export function AddToCartForm({
               id={`${id}-increment`}
               type="button"
               onClick={increaseQuantity}
-              disabled={quantity >= 10 || isPending}
+              disabled={quantity >= 10 || isPending || !inStock}
               className="flex size-9 shrink-0 items-center justify-center rounded-md transition-colors hover:bg-accent/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring active:scale-90 disabled:pointer-events-none disabled:opacity-30 lg:size-12"
             >
               <Icons.chevronRight
@@ -170,24 +178,43 @@ export function AddToCartForm({
         </div>
         <div className="flex flex-col items-center space-y-2 sm:space-y-3">
           <Button
-            type="submit"
+            type={Number(inventoryQuantity) < 1 ? "button" : "submit"}
             variant="secondary"
             size="lg"
-            className="w-full border dark:border-primary/10 lg:h-12"
-            disabled={isPending}
+            className={cn(
+              "w-full border lg:h-12",
+              Number(inventoryQuantity) < 1
+                ? "border-destructive/20 bg-destructive/5 text-destructive disabled:opacity-80"
+                : "dark:border-primary/10"
+            )}
+            disabled={isPending || !inStock}
             loading={isPending}
           >
-            Add to cart
+            {inStock ? "Add to cart" : "Out of stock"}
           </Button>
-          <Button
-            type="button"
-            aria-label="Buy now"
-            className="w-full lg:h-12"
-            size="lg"
-            disabled={isPending}
-          >
-            Buy now
-          </Button>
+          {inStock ? (
+            <Button
+              type="button"
+              aria-label="Buy now"
+              className="w-full lg:h-12"
+              size="lg"
+              disabled={isPending}
+            >
+              Buy now
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              size="lg"
+              variant={inStock ? "default" : "secondary"}
+              aria-label="Buy now"
+              className={cn("w-full lg:h-12", !inStock && "border")}
+              disabled={isPending}
+            >
+              <Icons.heart className="mr-2 size-4" />
+              Add to wishlist
+            </Button>
+          )}
         </div>
       </form>
     </Form>

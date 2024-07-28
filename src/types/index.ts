@@ -18,7 +18,11 @@ import {
   type getProducts,
   type getTableProducts,
 } from "~/lib/api/products/queries"
-import type { cartItemSchema, checkoutItemSchema } from "~/lib/validations/cart"
+import type {
+  cartItemSchema,
+  cartLineItemSchema,
+  checkoutItemSchema,
+} from "~/lib/validations/cart"
 import type {
   imageIdSchema,
   imageSchema,
@@ -130,3 +134,4 @@ export type TableImageParams = z.infer<typeof searchImageParamsSchema>
 // Types: Cart
 export type CartItem = z.infer<typeof cartItemSchema>
 export type CheckoutItem = z.infer<typeof checkoutItemSchema>
+export type CartLineItem = z.infer<typeof cartLineItemSchema>
