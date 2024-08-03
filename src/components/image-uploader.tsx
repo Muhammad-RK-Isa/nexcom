@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import Image from "next/image"
 import Dropzone, {
   type DropzoneProps,
   type FileRejection,
@@ -10,8 +9,6 @@ import { toast } from "sonner"
 
 import { useControllableState } from "~/lib/hooks/use-controllable-state"
 import { cn, formatBytes } from "~/lib/utils"
-import { Button } from "~/components/ui/button"
-import { Progress } from "~/components/ui/progress"
 import { Icons } from "~/components/icons"
 
 interface ImageUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -91,6 +88,13 @@ interface ImageUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
   disabled?: boolean
 
   /**
+   * Whether the files are being uploaded or not
+   * @type boolean
+   * @example isUploading
+   */
+  isUploading: boolean
+
+  /**
    * Whether the progress bars should be shown.
    * @type boolean
    * @default true
@@ -116,6 +120,7 @@ export function ImageUploader(props: ImageUploaderProps) {
     maxFiles = 1,
     multiple = false,
     disabled = false,
+    isUploading,
     className,
     ...dropzoneProps
   } = props
@@ -159,7 +164,7 @@ export function ImageUploader(props: ImageUploaderProps) {
         updatedFiles.length <= maxFiles
       ) {
         const target =
-          updatedFiles.length > 0 ? `${updatedFiles.length} files` : `file`
+          updatedFiles.length > 1 ? `${updatedFiles.length} files` : `1 file`
 
         toast.promise(onUpload(updatedFiles), {
           loading: `Uploading ${target}`,
@@ -203,102 +208,61 @@ export function ImageUploader(props: ImageUploaderProps) {
           <div
             {...getRootProps()}
             className={cn(
-              "group relative grid h-52 w-full cursor-pointer place-items-center rounded-lg border-2 border-dashed border-muted-foreground/25 px-5 py-2.5 text-center transition hover:bg-muted/25",
+              "group relative grid h-52 w-full cursor-pointer place-items-center rounded-lg border-2 border-dashed border-muted-foreground/25 px-5 py-2.5 text-center transition-all hover:bg-muted/25",
               "focus-visible:border-primary focus-visible:outline-none",
-              isDragActive &&
-                "animate-rotate-border border-muted-foreground/50",
+              isDragActive && "border-muted-foreground",
               isDisabled && "pointer-events-none opacity-60",
               className
             )}
             {...dropzoneProps}
           >
-            <input {...getInputProps()} />
-            {isDragActive ? (
-              <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
-                <div className="rounded-full border border-dashed p-3">
-                  <Icons.upload
-                    className="size-7 text-muted-foreground"
-                    aria-hidden="true"
-                  />
-                </div>
-                <p className="font-medium text-muted-foreground">
-                  Drop the files here
-                </p>
+            {isUploading ? (
+              <div className="flex items-center text-xl opacity-50">
+                <Icons.spinner className="mr-2 size-6" />
+                File upload in progress
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
-                <div className="rounded-full border border-dashed p-3">
-                  <Icons.upload
-                    className="size-7 text-muted-foreground"
-                    aria-hidden="true"
-                  />
-                </div>
-                <div className="space-y-px">
-                  <p className="font-medium text-muted-foreground">
-                    Drag {`'n'`} drop files here, or click to select files
-                  </p>
-                  <p className="text-sm text-muted-foreground/70">
-                    You can upload
-                    {maxFiles > 1
-                      ? ` ${maxFiles === Infinity ? "multiple" : maxFiles}
+              <>
+                <input {...getInputProps()} />
+                {isDragActive ? (
+                  <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
+                    <div className="rounded-full border border-dashed p-3">
+                      <Icons.upload
+                        className="size-7 text-muted-foreground"
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <p className="font-medium text-muted-foreground">
+                      Drop the files here
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
+                    <div className="rounded-full border border-dashed p-3">
+                      <Icons.upload
+                        className="size-7 text-muted-foreground"
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <div className="space-y-px">
+                      <p className="font-medium text-muted-foreground">
+                        Drag {`'n'`} drop files here, or click to select files
+                      </p>
+                      <p className="text-sm text-muted-foreground/70">
+                        You can upload
+                        {maxFiles > 1
+                          ? ` ${maxFiles === Infinity ? "multiple" : maxFiles}
                       files (up to ${formatBytes(maxSize)} each)`
-                      : ` a file with ${formatBytes(maxSize)}`}
-                  </p>
-                </div>
-              </div>
+                          : ` a file with ${formatBytes(maxSize)}`}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </div>
         )}
       </Dropzone>
-    </div>
-  )
-}
-
-interface FileCardProps {
-  file: File
-  onRemove: () => void
-  progress?: number
-  className?: string
-}
-
-export function FileCard({ file, progress, onRemove }: FileCardProps) {
-  return (
-    <div className="relative flex items-center space-x-4">
-      <div className="flex flex-1 space-x-4">
-        {isFileWithPreview(file) ? (
-          <Image
-            src={file.preview}
-            alt={file.name}
-            width={48}
-            height={48}
-            loading="lazy"
-            className="aspect-square shrink-0 rounded-md object-cover"
-          />
-        ) : null}
-        <div className="flex w-full flex-col gap-2">
-          <div className="space-y-px">
-            <p className="line-clamp-1 break-all text-xs font-medium text-foreground/80">
-              {file.name}
-            </p>
-            <p className="text-xs text-muted-foreground">
-              {formatBytes(file.size)}
-            </p>
-          </div>
-          {progress ? <Progress value={progress} /> : null}
-        </div>
-      </div>
-      <div className="flex items-center gap-2">
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
-          className="size-7"
-          onClick={onRemove}
-        >
-          <Icons.multiply className="size-4" aria-hidden="true" />
-          <span className="sr-only">Remove file</span>
-        </Button>
-      </div>
     </div>
   )
 }

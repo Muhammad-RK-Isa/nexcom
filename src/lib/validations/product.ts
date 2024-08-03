@@ -1,4 +1,4 @@
-import { images, pgProductStatuses, products } from "~/server/db/schema"
+import { images, pgProductStatuses } from "~/server/db/schema"
 import { pgSizeUnits, pgWeightUnits } from "~/server/db/schema/utils"
 import { createSelectSchema } from "drizzle-zod"
 import { z } from "zod"
@@ -58,7 +58,8 @@ const generalProductFields = {
         .number()
         .nonnegative({ message: "Length cannot be negative" })
         .nullable()
-        .optional(),
+        .optional()
+        .default(0),
       unit: sizeUnits,
     })
     .nullable()
@@ -69,7 +70,8 @@ const generalProductFields = {
         .number()
         .nonnegative({ message: "Height cannot be negative" })
         .nullable()
-        .optional(),
+        .optional()
+        .default(0),
       unit: sizeUnits,
     })
     .nullable()
@@ -80,12 +82,30 @@ const generalProductFields = {
         .number()
         .nonnegative({ message: "Width cannot be negative" })
         .nullable()
-        .optional(),
+        .optional()
+        .default(0),
       unit: sizeUnits,
     })
     .nullable()
     .optional(),
 }
+
+export const JSONContentSchema: z.ZodType<any> = z.lazy(() =>
+  z.object({
+    type: z.string().optional(),
+    attrs: z.record(z.any()).optional(),
+    content: z.array(JSONContentSchema).optional(),
+    marks: z
+      .array(
+        z.object({
+          type: z.string(),
+          attrs: z.record(z.any()).optional(),
+        })
+      )
+      .optional(),
+    text: z.string().optional(),
+  })
+)
 
 export const baseProductSchema = z
   .object({
@@ -97,8 +117,8 @@ export const baseProductSchema = z
       .trim()
       .min(3, { message: "Please give a title for the product" }),
     metaTitle: z.string(),
-    content: z.string().nullable(),
-    description: z.string().nullable(),
+    content: JSONContentSchema.optional(),
+    description: z.string(),
     vendor: z.string().optional().nullable(),
     mrp: z.coerce
       .number({ message: "Please enter the MRP" })

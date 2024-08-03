@@ -13,7 +13,6 @@ import { Label } from "~/components/ui/label"
 import { Sortable } from "~/components/ui/sortable"
 import { Icons } from "~/components/icons"
 
-import { generateVariants } from "../../_lib/utils"
 import { ProductOption } from "./product-option"
 
 export const ProductOptions = () => {

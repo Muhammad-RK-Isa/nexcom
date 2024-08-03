@@ -1,3 +1,7 @@
+import { redirect } from "next/navigation"
+
+import { Paths } from "~/lib/constants"
+
 export default function AdminPage() {
-  return <div>Admin Page</div>
+  return redirect(Paths.Admin.Dashboard)
 }

@@ -3,12 +3,17 @@ export const EMAIL_SENDER = '"Nexcom" <admin@pixiewear.store>'
 
 export const unknownError = "An unknown error occurred. Please try again later."
 
-export enum Paths {
-  Storefront = "/",
-  SignIn = "/signin",
-  SignUp = "/signup",
-  Admin = "/admin",
-  VerifyEmail = "/verify-email",
-  ResetPassword = "/reset-password",
-  Unauthorized = "/unauthorized",
+export const Paths = {
+  SignIn: "/signin",
+  SignUp: "/signup",
+  VerifyEmail: "/verify-email",
+  ResetPassword: "/reset-password",
+  Unauthorized: "/unauthorized",
+  Storefront: "/",
+  Admin: {
+    Dashboard: "/admin/dashboard",
+    Products: "/admin/products",
+    Orders: "/admin/orders",
+    Users: "/admin/users",
+  },
 }

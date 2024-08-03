@@ -1,5 +1,3 @@
-"use client"
-
 import React from "react"
 import NextImage from "next/image"
 import { toast } from "sonner"
@@ -77,6 +75,7 @@ export const ImageSelectModal: React.FC<ImageSelectModalProps> = ({
 
   const { data: images, refetch } =
     api.images.getTableImages.useQuery(searchParams)
+
   const { mutate: deleteImages, isPending: isDeleting } =
     api.images.deleteImages.useMutation({
       onSuccess: () => {
@@ -90,29 +89,23 @@ export const ImageSelectModal: React.FC<ImageSelectModalProps> = ({
       },
     })
 
-  const reshapedImages = React.useMemo(() => {
-    return (
-      images?.data.map((image) => ({
-        id: image.id,
-        name: image.name,
-        url: image.url,
-      })) ?? []
-    )
-  }, [images])
-
   const {
     uploadFiles,
     progresses,
     uploadedFiles,
     isUploading,
     setUploadedFiles,
-  } = useUploadFile("authorizedRoute", {
-    defaultUploadedFiles: reshapedImages ?? [],
-  })
+  } = useUploadFile("authorizedRoute")
 
   React.useEffect(() => {
-    setUploadedFiles(reshapedImages ?? [])
-  }, [setUploadedFiles, reshapedImages])
+    setUploadedFiles(
+      images?.data.map((image) => ({
+        id: image.id,
+        name: image.name,
+        url: image.url,
+      })) ?? []
+    )
+  }, [setUploadedFiles, images?.data, images])
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -139,6 +132,7 @@ export const ImageSelectModal: React.FC<ImageSelectModalProps> = ({
               progresses={progresses}
               disabled={isUploading}
               onUpload={uploadFiles}
+              isUploading={isUploading}
               className="h-40 text-sm"
             />
             <Images
@@ -216,7 +210,7 @@ export const ImageSelectModal: React.FC<ImageSelectModalProps> = ({
                 <Button
                   type="button"
                   size={"sm"}
-                  disabled={reshapedImages.length === 0 || isDeleting}
+                  disabled={!uploadedFiles.length || isDeleting}
                   onClick={() => {
                     onValueChange(selectedImages)
                     onOpenChange?.(false)
@@ -315,8 +309,8 @@ export function Images({
         ) : (
           <EmptyCard
             title="No files uploaded"
-            description="Upload some files to see them here"
-            className="w-full"
+            description="Upload some files to choose from"
+            className="w-full border-none shadow-none"
           />
         )}
       </CardContent>

@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
+import Editor from "~/components/editor"
 import { Icons } from "~/components/icons"
 import { ImageSelectModal } from "~/components/image-select-modal"
 import Images from "~/components/images"
@@ -77,21 +78,17 @@ const ProductDetailsForm = () => {
               </FormItem>
             )}
           />
-          {/* <FormField
-            name="description"
+          <FormField
+            name="content"
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
-                <Textarea
-                  {...field}
-                  value={field.value ?? ""}
-                  placeholder="Write a short description of the product"
-                  rows={6}
-                />
+                <FormLabel>Content</FormLabel>
+                <Editor {...field} />
+                <FormMessage />
               </FormItem>
             )}
-          /> */}
+          />
           <FormField
             control={form.control}
             name="images"
@@ -102,7 +99,6 @@ const ProductDetailsForm = () => {
                   <FormControl>
                     <Button
                       variant="outline"
-                      size="sm"
                       type="button"
                       onClick={() => setIsImageModalOpen(true)}
                       className="w-full"

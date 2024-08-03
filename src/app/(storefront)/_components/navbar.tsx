@@ -4,7 +4,6 @@ import * as React from "react"
 import Link from "next/link"
 import { motion, useScroll, useTransform } from "framer-motion"
 
-import type { CartLineItem } from "~/types"
 import { APP_TITLE } from "~/lib/constants"
 import { cn } from "~/lib/utils"
 import {
@@ -16,16 +15,13 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "~/components/ui/navigation-menu"
-import CartSheet from "~/components/checkout/cart-sheet"
 import { Icons } from "~/components/icons"
 
 import { navLinks } from "../_lib/nav-links"
 
-interface NavbarProps {
-  cartLineItems: CartLineItem[]
-}
+interface NavbarProps {}
 
-const Navbar: React.FC<NavbarProps> = ({ cartLineItems }) => {
+const Navbar: React.FC<NavbarProps> = () => {
   const { scrollY } = useScroll()
 
   const padding = useTransform(scrollY, [0, 300], ["1.5rem", "1.25rem"])
@@ -140,7 +136,6 @@ const Navbar: React.FC<NavbarProps> = ({ cartLineItems }) => {
       </Link>
       <div className="flex items-center space-x-6 md:space-x-8 lg:space-x-10">
         <Icons.search className="size-4" />
-        <CartSheet cartLineItems={cartLineItems} />
       </div>
     </motion.nav>
   )

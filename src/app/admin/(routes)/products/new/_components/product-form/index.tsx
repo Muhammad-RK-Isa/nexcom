@@ -8,10 +8,10 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 import type { CreateProductInput } from "~/types"
+import { Paths } from "~/lib/constants"
 import { cn } from "~/lib/utils"
-import { insertProductSchema, productStatuses } from "~/lib/validations/product"
+import { insertProductSchema } from "~/lib/validations/product"
 import { Button, buttonVariants } from "~/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,39 +20,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form"
-import { Input } from "~/components/ui/input"
+import { Form } from "~/components/ui/form"
 import { ScrollArea } from "~/components/ui/scroll-area"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select"
 import { Icons } from "~/components/icons"
-import KeywordsInput from "~/components/keywords-input"
 import { api } from "~/trpc/react"
 
-import { getStatusIcon } from "../../../_lib/utils"
 import ProductDetailsForm from "./product-details"
 import ProductInventoryForm from "./product-inventory"
+import ProductOrganisationForm from "./product-organisation"
 import ProductPricingForm from "./product-pricing"
 import ProductSEOForm from "./product-seo"
 import ProductShippingForm from "./product-shipping"
+import ProductStatusForm from "./product-status"
 import { ProductVariantsForm } from "./product-variants"
 
 const ProductForm = () => {
   const router = useRouter()
-
-  const [isActionMenuOpen, setIsActionMenuOpen] = React.useState(false)
+  const [isActionsMenuOpen, setIsActionsMenuOpen] = React.useState(false)
 
   const form = useForm<CreateProductInput>({
     resolver: zodResolver(insertProductSchema),
@@ -92,10 +76,10 @@ const ProductForm = () => {
 
   const { mutate: createProduct, isPending: isCreating } =
     api.products.createProduct.useMutation({
-      onSuccess: (data) => {
+      onSuccess: () => {
         toast.success("Product created")
-        setIsActionMenuOpen(false)
-        router.push(`/admin/products/${data?.product?.id}`)
+        setIsActionsMenuOpen(false)
+        router.push(`${Paths.Admin.Products}/{data?.product?.id}`)
       },
       onError: (err) => {
         toast.error(err.message)
@@ -150,8 +134,8 @@ const ProductForm = () => {
               </Button>
             </div>
             <DropdownMenu
-              open={isActionMenuOpen}
-              onOpenChange={setIsActionMenuOpen}
+              open={isActionsMenuOpen}
+              onOpenChange={setIsActionsMenuOpen}
             >
               <DropdownMenuTrigger asChild>
                 <Button
@@ -196,98 +180,13 @@ const ProductForm = () => {
               <ProductPricingForm />
               <ProductInventoryForm />
               <ProductShippingForm />
-              <ProductVariantsForm />
+              {/* <ProductVariantsForm /> */}
               <ProductSEOForm />
             </div>
             <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Product Status</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <FormField
-                    control={form.control}
-                    name="status"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Product Status</FormLabel>
-                        <Select
-                          {...field}
-                          value={field.value}
-                          onValueChange={field.onChange}
-                          defaultValue={productStatuses.Values.active}
-                        >
-                          <FormControl>
-                            <SelectTrigger className="capitalize">
-                              <SelectValue placeholder="Select the status of the product" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {Object.values(productStatuses.Values).map(
-                              (status, idx) => {
-                                const Icon = getStatusIcon(status)
-                                return (
-                                  <SelectItem key={idx} value={status}>
-                                    <div className="flex items-center">
-                                      <Icon className="mr-2 size-4 text-muted-foreground" />
-                                      <span className="capitalize">
-                                        {status}
-                                      </span>
-                                    </div>
-                                  </SelectItem>
-                                )
-                              }
-                            )}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Product Organization</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid gap-6">
-                    <FormField
-                      name="vendor"
-                      control={form.control}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Vendor</FormLabel>
-                          <Input {...field} value={field.value ?? ""} />
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      name="tags"
-                      control={form.control}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Tags</FormLabel>
-                          <FormControl>
-                            <KeywordsInput
-                              {...field}
-                              onKeywordsChange={field.onChange}
-                              initialKeywords={field.value}
-                              placeholder=""
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </CardContent>
-              </Card>
+              <ProductStatusForm />
+              <ProductOrganisationForm />
             </div>
-            {form.formState.isValidating && (
-              <p className="text-lg">Validating...</p>
-            )}
           </div>
         </ScrollArea>
       </form>
