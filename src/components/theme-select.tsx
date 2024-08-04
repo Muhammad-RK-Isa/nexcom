@@ -38,10 +38,10 @@ export const ThemeSelect: React.FC<ThemeToggleProps> = ({
               variant={"ghost"}
               size={"icon"}
               className={cn(
-                "size-max cursor-pointer rounded-full p-2 transition-colors hover:text-primary",
+                "size-max cursor-pointer rounded-full border p-2 transition-colors hover:text-primary",
                 theme === thm
-                  ? "bg-accent text-primary"
-                  : "text-muted-foreground"
+                  ? "border-border bg-accent text-primary"
+                  : "border-transparent text-muted-foreground"
               )}
               onClick={() => setTheme(thm)}
             >

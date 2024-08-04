@@ -1,10 +1,6 @@
-"use client"
-
 import React from "react"
-import { signOut, useSession } from "next-auth/react"
 
-import { useSidebar } from "~/lib/hooks/use-sidebar"
-import { cn } from "~/lib/utils"
+import { currentUser } from "~/lib/auth/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { Button } from "~/components/ui/button"
 import {
@@ -15,16 +11,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu"
-import { Icons } from "~/components/icons"
+import { Skeleton } from "~/components/ui/skeleton"
 
 import { Breadcrumbs } from "./breadcrumbs"
+import DropddownSignOutItem from "./dropdown-sign-out-item"
 import { MobileSidebar } from "./mobile-sidebar"
 
-export const AdminHeader = () => {
-  const { data } = useSession()
-  const { isOpen, onOpen } = useSidebar()
-
-  const user = data?.user
+export const AdminHeader = async () => {
+  const user = await currentUser()
 
   const avatarFallback =
     user?.name
@@ -34,18 +28,11 @@ export const AdminHeader = () => {
       .join("") ?? ""
 
   return (
-    <header className="sticky left-0 top-0 z-50 flex h-14 items-center gap-4 border-b bg-background px-4 backdrop-blur-sm dark:bg-card lg:h-[60px] lg:px-6">
+    <header className="z-50 flex h-14 items-center gap-4 rounded-lg border bg-accent/50 p-6 backdrop-blur-sm">
       <MobileSidebar />
-      <Button
-        size="icon"
-        variant="ghost"
-        onClick={onOpen}
-        className={cn("group -ml-2 hidden", isOpen ? "lg:hidden" : "lg:flex")}
-      >
-        <Icons.panelLeftOpen className="size-4 text-muted-foreground transition-colors group-hover:text-primary" />
-        <span className="sr-only">Open side panel</span>
-      </Button>
-      <Breadcrumbs />
+      <React.Suspense>
+        <Breadcrumbs />
+      </React.Suspense>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -72,7 +59,9 @@ export const AdminHeader = () => {
           <DropdownMenuItem disabled>Profile</DropdownMenuItem>
           <DropdownMenuItem disabled>Settings</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => signOut()}>Logout</DropdownMenuItem>
+          <React.Suspense fallback={<Skeleton className="h-5 w-[129px]" />}>
+            <DropddownSignOutItem />
+          </React.Suspense>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

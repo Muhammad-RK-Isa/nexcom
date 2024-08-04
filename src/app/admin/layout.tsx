@@ -1,21 +1,21 @@
 import React from "react"
 
+import { ScrollArea } from "~/components/ui/scroll-area"
+
 import { AdminHeader } from "./_components/header"
-import { HeaderSkeleton } from "./_components/header-skeleton"
 import { Sidebar } from "./_components/sidebar"
-import { SidebarSkeleton } from "./_components/sidebar-skeleton"
 
 const AdminLayout = ({ children }: React.PropsWithChildren) => {
   return (
-    <div className="relative flex min-h-screen w-full bg-muted/40 dark:bg-background">
-      <React.Suspense fallback={<SidebarSkeleton />}>
-        <Sidebar />
-      </React.Suspense>
-      <div className="flex w-full flex-col">
-        <React.Suspense fallback={<HeaderSkeleton />}>
-          <AdminHeader />
-        </React.Suspense>
-        <main className="p-4 lg:p-6">{children}</main>
+    <div className="relative flex flex-col lg:grid lg:h-screen lg:w-screen lg:grid-cols-[256px,1fr] lg:overflow-hidden">
+      <Sidebar />
+      <div className="flex w-full flex-col gap-4 p-4 pl-0">
+        <AdminHeader />
+        <main className="h-full">
+          <ScrollArea className="h-full w-full rounded-lg border bg-accent/50 p-4">
+            {children}
+          </ScrollArea>
+        </main>
       </div>
     </div>
   )

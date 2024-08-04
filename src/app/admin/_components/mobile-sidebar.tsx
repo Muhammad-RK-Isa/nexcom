@@ -2,8 +2,6 @@
 
 import React from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useRouter } from "next-nprogress-bar"
 
 import { APP_TITLE } from "~/lib/constants"
 import { cn } from "~/lib/utils"
@@ -20,9 +18,6 @@ import { ThemeSelect } from "~/components/theme-select"
 import { adminNavLinks } from "../_lib/utils"
 
 export const MobileSidebar = () => {
-  const pathname = usePathname()
-  const router = useRouter()
-
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -46,21 +41,15 @@ export const MobileSidebar = () => {
               <span className="sr-only">{APP_TITLE}</span>
             </Link>
           </SheetClose>
-          {adminNavLinks.map(({ title, icon: Icon, path, active }, idx) => (
+          {adminNavLinks.map(({ title, icon: Icon, path }, idx) => (
             <SheetClose key={idx} asChild>
-              <button
-                onClick={() => router.push(path)}
-                disabled={!active}
-                className={cn(
-                  "flex items-center gap-4 px-2.5 py-1.5 hover:text-foreground disabled:text-muted-foreground/50",
-                  path === pathname
-                    ? "rounded-lg bg-accent text-foreground"
-                    : "text-muted-foreground"
-                )}
+              <Link
+                href={path}
+                className={cn("flex items-center gap-4 px-2.5 py-1.5")}
               >
                 <Icon className="size-5" />
                 {title}
-              </button>
+              </Link>
             </SheetClose>
           ))}
           <Link

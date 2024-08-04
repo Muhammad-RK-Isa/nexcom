@@ -19,7 +19,6 @@ import {
   DropdownMenuPortal,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuSeparator,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -37,7 +36,7 @@ export function getColumns(): ColumnDef<TableProduct>[] {
     {
       id: "select",
       header: ({ table }) => (
-        <div className="grid">
+        <div className="grid place-content-center">
           <Checkbox
             checked={
               table.getIsAllPageRowsSelected() ||
@@ -51,7 +50,7 @@ export function getColumns(): ColumnDef<TableProduct>[] {
         </div>
       ),
       cell: ({ row }) => (
-        <div className="grid">
+        <div className="grid place-content-center">
           <Checkbox
             checked={row.getIsSelected()}
             onCheckedChange={(value) => row.toggleSelected(!!value)}
