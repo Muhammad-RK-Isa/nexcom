@@ -1,5 +1,3 @@
-"use client"
-
 import React from "react"
 import Link from "next/link"
 
@@ -52,13 +50,6 @@ export const MobileSidebar = () => {
               </Link>
             </SheetClose>
           ))}
-          <Link
-            href="/admin/settings"
-            className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-          >
-            <Icons.settings className="size-5" />
-            Settings
-          </Link>
         </nav>
         <ThemeSelect />
       </SheetContent>

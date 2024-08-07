@@ -28,7 +28,7 @@ export const AdminHeader = async () => {
       .join("") ?? ""
 
   return (
-    <header className="z-50 flex h-14 items-center gap-4 rounded-lg border bg-accent/50 p-6 backdrop-blur-sm">
+    <header className="z-50 flex h-14 items-center gap-4 rounded-lg border bg-accent/50 p-6 px-4 backdrop-blur-sm lg:px-6">
       <MobileSidebar />
       <React.Suspense>
         <Breadcrumbs />
@@ -40,7 +40,7 @@ export const AdminHeader = async () => {
             size="icon"
             className="ml-auto size-7 rounded-full"
           >
-            <Avatar className="size-full">
+            <Avatar className="size-full border">
               <AvatarImage src={user?.image ?? ""} alt="User avater" />
               <AvatarFallback className="text-sm">
                 {avatarFallback}

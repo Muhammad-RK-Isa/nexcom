@@ -1,5 +1,6 @@
 import { relations, sql } from "drizzle-orm"
 import {
+  index,
   jsonb,
   pgEnum,
   pgTable,
@@ -41,6 +42,7 @@ export const products = pgTable(
     ...lifecycleDates,
   },
   (t) => ({
+    titleIdx: index("title_index").on(t.title),
     slugIdx: uniqueIndex("slug_index").on(t.slug),
   })
 )

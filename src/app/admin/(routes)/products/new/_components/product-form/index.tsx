@@ -44,7 +44,6 @@ const ProductForm = () => {
       title: "",
       slug: "",
       description: "",
-      inventoryQuantity: 0,
       manageInventory: true,
       allowBackorder: false,
       weight: {
@@ -68,7 +67,7 @@ const ProductForm = () => {
       variants: [],
       images: [],
       originCountry: "",
-      content: "",
+      content: {},
       metaTitle: "",
       material: "",
     },
@@ -79,11 +78,18 @@ const ProductForm = () => {
       onSuccess: () => {
         toast.success("Product created")
         setIsActionsMenuOpen(false)
-        router.push(`${Paths.Admin.Products}/{data?.product?.id}`)
+        router.push(`${Paths.Admin.Products}`)
       },
       onError: (err) => {
+        if (
+          err.message.includes("slug_index") &&
+          err.message.includes("duplicate key value violates unique constraint")
+        ) {
+          form.setError("slug", { message: "This slug is already in use" })
+          form.setFocus("slug")
+          return
+        }
         toast.error(err.message)
-        console.table(err)
       },
     })
 
@@ -95,100 +101,94 @@ const ProductForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="mx-auto grid flex-1 auto-rows-max"
+        className="mx-auto max-w-5xl lg:px-6"
       >
-        <div className="-mt-6 w-full border-b bg-card py-4">
-          <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 sm:justify-start lg:px-0">
-            <Link
-              href={"/admin/products"}
-              className={cn(
-                buttonVariants({
-                  variant: "outline",
-                  size: "icon",
-                  className: "size-7",
-                })
-              )}
+        <div className="sticky top-0 z-10 mx-auto flex w-full items-center justify-between gap-4 bg-background p-4 sm:justify-start lg:bg-[#fafafa] lg:px-0 lg:pt-0 lg:dark:bg-[#181818]">
+          <Link
+            href={"/admin/products"}
+            className={cn(
+              buttonVariants({
+                variant: "outline",
+                size: "icon",
+                className: "size-7",
+              })
+            )}
+          >
+            <Icons.chevronLeft className="size-4" />
+            <span className="sr-only">Back</span>
+          </Link>
+          <h1 className="max-w-40 truncate text-lg font-semibold tracking-tight md:max-w-72 md:text-xl lg:max-w-[60%]">
+            Add Product
+          </h1>
+          <div className="hidden items-center gap-2 sm:ml-auto sm:flex">
+            <Button
+              variant="outline"
+              size="sm"
+              type="button"
+              onClick={() => router.push("/admin/products")}
             >
-              <Icons.chevronLeft className="size-4" />
-              <span className="sr-only">Back</span>
-            </Link>
-            <h1 className="max-w-40 truncate text-lg font-semibold tracking-tight md:max-w-72 md:text-xl lg:max-w-[60%]">
-              Add Product
-            </h1>
-            <div className="hidden items-center gap-2 sm:ml-auto sm:flex">
+              Discard
+            </Button>
+            <Button
+              size="sm"
+              type="submit"
+              disabled={isCreating}
+              loading={isCreating}
+            >
+              Create
+            </Button>
+          </div>
+          <DropdownMenu
+            open={isActionsMenuOpen}
+            onOpenChange={setIsActionsMenuOpen}
+          >
+            <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                size="sm"
-                type="button"
+                size="icon"
+                className="size-7 sm:hidden"
+              >
+                <Icons.ellipsisVertical className="size-4" />
+                <span className="sr-only">Toggle form actions menu</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel className="text-xs">Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator className="my-0" />
+              <DropdownMenuItem
+                onClick={form.handleSubmit(onSubmit)}
+                disabled={isCreating || !form.formState.isDirty}
+                className="text-xs"
+              >
+                Save
+                {isCreating ? (
+                  <Icons.spinner className="ml-auto size-3" />
+                ) : null}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-xs"
+                disabled={isCreating || !form.formState.isDirty}
                 onClick={() => router.push("/admin/products")}
               >
                 Discard
-              </Button>
-              <Button
-                size="sm"
-                type="submit"
-                disabled={isCreating}
-                loading={isCreating}
-              >
-                Create
-              </Button>
-            </div>
-            <DropdownMenu
-              open={isActionsMenuOpen}
-              onOpenChange={setIsActionsMenuOpen}
-            >
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="size-7 sm:hidden"
-                >
-                  <Icons.ellipsisVertical className="size-4" />
-                  <span className="sr-only">Toggle form actions menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel className="text-xs">
-                  Actions
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator className="my-0" />
-                <DropdownMenuItem
-                  onClick={form.handleSubmit(onSubmit)}
-                  disabled={isCreating || !form.formState.isDirty}
-                  className="text-xs"
-                >
-                  Save
-                  {isCreating ? (
-                    <Icons.spinner className="ml-auto size-3" />
-                  ) : null}
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="text-xs"
-                  disabled={isCreating || !form.formState.isDirty}
-                  onClick={() => router.push("/admin/products")}
-                >
-                  Discard
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        <div className="mx-auto grid w-full gap-4 px-4 lg:grid-cols-[2fr,1fr] lg:px-0">
+          <div className="grid auto-rows-max gap-4">
+            <ProductDetailsForm />
+            <ProductPricingForm />
+            <ProductInventoryForm />
+            <ProductShippingForm />
+            {/* <ProductVariantsForm /> */}
+            <ProductSEOForm />
+          </div>
+          <div className="grid auto-rows-max items-start gap-4">
+            <ProductStatusForm />
+            <ProductOrganisationForm />
           </div>
         </div>
-        <ScrollArea className="max-h-[calc(100vh-117px)] w-full px-4 lg:max-h-[calc(100vh-125px)] lg:px-6">
-          <div className="mx-auto my-4 grid max-w-6xl gap-4 md:grid-cols-[1fr_250px] lg:my-6 lg:grid-cols-3 lg:gap-8">
-            <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
-              <ProductDetailsForm />
-              <ProductPricingForm />
-              <ProductInventoryForm />
-              <ProductShippingForm />
-              {/* <ProductVariantsForm /> */}
-              <ProductSEOForm />
-            </div>
-            <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
-              <ProductStatusForm />
-              <ProductOrganisationForm />
-            </div>
-          </div>
-        </ScrollArea>
       </form>
     </Form>
   )

@@ -112,16 +112,13 @@ export const baseProductSchema = z
     id: z.string(),
     slug: z.string(),
     status: productStatuses,
-    title: z
-      .string()
-      .trim()
-      .min(3, { message: "Please give a title for the product" }),
+    title: z.string().trim().min(3, { message: "Title is required" }),
     metaTitle: z.string(),
-    content: JSONContentSchema.optional(),
+    content: JSONContentSchema.optional().nullable(),
     description: z.string(),
     vendor: z.string().optional().nullable(),
     mrp: z.coerce
-      .number({ message: "Please enter the MRP" })
+      .number({ message: "MRP is required" })
       .nonnegative({ message: "MRP cannot be negative" }),
     tags: z.string().array().optional(),
     images: z.array(imageSchema),

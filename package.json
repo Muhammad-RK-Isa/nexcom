@@ -130,7 +130,9 @@
     "initVersion": "7.31.0"
   },
   "trustedDependencies": [
+    "@swc/core",
     "@vercel/speed-insights",
-    "es5-ext"
+    "es5-ext",
+    "esbuild"
   ]
 }

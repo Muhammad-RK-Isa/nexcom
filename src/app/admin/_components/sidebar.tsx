@@ -25,7 +25,7 @@ export const Sidebar = () => {
             <Link
               key={idx}
               href={path}
-              className={cn("group flex items-center gap-2 p-2")}
+              className="group -mx-2 flex items-center gap-2 p-2"
             >
               <Icon className="size-5 text-muted-foreground transition-colors group-hover:text-foreground" />
               {title}

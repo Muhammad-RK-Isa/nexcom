@@ -9,7 +9,7 @@ import {
   productVariants,
   variantsOptionValues,
 } from "~/server/db/schema"
-import { and, eq, inArray, ne } from "drizzle-orm"
+import { eq, inArray } from "drizzle-orm"
 
 import type {
   CreateProductInput,

@@ -26,12 +26,12 @@ const ProductPricingForm = () => {
         <CardTitle>Pricing</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex w-full flex-col justify-between gap-6 md:flex-row">
+        <div className="flex w-full flex-col justify-between gap-6 md:flex-row md:items-start">
           <FormField
             name="price"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="grid flex-1 gap-2.5 space-y-0">
+              <FormItem className="flex flex-col gap-2.5 space-y-0">
                 <FormLabel>Price</FormLabel>
                 <FormControl>
                   <div className="relative h-9">
@@ -55,7 +55,7 @@ const ProductPricingForm = () => {
             name="mrp"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="grid flex-1 gap-2.5 space-y-0">
+              <FormItem>
                 <FormLabel className="flex items-center justify-between">
                   MRP
                   <HoverCard openDelay={100}>

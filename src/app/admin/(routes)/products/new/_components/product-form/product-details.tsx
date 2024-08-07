@@ -84,7 +84,7 @@ const ProductDetailsForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Content</FormLabel>
-                <Editor {...field} />
+                <Editor {...field} initialValue={{}} />
                 <FormMessage />
               </FormItem>
             )}

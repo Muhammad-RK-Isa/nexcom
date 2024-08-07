@@ -177,7 +177,7 @@ export function getColumns(): ColumnDef<TableProduct>[] {
         const { mutate: updateProductStatus, isPending: isUpdating } =
           api.products.updateProductStatus.useMutation({
             onSuccess: () => {
-              toast.success("Product status changed")
+              toast.success("Product status updated")
               setShowDeleteProductAlertDialog(false)
               router.refresh()
             },
