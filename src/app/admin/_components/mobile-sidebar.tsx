@@ -19,12 +19,8 @@ export const MobileSidebar = () => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button
-          size="icon"
-          variant="outline"
-          className="-ml-2 size-8 lg:hidden"
-        >
-          <Icons.panelLeft className="size-4" />
+        <Button size="icon" variant="ghost" className="-ml-2 size-8 md:hidden">
+          <Icons.menu className="size-5" />
           <span className="sr-only">Toggle Sidebar</span>
         </Button>
       </SheetTrigger>

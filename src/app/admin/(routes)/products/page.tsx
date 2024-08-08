@@ -1,4 +1,5 @@
 import React from "react"
+import { type Metadata } from "next"
 
 import type { SearchParams } from "~/types"
 import { searchProductParamsSchema } from "~/lib/validations/product"
@@ -10,6 +11,11 @@ import { ProductsTableProvider } from "./_components/products-table-provider"
 
 interface ProductsPageProps {
   searchParams: SearchParams
+}
+
+export const metadata: Metadata = {
+  title: "Products",
+  description: "Manage your products",
 }
 
 const ProductsPage: React.FC<ProductsPageProps> = async ({ searchParams }) => {

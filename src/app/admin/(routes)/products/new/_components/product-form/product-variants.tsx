@@ -30,8 +30,6 @@ export const ProductVariantsForm = () => {
   const form = useFormContext<UpdateProductInput>()
   const { variants, options } = form.watch()
 
-  const [isVariantModalOpen, setIsVariantModalOpen] = React.useState(false)
-
   return (
     <Card>
       <CardHeader>
@@ -47,17 +45,10 @@ export const ProductVariantsForm = () => {
               variant={"link"}
               className="border bg-muted/40 py-6 active:scale-100"
               disabled={!options.length}
-              onClick={() => options.length && setIsVariantModalOpen(true)}
             >
               <Icons.plus className="mr-2 size-4" />
               Add Variant
             </Button>
-            {/* <ProductVariantFormModal
-              open={isVariantModalOpen}
-              onOpenChange={setIsVariantModalOpen}
-              options={options}
-              variantIdx={}
-            /> */}
           </div>
           {Boolean(variants.length) ? (
             <Table>

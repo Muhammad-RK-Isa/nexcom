@@ -11,11 +11,9 @@ export const metadata: Metadata = {
 
 const CreateProductPage = () => {
   return (
-    <div className="-mx-4 -mb-4 lg:-mx-6 lg:-mb-6">
-      <React.Suspense fallback={<ProductFormSkeleton />}>
-        <ProductForm />
-      </React.Suspense>
-    </div>
+    <React.Suspense fallback={<ProductFormSkeleton />}>
+      <ProductForm />
+    </React.Suspense>
   )
 }
 

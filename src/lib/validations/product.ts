@@ -186,14 +186,9 @@ export const productOptionSchema = z.object({
 
 export const productVariantSchema = z
   .object({
-    id: z
-      .string()
-      .default(generateId({ prefix: "variant" }))
-      .optional(),
     title: z.string(),
-    productId: z.string().optional(),
     productImageId: z.string().nullable().optional(),
-    optionValues: z.array(optionValueSchema).default([]).optional(),
+    options: z.record(z.string()),
     image: imageSchema.nullable().optional(),
   })
   .extend(generalProductFields)

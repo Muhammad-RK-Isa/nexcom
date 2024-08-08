@@ -28,7 +28,7 @@ export const AdminHeader = async () => {
       .join("") ?? ""
 
   return (
-    <header className="z-50 flex h-14 items-center gap-4 rounded-lg border bg-accent/50 p-6 px-4 backdrop-blur-sm lg:px-6">
+    <header className="z-30 flex h-[54px] items-center gap-4 border-b bg-background/80 p-4 backdrop-blur-sm">
       <MobileSidebar />
       <React.Suspense>
         <Breadcrumbs />
