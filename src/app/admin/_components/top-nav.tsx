@@ -17,7 +17,7 @@ import { Breadcrumbs } from "./breadcrumbs"
 import DropddownSignOutItem from "./dropdown-sign-out-item"
 import { MobileSidebar } from "./mobile-sidebar"
 
-export const AdminHeader = async () => {
+const TopNav = async () => {
   const user = await currentUser()
 
   const avatarFallback =
@@ -28,7 +28,7 @@ export const AdminHeader = async () => {
       .join("") ?? ""
 
   return (
-    <header className="z-30 flex h-[54px] items-center gap-4 border-b bg-background/80 p-4 backdrop-blur-sm">
+    <nav className="fixed inset-x-0 top-0 z-30 flex h-[54px] items-center gap-4 border-b bg-background p-4 md:inset-x-auto md:w-[calc(100%-53px)]">
       <MobileSidebar />
       <React.Suspense>
         <Breadcrumbs />
@@ -64,6 +64,8 @@ export const AdminHeader = async () => {
           </React.Suspense>
         </DropdownMenuContent>
       </DropdownMenu>
-    </header>
+    </nav>
   )
 }
+
+export default TopNav

@@ -32,7 +32,7 @@ const ProductInventoryForm = () => {
             name="manageInventory"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border pl-4 shadow-sm transition-all hover:bg-accent hover:text-accent-foreground">
+              <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border bg-background pl-4 shadow-sm transition-all hover:bg-accent hover:text-accent-foreground">
                 <FormControl>
                   <Checkbox
                     checked={field.value}

@@ -20,7 +20,7 @@ export const Sidebar = () => {
 
   return (
     <motion.aside
-      className="absolute inset-y-0 left-0 z-50 hidden space-y-4 border-r bg-background/80 backdrop-blur-sm hover:shadow-sm hover:drop-shadow-sm md:flex md:flex-col"
+      className="fixed inset-y-0 left-0 z-50 hidden space-y-4 border-r bg-background hover:shadow-sm hover:drop-shadow-sm md:flex md:flex-col"
       transition={{ duration: 0.15 }}
       onMouseEnter={() => setIsExpanded(true)}
       onMouseLeave={() => setIsExpanded(false)}

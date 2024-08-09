@@ -100,10 +100,10 @@ const ProductForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="mb-4 space-y-4 lg:space-y-0 lg:px-6"
+        className="-mt-4 mb-4 md:space-y-4 lg:space-y-0 lg:px-6"
       >
-        <div className="sticky top-0 z-10 w-full rounded-md border backdrop-blur-sm lg:border-none">
-          <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 p-4 sm:justify-start lg:px-0 lg:pt-0">
+        <div className="sticky top-[54px] z-10 -mx-4 w-screen bg-[#fafafa] dark:bg-background md:w-full">
+          <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 p-4 sm:justify-start lg:px-0">
             <Link
               href={"/admin/products"}
               className={cn(
@@ -156,9 +156,12 @@ const ProductForm = () => {
                 <DropdownMenuLabel className="text-xs">
                   Actions
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator className="my-0" />
+                <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  onClick={form.handleSubmit(onSubmit)}
+                  onClick={() => {
+                    form.handleSubmit(onSubmit)()
+                    setIsActionsMenuOpen(false)
+                  }}
                   disabled={isCreating || !form.formState.isDirty}
                   className="text-xs"
                 >
@@ -167,6 +170,7 @@ const ProductForm = () => {
                     <Icons.spinner className="ml-auto size-3" />
                   ) : null}
                 </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="text-xs"
                   disabled={isCreating || !form.formState.isDirty}
