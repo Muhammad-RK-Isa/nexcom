@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useRouter } from "next-nprogress-bar"
 
 import type {
   CompleteTableProducts,
@@ -24,6 +25,8 @@ interface ProductsTableProps {
 }
 
 export function ProductsTable({ tableProducts }: ProductsTableProps) {
+  const router = useRouter()
+
   // Feature flags for showcasing some additional features. Feel free to remove them.
   const { featureFlags } = useProductsTable()
 
@@ -79,6 +82,8 @@ export function ProductsTable({ tableProducts }: ProductsTableProps) {
           <ProductsTableFloatingBar table={table} />
         ) : null
       }
+      rowLinkBasePath="/admin/products"
+      rowIdentifierKey="id"
     >
       {featureFlags.includes("advancedFilter") ? (
         <DataTableAdvancedToolbar table={table} filterFields={filterFields}>

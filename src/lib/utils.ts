@@ -127,9 +127,10 @@ export function formatId(id: number) {
 export function slugify(str: string) {
   return str
     .toLowerCase()
-    .replace(/ /g, "-")
+    .replace(/\s+/g, "-")
     .replace(/[^\w-]+/g, "")
-    .replace(/-$/, "")
+    .replace(/--+/g, "-")
+    .replace(/^-+|-+$/g, "")
 }
 
 export function unslugify(str: string) {

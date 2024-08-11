@@ -1,8 +1,12 @@
 import React from "react"
 import Image from "next/image"
-import { useFormContext } from "react-hook-form"
+import {
+  useFieldArray,
+  useFormContext,
+  type UseFormReturn,
+} from "react-hook-form"
 
-import type { UpdateProductInput } from "~/types"
+import type { CreateProductInput, UpdateProductInput } from "~/types"
 import { Button } from "~/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 // import ProductVariantFormModal from "./product-variant-modal"
@@ -26,9 +30,20 @@ import { ImageSelectModal } from "~/components/image-select-modal"
 
 import { ProductOptions } from "./product-options"
 
-export const ProductVariantsForm = () => {
-  const form = useFormContext<UpdateProductInput>()
+interface ProductVariantsFormProps {
+  form: UseFormReturn<CreateProductInput>
+}
+
+export const ProductVariantsForm: React.FC<ProductVariantsFormProps> = ({
+  form,
+}) => {
+  // const form = useFormContext<UpdateProductInput>()
   const { variants, options } = form.watch()
+
+  const { append, remove } = useFieldArray({
+    control: form.control,
+    name: "variants",
+  })
 
   return (
     <Card>

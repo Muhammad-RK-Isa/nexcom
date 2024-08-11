@@ -31,7 +31,6 @@ import ProductPricingForm from "./product-pricing"
 import ProductSEOForm from "./product-seo"
 import ProductShippingForm from "./product-shipping"
 import ProductStatusForm from "./product-status"
-import { ProductVariantsForm } from "./product-variants"
 
 const ProductForm = () => {
   const router = useRouter()
@@ -100,9 +99,9 @@ const ProductForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="-mt-4 mb-4 md:space-y-4 lg:space-y-0 lg:px-6"
+        className="-mt-4 md:space-y-4 lg:space-y-0 lg:px-6"
       >
-        <div className="sticky top-[54px] z-10 -mx-4 w-screen bg-[#fafafa] dark:bg-background md:w-full">
+        <div className="sticky top-[54px] z-10 -mx-4 w-screen bg-[#fafafa] dark:bg-background md:mx-0 md:w-full">
           <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 p-4 sm:justify-start lg:px-0">
             <Link
               href={"/admin/products"}

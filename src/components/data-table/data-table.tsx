@@ -1,5 +1,6 @@
 import * as React from "react"
 import { flexRender, type Table as TanstackTable } from "@tanstack/react-table"
+import { useRouter } from "next-nprogress-bar"
 
 import { cn } from "~/lib/utils"
 import {
@@ -26,6 +27,21 @@ interface DataTableProps<TData> extends React.HTMLAttributes<HTMLDivElement> {
    * @example floatingBar={<TasksTableFloatingBar table={table} />}
    */
   floatingBar?: React.ReactNode | null
+
+  /**
+   * The route to link to when a row is clicked.
+   * @example rowLinkRoute="/admin/products"
+   * @type string
+   */
+  rowLinkBasePath?: string
+
+  /**
+   * The key to use to identify the row in the table.
+   * @default "id"
+   * @example rowIdentifierKey="id"
+   * @type string
+   */
+  rowIdentifierKey?: keyof TData
 }
 
 export function DataTable<TData>({
@@ -33,8 +49,11 @@ export function DataTable<TData>({
   floatingBar = null,
   children,
   className,
+  rowLinkBasePath,
+  rowIdentifierKey,
   ...props
 }: DataTableProps<TData>) {
+  const router = useRouter()
   return (
     <div className={cn("w-full space-y-2.5", className)} {...props}>
       {children}
@@ -64,6 +83,21 @@ export function DataTable<TData>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className={cn(
+                    rowLinkBasePath ? "cursor-pointer" : "cursor-default"
+                  )}
+                  onClick={() => {
+                    if (
+                      table.getIsSomeRowsSelected() ||
+                      table.getIsAllRowsSelected()
+                    ) {
+                      row.toggleSelected(!row.getIsSelected())
+                    } else if (rowLinkBasePath && rowIdentifierKey) {
+                      router.push(
+                        `${rowLinkBasePath}/${row.original[rowIdentifierKey as keyof TData]}`
+                      )
+                    }
+                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

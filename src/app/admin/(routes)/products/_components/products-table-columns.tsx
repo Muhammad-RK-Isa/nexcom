@@ -36,7 +36,7 @@ export function getColumns(): ColumnDef<TableProduct>[] {
     {
       id: "select",
       header: ({ table }) => (
-        <div className="grid place-content-center">
+        <div className="ml-1 grid">
           <Checkbox
             checked={
               table.getIsAllPageRowsSelected() ||
@@ -50,11 +50,12 @@ export function getColumns(): ColumnDef<TableProduct>[] {
         </div>
       ),
       cell: ({ row }) => (
-        <div className="grid place-content-center">
+        <div className="ml-1 grid">
           <Checkbox
             checked={row.getIsSelected()}
             onCheckedChange={(value) => row.toggleSelected(!!value)}
             aria-label="Select row"
+            onClick={(e) => e.stopPropagation()}
           />
         </div>
       ),

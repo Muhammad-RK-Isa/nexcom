@@ -4,7 +4,7 @@ import { InputLableSkeleton } from "~/components/skeletons/input-label-skeleton"
 
 const ProductFormSkeleton = () => {
   return (
-    <div className="mx-auto grid max-w-6xl flex-1 auto-rows-max gap-6">
+    <div className="mx-auto grid max-w-5xl flex-1 auto-rows-max gap-6 p-4 lg:p-0">
       <div className="flex items-center gap-4">
         <Skeleton className="h-7 w-full md:h-8 md:w-1/4" />
         <Skeleton className="ml-auto h-7 w-full md:h-8 md:w-1/4" />
