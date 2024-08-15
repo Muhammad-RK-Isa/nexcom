@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form"
 
-import type { UpdateProductInput } from "~/types"
+import type { CreateProductInput } from "~/types"
 import { cn } from "~/lib/utils"
 import { buttonVariants } from "~/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
@@ -20,7 +20,7 @@ import {
 import { Input } from "~/components/ui/input"
 
 const ProductInventoryForm = () => {
-  const form = useFormContext<UpdateProductInput>()
+  const form = useFormContext<CreateProductInput>()
   return (
     <Card>
       <CardHeader>

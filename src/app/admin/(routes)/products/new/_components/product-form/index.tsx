@@ -31,6 +31,7 @@ import ProductPricingForm from "./product-pricing"
 import ProductSEOForm from "./product-seo"
 import ProductShippingForm from "./product-shipping"
 import ProductStatusForm from "./product-status"
+import { ProductVariantsForm } from "./product-variants"
 
 const ProductForm = () => {
   const router = useRouter()
@@ -187,7 +188,7 @@ const ProductForm = () => {
             <ProductPricingForm />
             <ProductInventoryForm />
             <ProductShippingForm />
-            {/* <ProductVariantsForm /> */}
+            <ProductVariantsForm />
             <ProductSEOForm />
           </div>
           <div className="grid auto-rows-max items-start gap-4">

@@ -1,7 +1,7 @@
 import React from "react"
 import { useFieldArray, useFormContext } from "react-hook-form"
 
-import type { UpdateProductInput } from "~/types"
+import type { CreateProductInput } from "~/types"
 import { cn, generateId } from "~/lib/utils"
 import { Button, buttonVariants } from "~/components/ui/button"
 import {
@@ -16,7 +16,7 @@ import { Icons } from "~/components/icons"
 import { ProductOption } from "./product-option"
 
 export const ProductOptions = () => {
-  const form = useFormContext<UpdateProductInput>()
+  const form = useFormContext<CreateProductInput>()
 
   const { append: addOption } = useFieldArray({
     control: form.control,
@@ -77,8 +77,9 @@ export const ProductOptions = () => {
         ) : null}
         <Button
           type="button"
-          variant={"link"}
-          className="rounded-t-none bg-muted/40 py-6 active:scale-100"
+          variant="secondary"
+          size="lg"
+          className={cn(options.length && "rounded-t-none")}
           onClick={() => {
             const newOptionId = generateId({ prefix: "opt" })
             addOption({

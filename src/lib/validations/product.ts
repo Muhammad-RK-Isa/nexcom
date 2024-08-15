@@ -188,16 +188,16 @@ export const productVariantSchema = z
   .object({
     title: z.string(),
     productImageId: z.string().nullable().optional(),
-    options: z.record(z.string()),
+    options: z.array(z.record(z.string())),
     image: imageSchema.nullable().optional(),
   })
   .extend(generalProductFields)
 
-export const updateProductSchema = baseProductSchema.extend({
-  options: z.array(productOptionSchema).optional().default([]),
-  variants: z.array(productVariantSchema).optional().default([]),
-})
-
-export const insertProductSchema = updateProductSchema.omit({
-  id: true,
-})
+export const insertProductSchema = baseProductSchema
+  .extend({
+    options: z.array(productOptionSchema).optional().default([]),
+    variants: z.array(productVariantSchema).optional().default([]),
+  })
+  .omit({
+    id: true,
+  })

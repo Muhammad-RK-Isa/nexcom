@@ -1,7 +1,7 @@
 import React from "react"
 import { useFieldArray, useFormContext, type Control } from "react-hook-form"
 
-import type { UpdateProductInput } from "~/types"
+import type { CreateProductInput } from "~/types"
 import { generateId } from "~/lib/utils"
 import { Button } from "~/components/ui/button"
 import {
@@ -22,7 +22,7 @@ import { Icons } from "~/components/icons"
 interface ProductOptionValuesProps {
   optionIdx: number
   optionId?: string
-  control: Control<UpdateProductInput>
+  control: Control<CreateProductInput>
   onFinishEditing: () => void
 }
 
@@ -32,7 +32,7 @@ export const ProductOptionValues: React.FC<ProductOptionValuesProps> = ({
   control,
   onFinishEditing,
 }) => {
-  const form = useFormContext<UpdateProductInput>()
+  const form = useFormContext<CreateProductInput>()
 
   const { options } = form.watch()
 
@@ -132,13 +132,7 @@ export const ProductOptionValues: React.FC<ProductOptionValuesProps> = ({
             <Icons.plus className="mr-2 size-4" />
             Add {optionValues.length > 0 ? "another" : "a"} value
           </Button>
-          <Button
-            type="button"
-            size={"sm"}
-            variant={"outline"}
-            onClick={() => onFinishEditing()}
-          >
-            <Icons.check className="mr-1.5 size-4" />
+          <Button type="button" size="sm" onClick={() => onFinishEditing()}>
             Done
           </Button>
         </div>

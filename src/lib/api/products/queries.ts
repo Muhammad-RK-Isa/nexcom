@@ -2,7 +2,18 @@ import "server-only"
 
 import { db } from "~/server/db"
 import { products } from "~/server/db/schema"
-import { and, asc, count, desc, gte, lte, or, sql, type SQL } from "drizzle-orm"
+import {
+  and,
+  asc,
+  count,
+  desc,
+  eq,
+  gte,
+  lte,
+  or,
+  sql,
+  type SQL,
+} from "drizzle-orm"
 
 import type {
   DrizzleWhere,
@@ -15,7 +26,7 @@ import type {
 import { filterColumn } from "~/lib/filter-column"
 
 export const getProducts = async (input: SearchProductParams) => {
-  const { page, per_page, sort, title, bestSelling, featured } = input
+  const { page, per_page, sort, title } = input
 
   try {
     // Offset to paginate the results
@@ -36,9 +47,12 @@ export const getProducts = async (input: SearchProductParams) => {
         .limit(per_page)
         .offset(offset)
         .where(
-          title
-            ? sql`to_tsvector('english', ${products.title}) @@ to_tsquery('english', ${title})`
-            : undefined
+          and(
+            title
+              ? sql`to_tsvector('english', ${products.title}) @@ to_tsquery('english', ${title})`
+              : undefined,
+            eq(products.status, "active")
+          )
         )
         .orderBy(
           column && column in products

@@ -28,9 +28,7 @@ export function useProductsTable() {
 }
 
 export function ProductsTableProvider({ children }: React.PropsWithChildren) {
-  const [featureFlags, setFeatureFlags] = React.useState<FeatureFlagValue[]>([
-    "floatingBar",
-  ])
+  const [featureFlags, setFeatureFlags] = React.useState<FeatureFlagValue[]>([])
 
   return (
     <ProductsTableContext.Provider

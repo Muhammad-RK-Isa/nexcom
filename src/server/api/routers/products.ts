@@ -8,7 +8,6 @@ import {
   createProduct,
   deleteProduct,
   deleteProducts,
-  updateProduct,
   updateProductsStatus,
   updateProductStatus,
 } from "~/lib/api/products/mutations"
@@ -25,7 +24,6 @@ import {
   productSlugSchema,
   searchProductParamsSchema,
   searchTableProductParamsSchema,
-  updateProductSchema,
   updateProductsStatusSchema,
   updateProductStatusSchema,
 } from "~/lib/validations/product"
@@ -46,9 +44,6 @@ export const productsRouter = createTRPCRouter({
   createProduct: adminProcedure
     .input(insertProductSchema)
     .mutation(async ({ input }) => createProduct(input)),
-  updateProduct: adminProcedure
-    .input(updateProductSchema)
-    .mutation(async ({ input }) => updateProduct(input)),
   updateProductStatus: adminProcedure
     .input(updateProductStatusSchema)
     .mutation(async ({ input }) => updateProductStatus(input)),

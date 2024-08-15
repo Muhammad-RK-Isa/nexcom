@@ -36,7 +36,6 @@ import type {
   searchImageParamsSchema,
   searchProductParamsSchema,
   searchTableProductParamsSchema,
-  updateProductSchema,
   updateProductsStatusSchema,
   updateProductStatusSchema,
 } from "~/lib/validations/product"
@@ -97,7 +96,6 @@ export type ResendEmailVerificationCode = z.infer<
 export type ProductId = z.infer<typeof productIdSchema>
 export type ProductSlug = z.infer<typeof productSlugSchema>
 export type CreateProductInput = z.infer<typeof insertProductSchema>
-export type UpdateProductInput = z.infer<typeof updateProductSchema>
 export type UpdateProductStatusInput = z.infer<typeof updateProductStatusSchema>
 export type UpdateProductsStatusInput = z.infer<
   typeof updateProductsStatusSchema

@@ -2,7 +2,7 @@ import React from "react"
 import { type Metadata } from "next"
 
 import type { SearchParams } from "~/types"
-import { searchProductParamsSchema } from "~/lib/validations/product"
+import { searchTableProductParamsSchema } from "~/lib/validations/product"
 import { DataTableSkeleton } from "~/components/skeletons/data-table-skeleton"
 import { api } from "~/trpc/server"
 
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 }
 
 const ProductsPage: React.FC<ProductsPageProps> = async ({ searchParams }) => {
-  const search = searchProductParamsSchema.parse(searchParams)
+  const search = searchTableProductParamsSchema.parse(searchParams)
   const tableProducts = await api.products.getTableProducts(search)
   return (
     <ProductsTableProvider>

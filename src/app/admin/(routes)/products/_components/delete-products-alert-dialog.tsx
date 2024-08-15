@@ -44,6 +44,7 @@ export function DeleteProductsAlertDialog({
           : "One product deleted"
       toast.success(message)
       onSuccess?.()
+      props.onOpenChange?.(false)
       router.refresh()
     },
   })

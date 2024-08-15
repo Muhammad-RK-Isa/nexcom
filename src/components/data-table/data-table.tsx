@@ -42,6 +42,14 @@ interface DataTableProps<TData> extends React.HTMLAttributes<HTMLDivElement> {
    * @type string
    */
   rowIdentifierKey?: keyof TData
+
+  /**
+   * The key to use to identify the row in the table.
+   * @default "title"
+   * @example rowLinkCell="title"
+   * @type string
+   */
+  rowLinkCell?: keyof TData
 }
 
 export function DataTable<TData>({
@@ -51,6 +59,7 @@ export function DataTable<TData>({
   className,
   rowLinkBasePath,
   rowIdentifierKey,
+  rowLinkCell,
   ...props
 }: DataTableProps<TData>) {
   const router = useRouter()
@@ -83,24 +92,30 @@ export function DataTable<TData>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className={cn(
-                    rowLinkBasePath ? "cursor-pointer" : "cursor-default"
-                  )}
-                  onClick={() => {
-                    if (
-                      table.getIsSomeRowsSelected() ||
-                      table.getIsAllRowsSelected()
-                    ) {
-                      row.toggleSelected(!row.getIsSelected())
-                    } else if (rowLinkBasePath && rowIdentifierKey) {
-                      router.push(
-                        `${rowLinkBasePath}/${row.original[rowIdentifierKey as keyof TData]}`
-                      )
-                    }
-                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      className={cn(
+                        rowLinkCell === cell.column.id
+                          ? "cursor-pointer"
+                          : "cursor-default"
+                      )}
+                      onClick={() => {
+                        if (rowLinkCell !== cell.column.id) {
+                          return
+                        } else if (
+                          table.getIsSomeRowsSelected() ||
+                          table.getIsAllRowsSelected()
+                        ) {
+                          row.toggleSelected(!row.getIsSelected())
+                        } else if (rowLinkBasePath && rowIdentifierKey) {
+                          router.push(
+                            `${rowLinkBasePath}/${row.original[rowIdentifierKey as keyof TData]}`
+                          )
+                        }
+                      }}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

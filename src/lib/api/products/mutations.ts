@@ -14,15 +14,14 @@ import { eq, inArray } from "drizzle-orm"
 import type {
   CreateProductInput,
   ProductId,
-  ProductOptionValue,
-  UpdateProductInput,
   UpdateProductsStatusInput,
   UpdateProductStatusInput,
 } from "~/types"
 
 export const createProduct = async (product: CreateProductInput) => {
   try {
-    const p = await db.transaction(async (tx) => {
+    const productWithRelations = await db.transaction(async (tx) => {
+      // Insert product general information
       const [productRecord] = await tx
         .insert(products)
         .values({
@@ -38,47 +37,111 @@ export const createProduct = async (product: CreateProductInput) => {
         })
         .returning()
 
-      if (productRecord) {
+      if (!productRecord) throw new Error("Failed to create product")
+
+      const productId = productRecord.id
+
+      // Insert product images
+      const images = await Promise.all(
         product.images?.map(
           async (image) =>
-            await tx.insert(productsImages).values({
-              imageId: image.id,
-              productId: productRecord.id,
-              rank: product.images?.findIndex((i) => i.id === image.id),
-            })
-        )
+            await tx
+              .insert(productsImages)
+              .values({
+                imageId: image.id,
+                productId,
+                rank: product.images?.findIndex((i) => i.id === image.id),
+              })
+              .returning()
+        ) || []
+      )
 
-        for (const option of product.options) {
+      // Insert options and their values
+      const optionsWithValues = await Promise.all(
+        product.options.map(async (option) => {
           const [newOption] = await tx
             .insert(productOptions)
             .values({
-              title: option.title,
               id: option.id,
+              title: option.title,
               rank: option.rank,
-              productId: productRecord.id,
+              productId,
             })
             .returning()
 
-          if (newOption)
-            for (const value of option.values) {
-              await tx.insert(productOptionValues).values({
-                ...value,
-                optionId: newOption.id,
-              })
-            }
-        }
-        return productRecord
+          if (!newOption) throw new Error("Failed to create product option")
+
+          const optionValues = await Promise.all(
+            option.values.map(async (value) => {
+              const [newValue] = await tx
+                .insert(productOptionValues)
+                .values({
+                  ...value,
+                  optionId: newOption.id,
+                })
+                .returning()
+              return newValue
+            })
+          )
+
+          return {
+            ...newOption,
+            values: optionValues,
+          }
+        })
+      )
+
+      // Insert variants and their options
+      const variantsWithOptions = await Promise.all(
+        product.variants.map(async (variant) => {
+          const [v] = await tx
+            .insert(productVariants)
+            .values({
+              ...variant,
+              productId,
+              imageId: variant.image?.id,
+              weight: variant.weight.value,
+              weightUnit: variant.weight.unit,
+              length: variant.length?.value ?? null,
+              lengthUnit: variant.length?.unit,
+              height: variant.height?.value ?? null,
+              heightUnit: variant.height?.unit,
+              width: variant.width?.value ?? null,
+              widthUnit: variant.width?.unit,
+            })
+            .returning()
+
+          if (!v) throw new Error("Failed to create product variant")
+
+          const variantOptions = await Promise.all(
+            variant.options.map(async (option) => {
+              const valueId = Object.values(option)[0]
+              if (valueId) {
+                await tx.insert(variantsOptionValues).values({
+                  variantId: v.id,
+                  optionValueId: valueId,
+                })
+              }
+              return { optionId: Object.keys(option)[0], valueId }
+            })
+          )
+
+          return {
+            ...v,
+            options: variantOptions,
+          }
+        })
+      )
+
+      return {
+        ...productRecord,
+        images,
+        options: optionsWithValues,
+        variants: variantsWithOptions,
       }
     })
-    return { product: p }
-  } catch (err) {
-    throw err
-  }
-}
 
-export const updateProduct = async (product: UpdateProductInput) => {
-  try {
-    return true
+    return { product: productWithRelations }
   } catch (err) {
     throw err
   }

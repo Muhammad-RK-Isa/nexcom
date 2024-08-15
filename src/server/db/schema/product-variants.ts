@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm"
-import { pgTable, varchar } from "drizzle-orm/pg-core"
+import { pgTable, real, varchar } from "drizzle-orm/pg-core"
 
 import { generateId } from "~/lib/utils"
 
@@ -21,6 +21,7 @@ export const productVariants = pgTable("product_variants", {
     onDelete: "set null",
   }),
   ...productFields,
+  weight: real("weight"),
   ...lifecycleDates,
 })
 

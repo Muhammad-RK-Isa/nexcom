@@ -1,7 +1,7 @@
 import React from "react"
 import { useFormContext, type Control } from "react-hook-form"
 
-import type { UpdateProductInput } from "~/types"
+import type { CreateProductInput } from "~/types"
 import { cn } from "~/lib/utils"
 import { Badge } from "~/components/ui/badge"
 import { Button } from "~/components/ui/button"
@@ -19,7 +19,7 @@ import { Icons } from "~/components/icons"
 import { ProductOptionValues } from "./product-option-values"
 
 interface ProductOptionProps {
-  control: Control<UpdateProductInput>
+  control: Control<CreateProductInput>
   optionIndex: number
   optionId: string
   defaultExpanded?: boolean
@@ -33,8 +33,8 @@ export const ProductOption: React.FC<ProductOptionProps> = ({
 }) => {
   const [isExpanded, setIsExpanded] = React.useState(defaultExpanded)
 
-  const form = useFormContext<UpdateProductInput>()
-  const { options, variants } = form.watch()
+  const form = useFormContext<CreateProductInput>()
+  const { options } = form.watch()
 
   const option = options.find((o) => o.id === optionId)
 
@@ -125,7 +125,7 @@ export const ProductOption: React.FC<ProductOptionProps> = ({
               onClick={() => setIsExpanded(true)}
               className="ml-auto px-2"
             >
-              <Icons.edit className="mr-2 size-4 text-muted-foreground" />
+              <Icons.edit className="mr-2 size-3.5 text-muted-foreground" />
               Edit
             </Button>
           </div>

@@ -271,11 +271,11 @@ export function Images({
       <CardContent>
         {files.length ? (
           <ScrollArea className="h-fit">
-            <div className="grid h-full max-h-[40vh] grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            <div className="grid h-full max-h-[40vh] grid-cols-2 gap-4 p-px sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
               {files.map((file) => (
-                <div
+                <button
                   key={file.id}
-                  className="group flex flex-col items-center space-y-2 rounded-md border bg-secondary p-4 transition-colors hover:bg-secondary/80 dark:bg-secondary/40"
+                  className="group flex flex-col items-center space-y-2 rounded-md border bg-secondary p-4 transition-colors hover:bg-secondary/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring dark:bg-secondary/40"
                   onClick={() => handleSelect(file)}
                 >
                   <div className="relative size-28 rounded-md shadow-sm drop-shadow-sm">
@@ -284,7 +284,6 @@ export function Images({
                       alt={file.name}
                       fill
                       sizes="(min-width: 640px) 640px, 100vw"
-                      loading="lazy"
                       className="rounded-md object-cover"
                     />
                     <Checkbox
@@ -294,15 +293,15 @@ export function Images({
                         "absolute left-2 top-2 z-20 dark:border-background data-[state=checked]:dark:bg-background data-[state=checked]:dark:text-foreground",
                         selectedImages.find((f) => f.id === file.id)
                           ? "opacity-100"
-                          : "opacity-0 group-hover:opacity-100"
+                          : "opacity-0 group-hover:opacity-100 group-focus:opacity-100"
                       )}
                     />
-                    <div className="absolute inset-y-0 z-10 size-full rounded-md bg-[#09090b] bg-opacity-0 transition-all duration-150 group-hover:md:bg-opacity-40" />
+                    <div className="absolute inset-y-0 z-10 size-full rounded-md bg-[#09090b] bg-opacity-0 transition-all duration-75 group-hover:dark:bg-opacity-30 group-hover:md:bg-opacity-10" />
                   </div>
                   <div className="line-clamp-2 cursor-default break-all text-center text-xs">
                     {file.name}
                   </div>
-                </div>
+                </button>
               ))}
             </div>
           </ScrollArea>

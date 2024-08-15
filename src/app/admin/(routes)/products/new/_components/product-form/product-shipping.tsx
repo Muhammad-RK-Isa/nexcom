@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form"
 
-import type { UpdateProductInput } from "~/types"
+import type { CreateProductInput } from "~/types"
 import countries from "~/lib/countries.json"
 import { sizeUnits, weightUnits } from "~/lib/validations/product"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
@@ -21,7 +21,7 @@ import {
 } from "~/components/ui/select"
 
 const ProductShippingForm = () => {
-  const form = useFormContext<UpdateProductInput>()
+  const form = useFormContext<CreateProductInput>()
   return (
     <Card>
       <CardHeader>
@@ -228,11 +228,11 @@ const ProductShippingForm = () => {
                 )}
               />
             </div>
-            {form.getFieldState("length").error ? (
+            {form.getFieldState("width").error ? (
               <p className="text-[0.8rem] font-medium text-destructive">
-                {form.getFieldState("length.value").error?.message}
+                {form.getFieldState("width.value").error?.message}
                 <br />
-                {form.getFieldState("length.unit").error?.message}
+                {form.getFieldState("width.unit").error?.message}
               </p>
             ) : null}
           </div>

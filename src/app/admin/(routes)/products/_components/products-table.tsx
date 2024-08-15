@@ -25,8 +25,6 @@ interface ProductsTableProps {
 }
 
 export function ProductsTable({ tableProducts }: ProductsTableProps) {
-  const router = useRouter()
-
   // Feature flags for showcasing some additional features. Feel free to remove them.
   const { featureFlags } = useProductsTable()
 
@@ -77,13 +75,10 @@ export function ProductsTable({ tableProducts }: ProductsTableProps) {
   return (
     <DataTable
       table={table}
-      floatingBar={
-        featureFlags.includes("floatingBar") ? (
-          <ProductsTableFloatingBar table={table} />
-        ) : null
-      }
+      floatingBar={<ProductsTableFloatingBar table={table} />}
       rowLinkBasePath="/admin/products"
       rowIdentifierKey="id"
+      rowLinkCell="title"
     >
       {featureFlags.includes("advancedFilter") ? (
         <DataTableAdvancedToolbar table={table} filterFields={filterFields}>

@@ -20,12 +20,12 @@ export const Sidebar = () => {
 
   return (
     <motion.aside
-      className="fixed inset-y-0 left-0 z-50 hidden space-y-4 border-r bg-background hover:shadow-sm hover:drop-shadow-sm md:flex md:flex-col"
+      className="fixed inset-y-0 left-0 z-50 hidden space-y-2 border-r bg-background hover:shadow-sm hover:drop-shadow-sm md:flex md:flex-col"
       transition={{ duration: 0.15 }}
       onMouseEnter={() => setIsExpanded(true)}
       onMouseLeave={() => setIsExpanded(false)}
       initial={{ width: 54 }}
-      animate={{ width: isExpanded ? 192 : 54 }}
+      animate={{ width: isExpanded ? 208 : 54 }}
     >
       <div className="flex h-[54px] items-center border-b pl-5 text-xl font-semibold uppercase">
         <Link href={Paths.Storefront} className="flex items-center">

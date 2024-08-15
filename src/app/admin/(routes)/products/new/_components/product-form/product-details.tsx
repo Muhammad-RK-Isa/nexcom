@@ -2,7 +2,7 @@ import React from "react"
 import { useFormContext } from "react-hook-form"
 import { toast } from "sonner"
 
-import type { UpdateProductInput } from "~/types"
+import type { CreateProductInput } from "~/types"
 import { slugify } from "~/lib/utils"
 import { Button } from "~/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
@@ -20,7 +20,7 @@ import { ImageSelectModal } from "~/components/image-select-modal"
 import Images from "~/components/images"
 
 const ProductDetailsForm = () => {
-  const form = useFormContext<UpdateProductInput>()
+  const form = useFormContext<CreateProductInput>()
   const { title } = form.watch()
 
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false)
@@ -78,7 +78,8 @@ const ProductDetailsForm = () => {
               </FormItem>
             )}
           />
-          <FormField
+          {/* TODO: Uncomment content field. It's commented for performance reasons */}
+          {/* <FormField
             name="content"
             control={form.control}
             render={({ field }) => (
@@ -88,7 +89,7 @@ const ProductDetailsForm = () => {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
           <FormField
             control={form.control}
             name="images"

@@ -55,7 +55,6 @@ export function getColumns(): ColumnDef<TableProduct>[] {
             checked={row.getIsSelected()}
             onCheckedChange={(value) => row.toggleSelected(!!value)}
             aria-label="Select row"
-            onClick={(e) => e.stopPropagation()}
           />
         </div>
       ),
@@ -188,7 +187,7 @@ export function getColumns(): ColumnDef<TableProduct>[] {
           })
 
         return (
-          <React.Fragment>
+          <>
             <DeleteProductsAlertDialog
               open={showDeleteProductAlertDialog}
               onOpenChange={setShowDeleteProductAlertDialog}
@@ -257,7 +256,7 @@ export function getColumns(): ColumnDef<TableProduct>[] {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          </React.Fragment>
+          </>
         )
       },
     },
