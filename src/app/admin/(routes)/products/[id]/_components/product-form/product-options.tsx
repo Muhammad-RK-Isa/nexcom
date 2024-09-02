@@ -1,7 +1,7 @@
 import React from "react"
 import { useFieldArray, useFormContext } from "react-hook-form"
 
-import type { CreateProductInput } from "~/types"
+import type { UpdateProductInput } from "~/types"
 import { cn, generateId } from "~/lib/utils"
 import { Button, buttonVariants } from "~/components/ui/button"
 import {
@@ -16,7 +16,7 @@ import { Icons } from "~/components/icons"
 import { ProductOption } from "./product-option"
 
 export const ProductOptions = () => {
-  const form = useFormContext<CreateProductInput>()
+  const form = useFormContext<UpdateProductInput>()
 
   const { append: addOption } = useFieldArray({
     control: form.control,

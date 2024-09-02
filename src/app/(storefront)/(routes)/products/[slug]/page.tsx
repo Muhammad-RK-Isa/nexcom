@@ -1,9 +1,6 @@
 import React from "react"
 import { type Metadata } from "next"
 import { notFound } from "next/navigation"
-import { db } from "~/server/db"
-import { products } from "~/server/db/schema"
-import { eq } from "drizzle-orm"
 
 import { toTitleCase } from "~/lib/utils"
 import { env } from "~/env"
@@ -22,13 +19,7 @@ export async function generateMetadata({
 }: ProductPageProps): Promise<Metadata> {
   const slug = decodeURIComponent(params.slug)
 
-  const product = await db.query.products.findFirst({
-    columns: {
-      metaTitle: true,
-      description: true,
-    },
-    where: eq(products.slug, slug),
-  })
+  const product = await api.products.getProductMetadataBySlug({ slug })
 
   if (!product) {
     return {}
@@ -36,13 +27,20 @@ export async function generateMetadata({
 
   return {
     metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
-    title: toTitleCase(product.metaTitle),
+    title: toTitleCase(product.title),
     description: product.description,
+    openGraph: product.image
+      ? {
+          title: product.title,
+          description: product.description,
+          images: [product.image.url],
+        }
+      : undefined,
   }
 }
 
 const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
-  const product = await api.products.getProductBySlug(params)
+  const product = await api.products.getPublicProduct(params)
   const cart = await api.carts.getCart()
 
   if (!product) return notFound()

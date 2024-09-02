@@ -6,7 +6,6 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-
 import { initTRPC, TRPCError } from "@trpc/server"
 import { getServerAuthSession } from "~/server/auth"
 import { db } from "~/server/db"
@@ -29,7 +28,6 @@ import { UserRole } from "../db/schema"
  */
 export const createTRPCContext = async (opts: { headers: Headers }) => {
   const session = await getServerAuthSession()
-
   return {
     db,
     session,
@@ -98,7 +96,10 @@ export const publicProcedure = t.procedure
  */
 export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
   if (!ctx.session || !ctx.session.user) {
-    throw new TRPCError({ code: "UNAUTHORIZED" })
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "You must be logged in to perform this action",
+    })
   }
   return next({
     ctx: {
@@ -122,7 +123,10 @@ export const adminProcedure = t.procedure.use(({ ctx, next }) => {
     !ctx.session.user ||
     ctx.session.user.role !== UserRole.Values.admin
   ) {
-    throw new TRPCError({ code: "UNAUTHORIZED" })
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "You do not have permission to perform this action",
+    })
   }
   return next({
     ctx: {

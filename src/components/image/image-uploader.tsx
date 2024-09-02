@@ -1,14 +1,19 @@
 "use client"
 
 import * as React from "react"
+import Image from "next/image"
 import Dropzone, {
   type DropzoneProps,
   type FileRejection,
 } from "react-dropzone"
 import { toast } from "sonner"
 
+import { getErrorMessage } from "~/lib/handle-error"
 import { useControllableState } from "~/lib/hooks/use-controllable-state"
 import { cn, formatBytes } from "~/lib/utils"
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
+import { Progress } from "~/components/ui/progress"
+import { ScrollArea } from "~/components/ui/scroll-area"
 import { Icons } from "~/components/icons"
 
 interface ImageUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -122,6 +127,7 @@ export function ImageUploader(props: ImageUploaderProps) {
     disabled = false,
     isUploading,
     className,
+    progresses,
     ...dropzoneProps
   } = props
 
@@ -153,8 +159,23 @@ export function ImageUploader(props: ImageUploaderProps) {
       setFiles(updatedFiles)
 
       if (rejectedFiles.length > 0) {
-        rejectedFiles.forEach(({ file }) => {
-          toast.error(`File ${file.name} was rejected`)
+        rejectedFiles.forEach(({ file, errors }) => {
+          toast.error(
+            <div className="font-medium">
+              <span>{`File ${file.name} was rejected due to the following errors:`}</span>
+              <ul className="list-disc space-y-1 p-2 text-[0.8rem]">
+                {errors.map((error) => (
+                  <li key={error.code} className="ml-4">
+                    {error.code === "file-too-large"
+                      ? error.message.replace(/(\d+) bytes/, (_, bytes) =>
+                          formatBytes(bytes)
+                        )
+                      : error.message}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
         })
       }
 
@@ -163,17 +184,12 @@ export function ImageUploader(props: ImageUploaderProps) {
         updatedFiles.length > 0 &&
         updatedFiles.length <= maxFiles
       ) {
-        const target =
-          updatedFiles.length > 1 ? `${updatedFiles.length} files` : `1 file`
-
-        toast.promise(onUpload(updatedFiles), {
-          loading: `Uploading ${target}`,
-          success: () => {
-            setFiles([])
-            return `${target} uploaded`
-          },
-          error: `Failed to upload ${target}`,
-        })
+        try {
+          await onUpload(updatedFiles)
+          setFiles([])
+        } catch (error) {
+          toast.error(getErrorMessage(error))
+        }
       }
     },
     [files, maxFiles, multiple, onUpload, setFiles]
@@ -216,53 +232,99 @@ export function ImageUploader(props: ImageUploaderProps) {
             )}
             {...dropzoneProps}
           >
-            {isUploading ? (
-              <div className="flex items-center text-xl opacity-50">
-                <Icons.spinner className="mr-2 size-6" />
-                File upload in progress
+            <input {...getInputProps()} />
+            {isDragActive ? (
+              <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
+                <div className="rounded-full border border-dashed p-3">
+                  <Icons.upload
+                    className="size-7 text-muted-foreground"
+                    aria-hidden="true"
+                  />
+                </div>
+                <p className="font-medium text-muted-foreground">
+                  Drop the files here
+                </p>
               </div>
             ) : (
-              <>
-                <input {...getInputProps()} />
-                {isDragActive ? (
-                  <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
-                    <div className="rounded-full border border-dashed p-3">
-                      <Icons.upload
-                        className="size-7 text-muted-foreground"
-                        aria-hidden="true"
-                      />
-                    </div>
-                    <p className="font-medium text-muted-foreground">
-                      Drop the files here
-                    </p>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
-                    <div className="rounded-full border border-dashed p-3">
-                      <Icons.upload
-                        className="size-7 text-muted-foreground"
-                        aria-hidden="true"
-                      />
-                    </div>
-                    <div className="space-y-px">
-                      <p className="font-medium text-muted-foreground">
-                        Drag {`'n'`} drop files here, or click to select files
-                      </p>
-                      <p className="text-sm text-muted-foreground/70">
-                        You can upload
-                        {maxFiles > 1
-                          ? ` ${maxFiles === Infinity ? "multiple" : maxFiles}
+              <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
+                <div className="rounded-full border border-dashed p-3">
+                  <Icons.upload
+                    className="size-7 text-muted-foreground"
+                    aria-hidden="true"
+                  />
+                </div>
+                <div className="space-y-px">
+                  <p className="font-medium text-muted-foreground">
+                    Drag {`'n'`} drop files here, or click to select files
+                  </p>
+                  <p className="text-sm text-muted-foreground/70">
+                    You can upload
+                    {maxFiles > 1
+                      ? ` ${maxFiles === Infinity ? "multiple" : maxFiles}
                       files (up to ${formatBytes(maxSize)} each)`
-                          : ` a file with ${formatBytes(maxSize)}`}
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </>
+                      : ` a file with ${formatBytes(maxSize)}`}
+                  </p>
+                </div>
+              </div>
             )}
           </div>
         )}
       </Dropzone>
+      {files?.length ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>Files to be uploaded</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="h-fit w-full px-3">
+              <div className="max-h-48 space-y-4">
+                {files?.map((file, index) => (
+                  <FileCard
+                    key={index}
+                    file={file}
+                    progress={progresses?.[file.name]}
+                  />
+                ))}
+              </div>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+      ) : null}
+    </div>
+  )
+}
+
+interface FileCardProps {
+  file: File
+  progress?: number
+}
+
+function FileCard({ file, progress }: FileCardProps) {
+  return (
+    <div className="relative flex items-center space-x-4">
+      <div className="flex flex-1 space-x-4">
+        {isFileWithPreview(file) ? (
+          <Image
+            src={file.preview}
+            alt={file.name}
+            width={48}
+            height={48}
+            loading="lazy"
+            className="aspect-square shrink-0 rounded-md object-cover"
+          />
+        ) : null}
+        <div className="flex w-full flex-col gap-2">
+          <div className="space-y-px">
+            <p className="line-clamp-1 text-sm font-medium text-foreground/80">
+              {file.name}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {formatBytes(file.size)}
+            </p>
+          </div>
+          <Progress value={progress} />
+        </div>
+      </div>
     </div>
   )
 }

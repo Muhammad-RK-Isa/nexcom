@@ -5,6 +5,7 @@
   pointer-events: none;
   height: 0;
 }
+
 .ProseMirror .is-empty::before {
   content: attr(data-placeholder);
   float: left;
@@ -81,11 +82,11 @@ ul[data-type="taskList"] li > label input[type="checkbox"] {
   display: grid;
   place-content: center;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: hsl(var(--accent));
   }
 
-  &:active {
+  &:active:not(:disabled) {
     background-color: hsl(var(--accent));
   }
 

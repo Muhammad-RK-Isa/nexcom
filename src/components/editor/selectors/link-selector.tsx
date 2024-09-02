@@ -3,6 +3,7 @@ import { useEditor } from "novel"
 
 import { cn, getUrlFromString } from "~/lib/utils"
 import { Button } from "~/components/ui/button"
+import { Input } from "~/components/ui/input"
 import {
   Popover,
   PopoverContent,
@@ -43,33 +44,34 @@ export const LinkSelector = ({ open, onOpenChange }: LinkSelectorProps) => {
           </p>
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="start" className="w-60 p-0" sideOffset={10}>
+      <PopoverContent align="start" className="w-full p-0" sideOffset={10}>
         <form
+          className="flex items-center space-x-2 p-1"
           onSubmit={(e) => {
-            const target = e.currentTarget as HTMLFormElement
             e.preventDefault()
-            const input = target[0] as HTMLInputElement
+            const input = inputRef.current
+            if (!input) return
             const url = getUrlFromString(input.value)
             if (url) {
               editor.chain().focus().setLink({ href: url }).run()
               onOpenChange(false)
             }
+            e.stopPropagation()
           }}
-          className="flex p-1"
         >
-          <input
+          <Input
             ref={inputRef}
             type="text"
             placeholder="Paste a link"
-            className="flex-1 bg-background p-1 text-sm outline-none"
+            className="h-8 w-min"
             defaultValue={editor.getAttributes("link").href || ""}
           />
           {editor.getAttributes("link").href ? (
             <Button
-              size="icon"
-              variant="outline"
               type="button"
-              className="flex h-8 items-center rounded-sm p-1 text-red-600 transition-all hover:bg-red-100 dark:hover:bg-red-800"
+              size="icon"
+              variant="destructive"
+              className="size-8"
               onClick={() => {
                 editor.chain().focus().unsetLink().run()
                 onOpenChange(false)
@@ -78,7 +80,7 @@ export const LinkSelector = ({ open, onOpenChange }: LinkSelectorProps) => {
               <Icons.trash className="size-4" />
             </Button>
           ) : (
-            <Button size="icon" className="h-8">
+            <Button type="submit" size="icon" className="size-8">
               <Icons.check className="size-4" />
             </Button>
           )}

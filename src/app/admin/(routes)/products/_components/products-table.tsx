@@ -1,13 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { useRouter } from "next-nprogress-bar"
 
-import type {
-  CompleteTableProducts,
-  DataTableFilterField,
-  TableProduct,
-} from "~/types"
+import type { DataTableFilterField, TableProduct, TableProducts } from "~/types"
 import { useDataTable } from "~/lib/hooks/use-data-table"
 import { productStatuses } from "~/lib/validations/product"
 import { DataTableAdvancedToolbar } from "~/components/data-table/advanced/data-table-advanced-toolbar"
@@ -21,7 +16,7 @@ import { useProductsTable } from "./products-table-provider"
 import { ProductsTableToolbarActions } from "./products-table-toolbar-actions"
 
 interface ProductsTableProps {
-  tableProducts: CompleteTableProducts
+  tableProducts: TableProducts
 }
 
 export function ProductsTable({ tableProducts }: ProductsTableProps) {

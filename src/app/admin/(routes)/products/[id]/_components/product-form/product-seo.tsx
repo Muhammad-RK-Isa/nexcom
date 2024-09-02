@@ -3,7 +3,7 @@
 import { useFormContext } from "react-hook-form"
 import { toast } from "sonner"
 
-import type { CreateProductInput } from "~/types"
+import type { UpdateProductInput } from "~/types"
 import { Button } from "~/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import {
@@ -19,7 +19,7 @@ import { Textarea } from "~/components/ui/textarea"
 import { Icons } from "~/components/icons"
 
 const ProductSEOForm = () => {
-  const form = useFormContext<CreateProductInput>()
+  const form = useFormContext<UpdateProductInput>()
   const { title, metaTitle, description } = form.watch()
   return (
     <Card>

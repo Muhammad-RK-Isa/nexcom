@@ -16,7 +16,8 @@ import {
   imageIdSchema,
   imageIdsSchema,
   insertImageSchema,
-  searchImageParamsSchema,
+  insertImagesSchema,
+  searchTableImageParamsSchema,
 } from "~/lib/validations/product"
 
 export const imagesRouter = createTRPCRouter({
@@ -29,15 +30,26 @@ export const imagesRouter = createTRPCRouter({
     return getAllImages()
   }),
   getTableImages: adminProcedure
-    .input(searchImageParamsSchema)
+    .input(searchTableImageParamsSchema)
     .query(async ({ input }) => {
       return getTableImages(input)
     }),
-  createImage: publicProcedure
+  insertImage: adminProcedure
     .input(insertImageSchema)
     .mutation(async ({ input, ctx }) => {
-      const image = await ctx.db.insert(images).values(input)
-      return image
+      const [r] = await ctx.db.insert(images).values(input).returning()
+      return r
+    }),
+  insertImages: adminProcedure
+    .input(insertImagesSchema)
+    .mutation(async ({ input, ctx }) => {
+      const imageRows = await Promise.all(
+        input.map(async (image) => {
+          const [r] = await ctx.db.insert(images).values(image).returning()
+          return r
+        })
+      )
+      return imageRows
     }),
   deleteImages: adminProcedure
     .input(imageIdsSchema)

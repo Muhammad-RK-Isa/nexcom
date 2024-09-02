@@ -4,15 +4,15 @@ import React from "react"
 import Image from "next/image"
 import useEmblaCarousel from "embla-carousel-react"
 
-import type { CompleteProduct } from "~/types"
+import type { PublicProduct } from "~/types"
 import { Icons } from "~/components/icons"
 
 import Thumb from "./thumb"
 import ZoomableImageViewer from "./zoomable-image-viewer"
 
 interface ProductImageViewerProps {
-  images: CompleteProduct["images"]
-  selectedVariant?: CompleteProduct["variants"][number]
+  images: PublicProduct["images"]
+  selectedVariant?: PublicProduct["variants"][number]
 }
 
 const ProductImageViewer: React.FC<ProductImageViewerProps> = ({

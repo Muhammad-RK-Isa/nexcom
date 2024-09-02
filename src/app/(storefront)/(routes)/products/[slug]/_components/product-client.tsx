@@ -4,7 +4,7 @@ import React from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { isEqual } from "lodash"
 
-import type { CartItem, CompleteProduct } from "~/types"
+import type { CartItem, PublicProduct } from "~/types"
 import { Icons } from "~/components/icons"
 
 import { AddToCartForm } from "./add-to-cart-form"
@@ -12,7 +12,7 @@ import OptionSelect from "./option-select"
 import ProductImageViewer from "./product-image-viewer"
 
 interface ProductClientProps {
-  product: CompleteProduct
+  product: PublicProduct
   cartItems?: CartItem[] | null
 }
 

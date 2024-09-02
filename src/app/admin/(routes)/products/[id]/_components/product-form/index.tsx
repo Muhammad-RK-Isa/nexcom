@@ -7,10 +7,10 @@ import { useRouter } from "next-nprogress-bar"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
-import type { CreateProductInput } from "~/types"
+import type { EditableProduct, UpdateProductInput } from "~/types"
 import { Paths } from "~/lib/constants"
 import { cn } from "~/lib/utils"
-import { insertProductSchema } from "~/lib/validations/product"
+import { updateProductSchema } from "~/lib/validations/product"
 import { Button, buttonVariants } from "~/components/ui/button"
 import {
   DropdownMenu,
@@ -33,42 +33,50 @@ import ProductShippingForm from "./product-shipping"
 import ProductStatusForm from "./product-status"
 import { ProductVariantsForm } from "./product-variants"
 
-const ProductForm = () => {
+interface ProductFormProps {
+  product?: EditableProduct
+}
+
+const ProductForm: React.FC<ProductFormProps> = ({ product }) => {
   const router = useRouter()
   const [isActionsMenuOpen, setIsActionsMenuOpen] = React.useState(false)
 
-  const form = useForm<CreateProductInput>({
-    resolver: zodResolver(insertProductSchema),
+  const form = useForm<UpdateProductInput>({
+    resolver: zodResolver(updateProductSchema),
     defaultValues: {
-      title: "",
-      slug: "",
-      description: "",
-      manageInventory: true,
-      allowBackorder: false,
+      id: product?.id || undefined,
+      title: product?.title || undefined,
+      slug: product?.slug || undefined,
+      description: product?.description || undefined,
+      price: product?.price || undefined,
+      mrp: product?.mrp || undefined,
+      manageInventory: product?.manageInventory || true,
+      allowBackorder: product?.allowBackorder || false,
+      inventoryQuantity: product?.inventoryQuantity || undefined,
       weight: {
-        value: undefined,
-        unit: "kg",
+        value: product?.weight?.value || undefined,
+        unit: product?.weight?.unit || "kg",
       },
       length: {
-        value: undefined,
-        unit: "m",
+        value: product?.length?.value || undefined,
+        unit: product?.length?.unit || "m",
       },
       height: {
-        value: undefined,
-        unit: "m",
+        value: product?.height?.value || undefined,
+        unit: product?.height?.unit || "m",
       },
       width: {
-        value: undefined,
-        unit: "m",
+        value: product?.width?.value || undefined,
+        unit: product?.width?.unit || "m",
       },
-      status: "active",
-      options: [],
-      variants: [],
-      images: [],
-      originCountry: "",
-      content: {},
-      metaTitle: "",
-      material: "",
+      status: product?.status || "active",
+      options: product?.options || [],
+      variants: product?.variants || [],
+      images: product?.images || [],
+      originCountry: product?.originCountry || undefined,
+      content: product?.content || {},
+      metaTitle: product?.metaTitle || undefined,
+      material: product?.material || undefined,
     },
   })
 
@@ -80,30 +88,58 @@ const ProductForm = () => {
         router.push(`${Paths.Admin.Products}`)
       },
       onError: (err) => {
-        if (
-          err.message.includes("slug_index") &&
-          err.message.includes("duplicate key value violates unique constraint")
-        ) {
-          form.setError("slug", { message: "This slug is already in use" })
-          form.setFocus("slug")
-          return
-        }
-        toast.error(err.message)
+        if (err.data?.code === "CONFLICT")
+          form.setError(
+            "slug",
+            {
+              message: "This slug is already in use",
+            },
+            {
+              shouldFocus: true,
+            }
+          )
+        else toast.error(err.message)
       },
     })
 
-  const onSubmit = (values: CreateProductInput) => {
-    createProduct(values)
+  const { mutate: updateProduct, isPending: isUpdating } =
+    api.products.updateProduct.useMutation({
+      onSuccess: () => {
+        toast.success("Product updated")
+        router.push(Paths.Admin.Products)
+      },
+      onError: (err) => {
+        if (err.data?.code === "CONFLICT")
+          form.setError(
+            "slug",
+            {
+              message: "This slug is already in use",
+            },
+            {
+              shouldFocus: true,
+            }
+          )
+        else toast.error(err.message)
+      },
+    })
+
+  const onSubmit = (values: UpdateProductInput) => {
+    if (product?.id) {
+      console.log(values)
+      updateProduct(values)
+    } else {
+      createProduct(values)
+    }
   }
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="-mt-4 md:space-y-4 lg:space-y-0 lg:px-6"
+        className="-mt-4 lg:space-y-0 lg:px-6"
       >
-        <div className="sticky top-[54px] z-10 -mx-4 w-screen bg-[#fafafa] dark:bg-background md:mx-0 md:w-full">
-          <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 p-4 sm:justify-start lg:px-0">
+        <div className="sticky top-[54px] z-10 -mx-4 w-screen bg-[#fafafa] dark:bg-background sm:mx-0 sm:w-full md:w-full">
+          <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 p-4 sm:justify-start sm:px-0 xl:max-w-6xl">
             <Link
               href={"/admin/products"}
               className={cn(
@@ -118,7 +154,7 @@ const ProductForm = () => {
               <span className="sr-only">Back</span>
             </Link>
             <h1 className="max-w-40 truncate text-lg font-semibold tracking-tight md:max-w-72 md:text-xl lg:max-w-[60%]">
-              Add Product
+              {product ? "Edit Product" : "Add Product"}
             </h1>
             <div className="hidden items-center gap-2 sm:ml-auto sm:flex">
               <Button
@@ -132,10 +168,10 @@ const ProductForm = () => {
               <Button
                 size="sm"
                 type="submit"
-                disabled={isCreating}
-                loading={isCreating}
+                disabled={isCreating || isUpdating}
+                loading={isCreating || isUpdating}
               >
-                Create
+                {product ? "Save" : "Create"}
               </Button>
             </div>
             <DropdownMenu
@@ -162,18 +198,18 @@ const ProductForm = () => {
                     form.handleSubmit(onSubmit)()
                     setIsActionsMenuOpen(false)
                   }}
-                  disabled={isCreating || !form.formState.isDirty}
+                  disabled={isCreating || isUpdating || !form.formState.isDirty}
                   className="text-xs"
                 >
-                  Save
-                  {isCreating ? (
+                  {product ? "Save" : "Create"}
+                  {isCreating || isUpdating ? (
                     <Icons.spinner className="ml-auto size-3" />
                   ) : null}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="text-xs"
-                  disabled={isCreating || !form.formState.isDirty}
+                  disabled={isCreating || isUpdating || !form.formState.isDirty}
                   onClick={() => router.push("/admin/products")}
                 >
                   Discard
@@ -182,7 +218,7 @@ const ProductForm = () => {
             </DropdownMenu>
           </div>
         </div>
-        <div className="mx-auto grid w-full max-w-5xl gap-4 lg:grid-cols-[2fr,1fr] lg:px-0">
+        <div className="mx-auto grid w-full max-w-5xl gap-4 lg:grid-cols-[2fr,1fr] lg:px-0 xl:max-w-6xl">
           <div className="grid auto-rows-max gap-4">
             <ProductDetailsForm />
             <ProductPricingForm />

@@ -2,7 +2,7 @@
 
 import { useFormContext } from "react-hook-form"
 
-import type { CreateProductInput } from "~/types"
+import type { UpdateProductInput } from "~/types"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import {
   FormControl,
@@ -15,7 +15,7 @@ import { Input } from "~/components/ui/input"
 import KeywordsInput from "~/components/keywords-input"
 
 const ProductOrganisationForm = () => {
-  const form = useFormContext<CreateProductInput>()
+  const form = useFormContext<UpdateProductInput>()
 
   return (
     <Card>

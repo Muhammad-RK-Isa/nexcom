@@ -25,7 +25,7 @@ export function useUploadFile(
   const [progresses, setProgresses] = React.useState<Record<string, number>>({})
   const [isUploading, setIsUploading] = React.useState(false)
 
-  const { mutate: createImage } = api.images.createImage.useMutation()
+  const { mutate: insertImages } = api.images.insertImages.useMutation()
 
   async function uploadThings(files: File[]) {
     setIsUploading(true)
@@ -43,17 +43,14 @@ export function useUploadFile(
         },
       })
 
-      const formattedRes: Image[] = res.map((file) => {
-        return {
-          id: file.key,
-          name: file.name,
-          url: file.url,
-        }
-      })
+      const formattedRes: Image[] = res.map((file) => ({
+        id: file.key,
+        name: file.name,
+        url: file.url,
+      }))
 
-      formattedRes.map((file) => {
-        createImage(file)
-      })
+      // Insert the uploaded images to the database
+      insertImages(formattedRes)
 
       setUploadedFiles((prev) =>
         prev ? [...prev, ...formattedRes] : formattedRes

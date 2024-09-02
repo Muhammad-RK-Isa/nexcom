@@ -2,7 +2,7 @@ import React from "react"
 import { useFormContext } from "react-hook-form"
 import { toast } from "sonner"
 
-import type { CreateProductInput } from "~/types"
+import type { UpdateProductInput } from "~/types"
 import { slugify } from "~/lib/utils"
 import { Button } from "~/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
@@ -16,11 +16,11 @@ import {
 import { Input } from "~/components/ui/input"
 import Editor from "~/components/editor"
 import { Icons } from "~/components/icons"
-import { ImageSelectModal } from "~/components/image-select-modal"
-import Images from "~/components/images"
+import { ImageSelectModal } from "~/components/image/image-select-modal"
+import Images from "~/components/image/images"
 
 const ProductDetailsForm = () => {
-  const form = useFormContext<CreateProductInput>()
+  const form = useFormContext<UpdateProductInput>()
   const { title } = form.watch()
 
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false)
@@ -78,18 +78,19 @@ const ProductDetailsForm = () => {
               </FormItem>
             )}
           />
-          {/* TODO: Uncomment content field. It's commented for performance reasons */}
-          {/* <FormField
+          <FormField
             name="content"
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Content</FormLabel>
-                <Editor {...field} initialValue={{}} />
+                <FormLabel>Detailed description</FormLabel>
+                <FormControl>
+                  <Editor {...field} initialValue={field.value ?? {}} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
-          /> */}
+          />
           <FormField
             control={form.control}
             name="images"

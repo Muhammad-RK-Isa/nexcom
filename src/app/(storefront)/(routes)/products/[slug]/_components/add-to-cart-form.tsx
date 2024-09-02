@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import type { z } from "zod"
 
-import type { CompleteProduct } from "~/types"
+import type { PublicProduct } from "~/types"
 import { cn } from "~/lib/utils"
 import { updateCartItemSchema } from "~/lib/validations/cart"
 import { Button } from "~/components/ui/button"
@@ -30,7 +30,7 @@ interface AddToCartFormProps {
   allowBackorder: boolean
   inventoryQuantity: number
   variantId?: string
-  options?: CompleteProduct["options"]
+  options?: PublicProduct["options"]
 }
 
 type Inputs = z.infer<typeof updateCartItemSchema>
@@ -81,21 +81,23 @@ export function AddToCartForm({
 
   const onAddToCart = (values: Inputs) => {
     if (variantRequired) {
-      if (!options || options.length === 0) return ""
-
-      const opts = options
-        .map(({ title }) => title.charAt(0).toUpperCase() + title.slice(1))
-        .join(", ")
-        .replace(/, ([^,]*)$/, " & $1")
-
-      toast.info(`Please select ${opts} to proceed.`)
-      return
     }
-    addToCart({
-      productId,
-      variantId: variantId ?? null,
-      quantity: values.quantity,
-    })
+    // if (variantRequired) {
+    //   if (!options || options.length === 0) return ""
+
+    //   const opts = options
+    //     .map(({ title }) => title.charAt(0).toUpperCase() + title.slice(1))
+    //     .join(", ")
+    //     .replace(/, ([^,]*)$/, " & $1")
+
+    //   toast.info(`Please select ${opts} to proceed.`)
+    //   return
+    // }
+    // addToCart({
+    //   productId,
+    //   variantId: variantId ?? null,
+    //   quantity: values.quantity,
+    // })
   }
 
   const inStock = allowBackorder ? true : inventoryQuantity > 0

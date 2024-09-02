@@ -1,7 +1,7 @@
 import React from "react"
 import { useFieldArray, useFormContext, type Control } from "react-hook-form"
 
-import type { CreateProductInput } from "~/types"
+import type { UpdateProductInput } from "~/types"
 import { generateId } from "~/lib/utils"
 import { Button } from "~/components/ui/button"
 import {
@@ -22,7 +22,7 @@ import { Icons } from "~/components/icons"
 interface ProductOptionValuesProps {
   optionIdx: number
   optionId?: string
-  control: Control<CreateProductInput>
+  control: Control<UpdateProductInput>
   onFinishEditing: () => void
 }
 
@@ -32,7 +32,7 @@ export const ProductOptionValues: React.FC<ProductOptionValuesProps> = ({
   control,
   onFinishEditing,
 }) => {
-  const form = useFormContext<CreateProductInput>()
+  const form = useFormContext<UpdateProductInput>()
 
   const { options } = form.watch()
 

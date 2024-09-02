@@ -103,7 +103,7 @@ const starterKit = StarterKit.configure({
   gapcursor: false,
 })
 
-export const defaultExtensions = [
+export const extensions = [
   starterKit,
   placeholder,
   tiptapLink,

@@ -10,7 +10,7 @@ import Providers from "~/providers"
 const poppins = Poppins({
   subsets: ["latin"],
   preload: true,
-  weight: ["200", "300", "400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-poppins",
 })
 

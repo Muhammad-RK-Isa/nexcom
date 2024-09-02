@@ -2,7 +2,7 @@
 
 import { useFormContext } from "react-hook-form"
 
-import type { CreateProductInput } from "~/types"
+import type { UpdateProductInput } from "~/types"
 import { productStatuses } from "~/lib/validations/product"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import {
@@ -23,7 +23,7 @@ import {
 import { getStatusIcon } from "../../../_lib/utils"
 
 const ProductStatusForm = () => {
-  const form = useFormContext<CreateProductInput>()
+  const form = useFormContext<UpdateProductInput>()
 
   return (
     <Card>

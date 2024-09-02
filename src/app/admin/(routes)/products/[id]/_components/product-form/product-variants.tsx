@@ -1,21 +1,19 @@
 import React from "react"
-import Image from "next/image"
 import { useFieldArray, useFormContext } from "react-hook-form"
 
-import type { CreateProductInput } from "~/types"
+import type { UpdateProductInput } from "~/types"
 import { cn, generateId } from "~/lib/utils"
 import { Button } from "~/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import { Label } from "~/components/ui/label"
 import { Icons } from "~/components/icons"
-import { ImageSelectModal } from "~/components/image-select-modal"
 
 import { ProductOptions } from "./product-options"
 import ProductVariant from "./product-variant"
 
 export const ProductVariantsForm = () => {
-  const form = useFormContext<CreateProductInput>()
-  const { variants, options } = form.watch()
+  const form = useFormContext<UpdateProductInput>()
+  const { variants, options, price, inventoryQuantity } = form.watch()
 
   const { append: addVariant } = useFieldArray({
     control: form.control,
@@ -35,10 +33,11 @@ export const ProductVariantsForm = () => {
             <div className="grid divide-y rounded-md border">
               {variants.map((variant, idx) => (
                 <ProductVariant
-                  key={idx}
+                  key={variant.id}
+                  variantId={variant.id}
                   control={form.control}
                   variantIndex={idx}
-                  defaultExpanded={!variant.title}
+                  defaultExpanded={!variant?.title}
                 />
               ))}
               <Button
@@ -50,27 +49,28 @@ export const ProductVariantsForm = () => {
                 onClick={() =>
                   options.length &&
                   addVariant({
+                    id: generateId({ prefix: "variant" }),
                     title: "",
-                    price: 0,
-                    inventoryQuantity: 0,
+                    price,
+                    inventoryQuantity,
                     manageInventory: true,
                     allowBackorder: false,
                     image: null,
                     options: [],
                     weight: {
-                      value: 0,
+                      value: undefined,
                       unit: "kg",
                     },
-                    width: {
-                      value: 0,
+                    length: {
+                      value: undefined,
                       unit: "m",
                     },
                     height: {
-                      value: 0,
+                      value: undefined,
                       unit: "m",
                     },
-                    length: {
-                      value: 0,
+                    width: {
+                      value: undefined,
                       unit: "m",
                     },
                   })

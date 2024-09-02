@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form"
 
-import type { CreateProductInput } from "~/types"
+import type { UpdateProductInput } from "~/types"
 import countries from "~/lib/countries.json"
 import { sizeUnits, weightUnits } from "~/lib/validations/product"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
@@ -21,7 +21,7 @@ import {
 } from "~/components/ui/select"
 
 const ProductShippingForm = () => {
-  const form = useFormContext<CreateProductInput>()
+  const form = useFormContext<UpdateProductInput>()
   return (
     <Card>
       <CardHeader>

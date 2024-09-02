@@ -1,6 +1,7 @@
 import { images, pgProductStatuses } from "~/server/db/schema"
 import { pgSizeUnits, pgWeightUnits } from "~/server/db/schema/utils"
 import { createSelectSchema } from "drizzle-zod"
+import { type JSONContent } from "novel"
 import { z } from "zod"
 
 import { generateId } from "~/lib/utils"
@@ -11,6 +12,8 @@ export const insertImageSchema = baseImageSchema.omit({
   createdAt: true,
   updatedAt: true,
 })
+
+export const insertImagesSchema = z.array(insertImageSchema)
 
 export const imageIdSchema = baseImageSchema.pick({ id: true })
 export const imageIdsSchema = z.array(imageIdSchema)
@@ -35,11 +38,11 @@ export const sizeUnits = z.enum(pgSizeUnits.enumValues)
 
 const generalProductFields = {
   price: z.coerce
-    .number({ message: "Please enter the price" })
+    .number({ message: "Price is required" })
     .nonnegative({ message: "Price cannot be negative" }),
   inventoryQuantity: z.coerce
     .number({
-      message: "Please enter the quantity",
+      message: "Quantity is required",
     })
     .nonnegative({ message: "Quantity cannot be negative" }),
   manageInventory: z.boolean().optional().default(false),
@@ -50,17 +53,16 @@ const generalProductFields = {
     value: z.coerce
       .number({ message: "Please enter the weight" })
       .nonnegative({ message: "Weight cannot be negative" }),
-    unit: weightUnits,
+    unit: weightUnits.default("kg"),
   }),
   length: z
     .object({
       value: z.coerce
         .number()
         .nonnegative({ message: "Length cannot be negative" })
-        .nullable()
         .optional()
-        .default(0),
-      unit: sizeUnits,
+        .nullable(),
+      unit: sizeUnits.default("m"),
     })
     .nullable()
     .optional(),
@@ -69,10 +71,9 @@ const generalProductFields = {
       value: z.coerce
         .number()
         .nonnegative({ message: "Height cannot be negative" })
-        .nullable()
         .optional()
-        .default(0),
-      unit: sizeUnits,
+        .nullable(),
+      unit: sizeUnits.default("m"),
     })
     .nullable()
     .optional(),
@@ -81,30 +82,33 @@ const generalProductFields = {
       value: z.coerce
         .number()
         .nonnegative({ message: "Width cannot be negative" })
-        .nullable()
         .optional()
-        .default(0),
-      unit: sizeUnits,
+        .nullable(),
+      unit: sizeUnits.default("m"),
     })
     .nullable()
     .optional(),
 }
 
-export const JSONContentSchema: z.ZodType<any> = z.lazy(() =>
-  z.object({
-    type: z.string().optional(),
-    attrs: z.record(z.any()).optional(),
-    content: z.array(JSONContentSchema).optional(),
-    marks: z
-      .array(
-        z.object({
-          type: z.string(),
-          attrs: z.record(z.any()).optional(),
-        })
-      )
-      .optional(),
-    text: z.string().optional(),
-  })
+export const JSONContentSchema: z.ZodType<JSONContent> = z.lazy(() =>
+  z
+    .object({
+      type: z.string().optional(),
+      attrs: z.record(z.any()).optional(),
+      content: z.array(JSONContentSchema).optional(),
+      marks: z
+        .array(
+          z
+            .object({
+              type: z.string(),
+              attrs: z.record(z.any()).optional(),
+            })
+            .and(z.record(z.any()))
+        )
+        .optional(),
+      text: z.string().optional(),
+    })
+    .and(z.record(z.any()))
 )
 
 export const baseProductSchema = z
@@ -112,20 +116,25 @@ export const baseProductSchema = z
     id: z.string(),
     slug: z.string(),
     status: productStatuses,
-    title: z.string().trim().min(3, { message: "Title is required" }),
-    metaTitle: z.string(),
+    title: z
+      .string()
+      .trim()
+      .min(3, { message: "Title must be at least 3 characters long" }),
+    metaTitle: z.string().optional(),
     content: JSONContentSchema.optional().nullable(),
     description: z.string(),
     vendor: z.string().optional().nullable(),
     mrp: z.coerce
       .number({ message: "MRP is required" })
-      .nonnegative({ message: "MRP cannot be negative" }),
+      .nonnegative({ message: "MRP cannot be negative" })
+      .optional()
+      .nullable(),
     tags: z.string().array().optional(),
     images: z.array(imageSchema),
   })
   .extend(generalProductFields)
 
-export const searchImageParamsSchema = z.object({
+export const searchTableImageParamsSchema = z.object({
   page: z.coerce.number().default(1),
   per_page: z.coerce.number().default(10),
   sort: z.string().optional(),
@@ -159,7 +168,7 @@ export const searchTableProductParamsSchema = z.object({
   operator: z.enum(["and", "or"]).optional(),
 })
 
-export const searchProductParamsSchema = z.object({
+export const filterProductParamsSchema = z.object({
   page: z.coerce.number().default(1),
   per_page: z.coerce.number().default(10),
   sort: z.string().optional(),
@@ -186,18 +195,32 @@ export const productOptionSchema = z.object({
 
 export const productVariantSchema = z
   .object({
-    title: z.string(),
-    productImageId: z.string().nullable().optional(),
+    id: z.string(),
+    title: z.string().nullable(),
     options: z.array(z.record(z.string())),
     image: imageSchema.nullable().optional(),
   })
   .extend(generalProductFields)
-
-export const insertProductSchema = baseProductSchema
   .extend({
-    options: z.array(productOptionSchema).optional().default([]),
-    variants: z.array(productVariantSchema).optional().default([]),
+    weight: z
+      .object({
+        value: z.coerce
+          .number({ message: "Please enter the weight" })
+          .nonnegative({ message: "Weight cannot be negative" })
+          .optional()
+          .nullable(),
+        unit: weightUnits.default("kg"),
+      })
+      .nullable()
+      .optional(),
   })
-  .omit({
-    id: true,
-  })
+
+export const updateProductSchema = baseProductSchema.extend({
+  id: z.string().optional(),
+  options: z.array(productOptionSchema).default([]),
+  variants: z.array(productVariantSchema).default([]),
+})
+
+export const insertProductSchema = updateProductSchema.omit({
+  id: true,
+})

@@ -1,5 +1,6 @@
 import "server-only"
 
+import { TRPCError } from "@trpc/server"
 import { db } from "~/server/db"
 import { products } from "~/server/db/schema"
 import {
@@ -17,15 +18,15 @@ import {
 
 import type {
   DrizzleWhere,
-  Product,
+  FilterProductParams,
+  ProductEntity,
   ProductId,
   ProductSlug,
-  SearchProductParams,
   TableProductsParams,
 } from "~/types"
 import { filterColumn } from "~/lib/filter-column"
 
-export const getProducts = async (input: SearchProductParams) => {
+export const getFilteredProducts = async (input: FilterProductParams) => {
   const { page, per_page, sort, title } = input
 
   try {
@@ -37,7 +38,7 @@ export const getProducts = async (input: SearchProductParams) => {
     const [column, order] = (sort?.split(".").filter(Boolean) ?? [
       "createdAt",
       "desc",
-    ]) as [keyof Product | undefined, "asc" | "desc" | undefined]
+    ]) as [keyof ProductEntity | undefined, "asc" | "desc" | undefined]
 
     // Transaction is used to ensure both queries are executed in a single transaction
     const { data, total } = await db.transaction(async (tx) => {
@@ -111,7 +112,7 @@ export const getProducts = async (input: SearchProductParams) => {
   }
 }
 
-export const getProductById = async ({ id }: ProductId) => {
+export const getEditableProduct = async ({ id }: ProductId) => {
   const product = await db.query.products.findFirst({
     where: (t, { eq }) => eq(t.id, id),
     with: {
@@ -138,7 +139,12 @@ export const getProductById = async ({ id }: ProductId) => {
     },
   })
 
-  if (!product) return null
+  if (!product)
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "Product not found",
+      cause: "Invalid product id",
+    })
 
   const options = product?.options
     .sort((a, b) => a.rank - b.rank)
@@ -153,16 +159,51 @@ export const getProductById = async ({ id }: ProductId) => {
   }))
 
   const variants = product?.variants.map((variant) => ({
-    ...variant,
-    optionValues: product?.variants
-      ?.find((v) => v.id === variant.id)
-      ?.variantsOptionValues.map((vOptVals) => vOptVals.optionValue),
+    id: variant.id,
+    title: variant.title,
+    options: variant.variantsOptionValues.map((vOptVals) => {
+      return { [vOptVals.optionValue.optionId]: vOptVals.optionValue.id }
+    }),
+    image: variant.image,
+    price: variant.price,
+    material: variant.material,
+    originCountry: variant.originCountry,
+    manageInventory: variant.manageInventory,
+    allowBackorder: variant.allowBackorder,
+    inventoryQuantity: variant.inventoryQuantity,
+    weight: {
+      value: variant.weight,
+      unit: variant.weightUnit,
+    },
+    length: {
+      value: variant.length,
+      unit: variant.lengthUnit,
+    },
+    height: {
+      value: variant.height,
+      unit: variant.heightUnit,
+    },
+    width: {
+      value: variant.width,
+      unit: variant.widthUnit,
+    },
   }))
 
-  const { productImages, ...productWithoutImages } = product
-
   return {
-    ...productWithoutImages,
+    id: product.id,
+    title: product.title,
+    slug: product.slug,
+    content: product.content,
+    price: product.price,
+    mrp: product.mrp,
+    material: product.material,
+    vendor: product.vendor,
+    originCountry: product.originCountry,
+    metaTitle: product.metaTitle,
+    description: product.description,
+    manageInventory: product.manageInventory,
+    allowBackorder: product.allowBackorder,
+    inventoryQuantity: product.inventoryQuantity,
     weight: {
       value: product?.weight,
       unit: product?.weightUnit,
@@ -179,13 +220,14 @@ export const getProductById = async ({ id }: ProductId) => {
       value: product?.width ?? null,
       unit: product?.widthUnit,
     },
+    status: product.status,
     options,
     images,
     variants,
   }
 }
 
-export const getProductBySlug = async ({ slug }: ProductSlug) => {
+export const getPublicProduct = async ({ slug }: ProductSlug) => {
   const product = await db.query.products.findFirst({
     where: (t, { eq }) => eq(t.slug, slug),
     with: {
@@ -212,7 +254,12 @@ export const getProductBySlug = async ({ slug }: ProductSlug) => {
     },
   })
 
-  if (!product) return null
+  if (!product)
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "Product not found",
+      cause: "Invalid product slug",
+    })
 
   const variants = product?.variants.map((variant) => ({
     ...variant,
@@ -267,7 +314,7 @@ export async function getTableProducts(input: TableProductsParams) {
     const [column, order] = (sort?.split(".").filter(Boolean) ?? [
       "createdAt",
       "desc",
-    ]) as [keyof Product | undefined, "asc" | "desc" | undefined]
+    ]) as [keyof ProductEntity | undefined, "asc" | "desc" | undefined]
 
     // Convert the date strings to Date objects
     const fromDay = from ? new Date(from) : undefined
@@ -293,7 +340,7 @@ export async function getTableProducts(input: TableProductsParams) {
         ? and(gte(products.createdAt, fromDay), lte(products.createdAt, toDay))
         : undefined,
     ]
-    const where: DrizzleWhere<Product> =
+    const where: DrizzleWhere<ProductEntity> =
       !operator || operator === "and" ? and(...expressions) : or(...expressions)
 
     // Transaction is used to ensure both queries are executed in a single transaction

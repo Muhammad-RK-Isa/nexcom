@@ -23,6 +23,14 @@ const config = {
       },
     },
     extend: {
+      typography: () => ({
+        DEFAULT: {
+          css: {
+            maxWidth: "65ch",
+            fontSize: "0.875rem",
+          },
+        },
+      }),
       fontFamily: {
         productsans: ["Product Sans", "sans-serif"],
       },

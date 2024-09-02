@@ -1,9 +1,8 @@
 import React from "react"
 import Image from "next/image"
 import { useFieldArray, useFormContext, type Control } from "react-hook-form"
-import { toast } from "sonner"
 
-import type { CreateProductInput } from "~/types"
+import type { UpdateProductInput } from "~/types"
 import { cn } from "~/lib/utils"
 import { sizeUnits, weightUnits } from "~/lib/validations/product"
 import {
@@ -31,32 +30,32 @@ import { Input } from "~/components/ui/input"
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select"
 import { Icons } from "~/components/icons"
-import { ImageSelectModal } from "~/components/image-select-modal"
+import { ImageSelectModal } from "~/components/image/image-select-modal"
 
 interface ProductVariantProps {
-  control: Control<CreateProductInput>
+  control: Control<UpdateProductInput>
+  variantId: string
   variantIndex: number
   defaultExpanded?: boolean
 }
 
 const ProductVariant: React.FC<ProductVariantProps> = ({
   control,
+  variantId,
   variantIndex,
   defaultExpanded = false,
 }) => {
   const [isExpanded, setIsExpanded] = React.useState(defaultExpanded)
 
-  const form = useFormContext<CreateProductInput>()
+  const form = useFormContext<UpdateProductInput>()
 
   const options = form.watch("options")
-  const variant = form.watch(`variants.${variantIndex}`)
+  const variant = form.getValues("variants").find((v) => v.id === variantId)
 
   const { remove: removeVariant } = useFieldArray({
     control,
@@ -78,7 +77,7 @@ const ProductVariant: React.FC<ProductVariantProps> = ({
             type="single"
             collapsible
             defaultValue="general"
-            className="w-full overflow-hidden rounded-md border"
+            className="w-full overflow-hidden rounded-md border bg-accent/50"
           >
             <AccordionItem value="general" className="px-4">
               <AccordionTrigger className="font-medium hover:no-underline sm:text-base">
@@ -95,6 +94,7 @@ const ProductVariant: React.FC<ProductVariantProps> = ({
                         <FormControl>
                           <Input
                             {...field}
+                            value={field.value ?? ""}
                             placeholder="Black / XL"
                             className="bg-background"
                             onChange={(e) => {
@@ -118,11 +118,13 @@ const ProductVariant: React.FC<ProductVariantProps> = ({
                             {...field}
                             multiple={false}
                             value={field.value ? [field.value] : []}
-                            onValueChange={(v) => field.onChange(v[0])}
+                            onValueChange={(v) =>
+                              field.onChange(v[0] ?? undefined)
+                            }
                             trigger={
                               <button
                                 type="button"
-                                className="relative flex size-full h-[calc(100%-28px)] min-h-40 items-center justify-center rounded-md border border-dashed transition-colors hover:border-primary sm:min-h-min"
+                                className="relative flex size-full h-[calc(100%-28px)] min-h-40 items-center justify-center rounded-md border border-dashed bg-background shadow-sm drop-shadow-sm transition-colors hover:border-primary sm:min-h-min"
                               >
                                 {field.value ? (
                                   <Image
@@ -132,7 +134,7 @@ const ProductVariant: React.FC<ProductVariantProps> = ({
                                     className="rounded-md object-cover object-top"
                                   />
                                 ) : (
-                                  <Icons.imagePlus className="size-12 text-muted-foreground/80" />
+                                  <Icons.imagePlus className="size-8 text-muted-foreground/80" />
                                 )}
                               </button>
                             }
@@ -183,7 +185,7 @@ const ProductVariant: React.FC<ProductVariantProps> = ({
                             <FormItem>
                               <FormLabel>{option.title}</FormLabel>
                               <Select
-                                defaultValue={field.value?.[option.id] || ""}
+                                value={field.value?.[option.id] || undefined}
                                 onValueChange={(v) => {
                                   field.onChange({ [option.id]: v })
                                   form.clearErrors(
@@ -192,15 +194,15 @@ const ProductVariant: React.FC<ProductVariantProps> = ({
                                 }}
                               >
                                 <FormControl>
-                                  <SelectTrigger>
+                                  <SelectTrigger className="bg-background">
                                     <SelectValue
                                       placeholder={`Select ${option.title}`}
                                     />
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                  {nonEmptyValues.map((v, idx) => (
-                                    <SelectItem key={idx} value={v.id}>
+                                  {nonEmptyValues.map((v) => (
+                                    <SelectItem key={v.id} value={v.id}>
                                       {v.value}
                                     </SelectItem>
                                   ))}
@@ -324,6 +326,7 @@ const ProductVariant: React.FC<ProductVariantProps> = ({
                             <FormLabel>Weight</FormLabel>
                             <Input
                               {...field}
+                              value={field.value ?? undefined}
                               type="number"
                               inputMode="numeric"
                             />
@@ -389,7 +392,7 @@ const ProductVariant: React.FC<ProductVariantProps> = ({
                               {...field}
                               type="number"
                               inputMode="numeric"
-                              value={field.value ?? ""}
+                              value={field.value ?? undefined}
                             />
                             <FormMessage />
                           </FormItem>
@@ -454,7 +457,7 @@ const ProductVariant: React.FC<ProductVariantProps> = ({
                             <Input
                               {...field}
                               type="number"
-                              value={field.value ?? ""}
+                              value={field.value ?? undefined}
                             />
                             <FormMessage />
                           </FormItem>
@@ -520,7 +523,7 @@ const ProductVariant: React.FC<ProductVariantProps> = ({
                             <Input
                               {...field}
                               type="number"
-                              value={field.value ?? ""}
+                              value={field.value ?? undefined}
                             />
                             <FormMessage />
                           </FormItem>
@@ -584,6 +587,7 @@ const ProductVariant: React.FC<ProductVariantProps> = ({
               Done
             </Button>
             <Button
+              type="button"
               variant="outline"
               size="sm"
               className="px-2"
@@ -595,7 +599,7 @@ const ProductVariant: React.FC<ProductVariantProps> = ({
           </div>
         </div>
       ) : (
-        <div className="flex w-full items-center justify-between">
+        <div className="flex w-full items-center space-x-2">
           <div className="flex flex-1 items-center space-x-4 text-sm">
             <FormField
               control={control}
@@ -607,7 +611,7 @@ const ProductVariant: React.FC<ProductVariantProps> = ({
                       {...field}
                       multiple={false}
                       value={field.value ? [field.value] : []}
-                      onValueChange={(v) => field.onChange(v[0])}
+                      onValueChange={(v) => field.onChange(v[0] ?? undefined)}
                       trigger={
                         <button
                           type="button"
@@ -631,22 +635,32 @@ const ProductVariant: React.FC<ProductVariantProps> = ({
               )}
             />
             <Badge
-              variant={variant.title ? "secondary" : "outline"}
+              variant={variant?.title ? "secondary" : "outline"}
               className="font-medium"
             >
-              {variant.title || "No title"}
+              {variant?.title || "No title"}
             </Badge>
             <span>{variant?.inventoryQuantity} in stock</span>
           </div>
           <Button
             size="sm"
-            variant="outline"
             type="button"
+            variant="outline"
             className="px-2"
             onClick={() => setIsExpanded(true)}
           >
             <Icons.edit className="mr-2 size-3.5" />
             Edit
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            type="button"
+            className="px-2"
+            onClick={() => removeVariant(variantIndex)}
+          >
+            <Icons.trash className="size-3.5" />
+            <span className="sr-only">Delete variant {variant?.title}</span>
           </Button>
         </div>
       )}

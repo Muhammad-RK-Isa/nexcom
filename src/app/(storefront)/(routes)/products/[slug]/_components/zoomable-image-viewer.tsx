@@ -4,7 +4,7 @@ import React from "react"
 import Image from "next/image"
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch"
 
-import type { CompleteProduct } from "~/types"
+import type { PublicProduct } from "~/types"
 import { Button } from "~/components/ui/button"
 import {
   Dialog,
@@ -14,12 +14,12 @@ import {
 } from "~/components/ui/dialog"
 import { Icons } from "~/components/icons"
 
-type ProductImage = CompleteProduct["images"][number]
+type ProductImage = PublicProduct["images"][number]
 
 interface ZoomableImageViewerProps {
   selectedImage: ProductImage
   setSelectedImage: (image: ProductImage | undefined) => void
-  images: CompleteProduct["images"]
+  images: PublicProduct["images"]
 }
 
 const ZoomableImageViewer: React.FC<ZoomableImageViewerProps> = ({

@@ -1,13 +1,13 @@
 import React from "react"
 
-import type { CompleteProduct } from "~/types"
+import type { PublicProduct } from "~/types"
 import { cn } from "~/lib/utils"
 import { Button } from "~/components/ui/button"
 
 interface OptionSelectProps {
-  options: CompleteProduct["options"]
-  onValueChange: (optionId: string, value: string) => void
+  options: PublicProduct["options"]
   selectedOptions: Record<string, string>
+  onValueChange: (optionId: string, value: string) => void
 }
 
 const OptionSelect: React.FC<OptionSelectProps> = ({

@@ -1,6 +1,6 @@
 import React from "react"
 
-import type { SearchedProducts } from "~/types"
+import type { FilteredProducts } from "~/types"
 import {
   AnimatedDialog,
   AnimatedDialogClose,
@@ -14,7 +14,7 @@ import {
 } from "~/components/ui/animated-dialog"
 
 interface ProductCardProps {
-  product: SearchedProducts["data"][number]
+  product: FilteredProducts["data"][number]
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {

@@ -627,6 +627,23 @@ export const Icons = {
       <path d="M2 12H22" />
     </svg>
   ),
+  moveLeft: (props: IconProps) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M6 8L2 12L6 16" />
+      <path d="M2 12H22" />
+    </svg>
+  ),
   plus: (props: IconProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -1156,6 +1173,23 @@ export const Icons = {
       <path d="m9 18 6-6-6-6" />
     </svg>
   ),
+  chevronsRight: (props: IconProps) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="m6 17 5-5-5-5" />
+      <path d="m13 17 5-5-5-5" />
+    </svg>
+  ),
   chevronLeft: (props: IconProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -1170,6 +1204,23 @@ export const Icons = {
       {...props}
     >
       <path d="m15 18-6-6 6-6" />
+    </svg>
+  ),
+  chevronsLeft: (props: IconProps) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="m11 17-5-5 5-5" />
+      <path d="m18 17-5-5 5-5" />
     </svg>
   ),
   chevronsUpDown: (props: IconProps) => (

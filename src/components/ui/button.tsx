@@ -63,15 +63,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <Comp
         className={cn(
           buttonVariants({ variant, size, className }),
-          loading && "cursor-wait"
+          loading && "cursor-wait",
+          Icon && "space-x-2"
         )}
         ref={ref}
         {...props}
       >
         {loading ? (
-          <Icons.spinner className={cn("size-4", size !== "icon" && "mr-2")} />
+          <Icons.spinner className="size-4" />
         ) : Icon ? (
-          <Icon className={cn("size-4", size !== "icon" && "mr-2")} />
+          <Icon className="size-4" />
         ) : null}
         {children}
       </Comp>

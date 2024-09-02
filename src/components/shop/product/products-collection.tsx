@@ -1,11 +1,11 @@
 import React from "react"
 
-import type { SearchedProducts } from "~/types"
+import type { FilteredProducts } from "~/types"
 
 import ProductCard from "./product-card"
 
 interface ProductsCollectionProps {
-  products: SearchedProducts["data"]
+  products: FilteredProducts["data"]
 }
 
 const ProductsCollection: React.FC<ProductsCollectionProps> = ({

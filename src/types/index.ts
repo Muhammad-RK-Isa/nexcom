@@ -1,4 +1,10 @@
-import type { images, products, UserRole, users } from "~/server/db/schema"
+import type {
+  images,
+  products,
+  productVariants,
+  UserRole,
+  users,
+} from "~/server/db/schema"
 import type {
   createUserSchema,
   forgotPasswordSchema,
@@ -13,9 +19,9 @@ import { type z } from "zod"
 
 import type { getImageById, getTableImages } from "~/lib/api/images/queries"
 import {
-  type getProductById,
-  type getProductBySlug,
-  type getProducts,
+  type getEditableProduct,
+  type getFilteredProducts,
+  type getPublicProduct,
   type getTableProducts,
 } from "~/lib/api/products/queries"
 import type {
@@ -24,6 +30,7 @@ import type {
   checkoutItemSchema,
 } from "~/lib/validations/cart"
 import type {
+  filterProductParamsSchema,
   imageIdSchema,
   imageSchema,
   insertImageSchema,
@@ -33,9 +40,9 @@ import type {
   productOptionSchema,
   productSlugSchema,
   productVariantSchema,
-  searchImageParamsSchema,
-  searchProductParamsSchema,
+  searchTableImageParamsSchema,
   searchTableProductParamsSchema,
+  updateProductSchema,
   updateProductsStatusSchema,
   updateProductStatusSchema,
 } from "~/lib/validations/product"
@@ -95,7 +102,8 @@ export type ResendEmailVerificationCode = z.infer<
 // Types: Product
 export type ProductId = z.infer<typeof productIdSchema>
 export type ProductSlug = z.infer<typeof productSlugSchema>
-export type CreateProductInput = z.infer<typeof insertProductSchema>
+export type InsertProductInput = z.infer<typeof insertProductSchema>
+export type UpdateProductInput = z.infer<typeof updateProductSchema>
 export type UpdateProductStatusInput = z.infer<typeof updateProductStatusSchema>
 export type UpdateProductsStatusInput = z.infer<
   typeof updateProductsStatusSchema
@@ -104,18 +112,18 @@ export type ProductOption = z.infer<typeof productOptionSchema>
 export type ProductVariant = z.infer<typeof productVariantSchema>
 export type ProductOptionValue = z.infer<typeof optionValueSchema>
 
-// This type infers the return from getProducts() - meaning it will include any joins
-export type CompleteProduct = NonNullable<
-  Awaited<ReturnType<typeof getProductBySlug>>
->
-export type EditableProduct = Awaited<ReturnType<typeof getProductById>>
-export type CompleteTableProducts = Awaited<ReturnType<typeof getTableProducts>>
-export type Product = typeof products.$inferSelect
+export type ProductEntity = typeof products.$inferSelect
+export type ProductVariantEntity = typeof productVariants.$inferSelect
+export type EditableProduct = Awaited<ReturnType<typeof getEditableProduct>>
+export type PublicProduct = Awaited<ReturnType<typeof getPublicProduct>>
+
+export type FilteredProducts = Awaited<ReturnType<typeof getFilteredProducts>>
+export type FilteredProduct = FilteredProducts["data"][number]
+
 export type TableProducts = Awaited<ReturnType<typeof getTableProducts>>
-export type SearchedProducts = Awaited<ReturnType<typeof getProducts>>
 export type TableProduct = TableProducts["data"][number]
 
-export type SearchProductParams = z.infer<typeof searchProductParamsSchema>
+export type FilterProductParams = z.infer<typeof filterProductParamsSchema>
 export type TableProductsParams = z.infer<typeof searchTableProductParamsSchema>
 
 // Types: Image
@@ -127,7 +135,7 @@ export type CompleteImage = Awaited<ReturnType<typeof getImageById>>
 export type CompleteTableImages = Awaited<ReturnType<typeof getTableImages>>
 export type TableImage = typeof images.$inferSelect
 
-export type TableImageParams = z.infer<typeof searchImageParamsSchema>
+export type TableImageParams = z.infer<typeof searchTableImageParamsSchema>
 
 // Types: Cart
 export type CartItem = z.infer<typeof cartItemSchema>

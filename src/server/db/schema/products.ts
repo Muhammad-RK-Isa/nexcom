@@ -9,6 +9,7 @@ import {
   uniqueIndex,
   varchar,
 } from "drizzle-orm/pg-core"
+import { type JSONContent } from "novel"
 
 import { generateId } from "~/lib/utils"
 
@@ -27,12 +28,12 @@ export const products = pgTable(
       .primaryKey()
       .$defaultFn(() => generateId({ prefix: "product" })),
     title: text("title").notNull(),
-    metaTitle: text("meta_title").notNull(),
+    metaTitle: text("meta_title"),
     slug: varchar("slug", { length: 255 }).notNull(),
-    content: jsonb("content"),
+    content: jsonb("content").$type<JSONContent>(),
     description: text("description").notNull(),
     status: pgProductStatuses("status").default("draft").notNull(),
-    mrp: real("mrp").notNull().default(0),
+    mrp: real("mrp"),
     vendor: text("vendor"),
     tags: text("tags")
       .array()
@@ -43,7 +44,7 @@ export const products = pgTable(
   },
   (t) => ({
     titleIdx: index("title_index").on(t.title),
-    slugIdx: uniqueIndex("slug_index").on(t.slug),
+    slugIdx: uniqueIndex("slug_unique_index").on(t.slug),
   })
 )
 

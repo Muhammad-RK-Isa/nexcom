@@ -21,8 +21,8 @@ export const productVariants = pgTable("product_variants", {
     onDelete: "set null",
   }),
   ...productFields,
-  weight: real("weight"),
   ...lifecycleDates,
+  weight: real("weight"),
 })
 
 export const variantsRelations = relations(

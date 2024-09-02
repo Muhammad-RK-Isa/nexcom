@@ -1,17 +1,17 @@
 import React from "react"
 
-import type { SearchProductParams } from "~/types"
+import type { FilterProductParams } from "~/types"
 import ProductsCollection from "~/components/shop/product/products-collection"
 import { api } from "~/trpc/server"
 
 interface StorefrontHomepageProps {
-  searchParams: SearchProductParams
+  searchParams: FilterProductParams
 }
 
 const StorefrontHomepage: React.FC<StorefrontHomepageProps> = async ({
   searchParams,
 }) => {
-  const { data, pageCount } = await api.products.getProducts(searchParams)
+  const { data } = await api.products.getFilteredProducts(searchParams)
   return (
     <div className="flex flex-col p-4 lg:p-6">
       <ProductsCollection products={data} />

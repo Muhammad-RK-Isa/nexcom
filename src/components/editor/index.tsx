@@ -13,29 +13,39 @@ import {
 } from "novel"
 import { handleCommandNavigation, ImageResizer } from "novel/extensions"
 
+import { cn } from "~/lib/utils"
+
 import { Separator } from "../ui/separator"
-import { defaultExtensions } from "./extensions"
-import { ColorSelector } from "./selectors/color-selector"
+import { extensions as baseExtensions } from "./extensions"
 import { LinkSelector } from "./selectors/link-selector"
 import { NodeSelector } from "./selectors/node-selector"
 import { TextButtons } from "./selectors/text-buttons"
 import { slashCommand, suggestionItems } from "./slash-command"
 
-const extensions = [...defaultExtensions, slashCommand]
+const extensions = [...baseExtensions, slashCommand]
 
 interface EditorProp {
   initialValue?: JSONContent
   onChange: (value: JSONContent) => void
+  className?: string
 }
-const Editor = ({ initialValue, onChange }: EditorProp) => {
+const Editor: React.FC<EditorProp> = ({
+  initialValue,
+  onChange,
+  className,
+}) => {
   const [openNode, setOpenNode] = React.useState(false)
-  const [openColor, setOpenColor] = React.useState(false)
   const [openLink, setOpenLink] = React.useState(false)
+  const [isFocused, setIsFocused] = React.useState(false)
 
   return (
     <EditorRoot>
       <EditorContent
-        className="rounded-md border bg-background p-4"
+        className={cn(
+          "rounded-md border bg-background p-4",
+          isFocused && "ring-1 ring-ring",
+          className
+        )}
         {...(initialValue && { initialContent: initialValue })}
         extensions={extensions}
         editorProps={{
@@ -43,14 +53,15 @@ const Editor = ({ initialValue, onChange }: EditorProp) => {
             keydown: (_view, event) => handleCommandNavigation(event),
           },
           attributes: {
-            class: `prose prose-sm bg-background dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full`,
+            class: `prose bg-background dark:prose-invert prose-headings:font-title font-default focus:outline-none`,
           },
         }}
         onUpdate={({ editor }) => {
           onChange(editor.getJSON())
         }}
         slotAfter={<ImageResizer />}
-        immediatelyRender={false}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
       >
         <EditorCommand className="z-50 h-auto max-h-[330px] overflow-y-auto rounded-md border border-muted bg-background px-1 py-2 shadow-md transition-all">
           <EditorCommandEmpty className="px-2 text-muted-foreground">
@@ -87,12 +98,9 @@ const Editor = ({ initialValue, onChange }: EditorProp) => {
           <Separator orientation="vertical" />
           <NodeSelector open={openNode} onOpenChange={setOpenNode} />
           <Separator orientation="vertical" />
-
           <LinkSelector open={openLink} onOpenChange={setOpenLink} />
           <Separator orientation="vertical" />
           <TextButtons />
-          <Separator orientation="vertical" />
-          <ColorSelector open={openColor} onOpenChange={setOpenColor} />
         </EditorBubble>
       </EditorContent>
     </EditorRoot>

@@ -1,8 +1,13 @@
+import { generateHTML } from "@tiptap/core"
 import { clsx, type ClassValue } from "clsx"
+import { type JSONContent } from "novel"
+import { type PostgresError } from "postgres"
 import { twMerge } from "tailwind-merge"
 import { v1 as uuidv1, v4 as uuidv4 } from "uuid"
 
 import { env } from "~/env"
+
+type Extensions = Parameters<typeof generateHTML>[1]
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -215,4 +220,31 @@ export function getUrlFromString(str: string) {
   } catch (e) {
     return null
   }
+}
+
+export function generateStaticHTML(
+  content: JSONContent,
+  extensions: Extensions
+): string {
+  const html = generateHTML(content, extensions)
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(html, "text/html")
+
+  // Disable checkboxes
+  doc.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+    const inputElement = checkbox as HTMLInputElement
+    inputElement.setAttribute("disabled", "true")
+  })
+
+  return doc.body.innerHTML
+}
+
+export function isPostgresError(error: unknown): error is PostgresError {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    "severity" in error &&
+    "detail" in error
+  )
 }

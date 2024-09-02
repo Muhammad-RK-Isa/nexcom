@@ -1,11 +1,11 @@
 import React from "react"
 import Image from "next/image"
 
-import type { CompleteProduct } from "~/types"
+import type { PublicProduct } from "~/types"
 import { cn } from "~/lib/utils"
 
 interface ThumbProps {
-  image: CompleteProduct["images"][number]
+  image: PublicProduct["images"][number]
   selected: boolean
   onClick: () => void
 }
