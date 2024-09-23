@@ -36,11 +36,8 @@ interface AddToCartFormProps {
 type Inputs = z.infer<typeof updateCartItemSchema>
 
 export function AddToCartForm({
-  productId,
-  variantId,
   cartQuantity,
   inventoryQuantity,
-  options,
   variantRequired = false,
   allowBackorder,
 }: AddToCartFormProps) {

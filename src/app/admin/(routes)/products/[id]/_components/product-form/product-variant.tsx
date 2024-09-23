@@ -1,5 +1,6 @@
 import React from "react"
 import Image from "next/image"
+import { ImageSelectModal } from "~/features/images/components/image-select-modal"
 import { useFieldArray, useFormContext, type Control } from "react-hook-form"
 
 import type { UpdateProductInput } from "~/types"
@@ -35,7 +36,6 @@ import {
   SelectValue,
 } from "~/components/ui/select"
 import { Icons } from "~/components/icons"
-import { ImageSelectModal } from "~/components/image/image-select-modal"
 
 interface ProductVariantProps {
   control: Control<UpdateProductInput>

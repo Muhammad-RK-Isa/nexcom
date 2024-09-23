@@ -1,5 +1,6 @@
 "use client"
 
+import KeywordsInput from "~/features/admin/components/keywords-input"
 import { useFormContext } from "react-hook-form"
 
 import type { UpdateProductInput } from "~/types"
@@ -12,7 +13,6 @@ import {
   FormMessage,
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
-import KeywordsInput from "~/components/keywords-input"
 
 const ProductOrganisationForm = () => {
   const form = useFormContext<UpdateProductInput>()

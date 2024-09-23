@@ -1,4 +1,6 @@
 import React from "react"
+import { ImageSelectModal } from "~/features/images/components/image-select-modal"
+import Images from "~/features/images/components/images"
 import { useFormContext } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -16,8 +18,6 @@ import {
 import { Input } from "~/components/ui/input"
 import Editor from "~/components/editor"
 import { Icons } from "~/components/icons"
-import { ImageSelectModal } from "~/components/image/image-select-modal"
-import Images from "~/components/image/images"
 
 const ProductDetailsForm = () => {
   const form = useFormContext<UpdateProductInput>()

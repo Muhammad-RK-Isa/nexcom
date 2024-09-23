@@ -29,7 +29,7 @@ export const env = createEnv({
     SMTP_HOST: z.string(),
     SMTP_PORT: z.string().min(3),
     UPLOADTHING_APP_ID: z.string(),
-    UPLOADTHING_SECRET: z.string(),
+    UPLOADTHING_TOKEN: z.string(),
   },
 
   /**

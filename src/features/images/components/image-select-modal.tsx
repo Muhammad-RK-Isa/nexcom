@@ -1,8 +1,10 @@
 import React from "react"
 import NextImage from "next/image"
+import { ImageSelectPagination } from "~/features/images/components/image-select-pagination"
+import { ImageUploader } from "~/features/images/components/image-uploader"
+import type { Image, TableImageParams } from "~/features/images/types"
 import { toast } from "sonner"
 
-import type { Image, TableImageParams } from "~/types"
 import { useUploadFile } from "~/lib/hooks/use-upload-files"
 import { cn } from "~/lib/utils"
 import {
@@ -34,9 +36,6 @@ import { Skeleton } from "~/components/ui/skeleton"
 import { EmptyCard } from "~/components/empty-card"
 import { Icons } from "~/components/icons"
 import { api } from "~/trpc/react"
-
-import { ImageSelectPagination } from "./image-select-pagination"
-import { ImageUploader } from "./image-uploader"
 
 interface ImageSelectModalProps {
   open?: boolean
@@ -151,13 +150,13 @@ export const ImageSelectModal: React.FC<ImageSelectModalProps> = ({
             />
           </div>
           <div className="flex w-full flex-col space-y-2 rounded-b-lg border-t bg-card p-4 lg:space-y-4 lg:p-6">
-            <ImageSelectPagination
+            {/* <ImageSelectPagination
               selectedImages={selectedImages.length}
               totalImages={Number(data?.pageCount ?? 0) * searchParams.per_page}
               pageCount={data?.pageCount ?? 0}
               searchParams={searchParams}
               updateSearchParams={updateSearchParams}
-            />
+            /> */}
             <div className="flex w-full flex-row justify-between gap-2">
               {selectedImages.length ? (
                 <div className="flex items-center gap-2">
@@ -257,7 +256,7 @@ interface ImagesProps {
   searchParams: TableImageParams
 }
 
-export function Images({
+function Images({
   files,
   selectedImages,
   setSelectedImages,

@@ -1,5 +1,14 @@
 import { unstable_noStore as noStore } from "next/cache"
 import { TRPCError } from "@trpc/server"
+import { createProduct, updateProduct } from "~/features/admin/api/mutations"
+import {
+  getEditableProduct,
+  getTableProducts,
+} from "~/features/admin/api/queries"
+import {
+  getFilteredProducts,
+  getPublicProduct,
+} from "~/features/storefront/api/queries"
 import {
   adminProcedure,
   createTRPCRouter,
@@ -8,13 +17,6 @@ import {
 import { products } from "~/server/db/schema"
 import { eq, inArray } from "drizzle-orm"
 
-import { createProduct, updateProduct } from "~/lib/api/products/mutations"
-import {
-  getEditableProduct,
-  getFilteredProducts,
-  getPublicProduct,
-  getTableProducts,
-} from "~/lib/api/products/queries"
 import {
   filterProductParamsSchema,
   insertProductSchema,

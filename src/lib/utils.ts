@@ -248,3 +248,7 @@ export function isPostgresError(error: unknown): error is PostgresError {
     "detail" in error
   )
 }
+
+export function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}

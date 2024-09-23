@@ -1,8 +1,8 @@
 "use client"
 
 import React from "react"
+import type { TableImageParams } from "~/features/images/types"
 
-import type { TableImageParams } from "~/types"
 import {
   Select,
   SelectContent,
@@ -11,8 +11,8 @@ import {
   SelectValue,
 } from "~/components/ui/select"
 
-import { Icons } from "../icons"
-import { Button } from "../ui/button"
+import { Icons } from "../../../components/icons"
+import { Button } from "../../../components/ui/button"
 
 interface ImageSelectModalProps {
   selectedImages: number

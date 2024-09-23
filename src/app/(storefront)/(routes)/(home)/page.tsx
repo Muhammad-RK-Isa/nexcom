@@ -1,7 +1,7 @@
 import React from "react"
+import ProductsCollection from "~/features/storefront/components/shop/product/products-collection"
 
 import type { FilterProductParams } from "~/types"
-import ProductsCollection from "~/components/shop/product/products-collection"
 import { api } from "~/trpc/server"
 
 interface StorefrontHomepageProps {

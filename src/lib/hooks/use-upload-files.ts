@@ -1,8 +1,8 @@
 import * as React from "react"
+import type { Image } from "~/features/images/types"
 import { toast } from "sonner"
 import type { UploadFilesOptions } from "uploadthing/types"
 
-import type { Image } from "~/types"
 import { getErrorMessage } from "~/lib/handle-error"
 import { uploadFiles } from "~/lib/uploadthing"
 import { type OurFileRouter } from "~/app/api/uploadthing/core"
@@ -37,7 +37,7 @@ export function useUploadFile(
           setProgresses((prev) => {
             return {
               ...prev,
-              [file]: progress,
+              [file.name]: progress,
             }
           })
         },

@@ -17,13 +17,25 @@ export const Sidebar = () => {
   const pathname = usePathname()
 
   const [isExpanded, setIsExpanded] = React.useState(false)
+  const hoverTimeout = React.useRef<NodeJS.Timeout>()
+
+  const handleMouseEnter = () => {
+    hoverTimeout.current = setTimeout(() => {
+      setIsExpanded(true)
+    }, 300)
+  }
+
+  const handleMouseLeave = () => {
+    clearTimeout(hoverTimeout.current)
+    setIsExpanded(false)
+  }
 
   return (
     <motion.aside
       className="fixed inset-y-0 left-0 z-50 hidden space-y-2 border-r bg-background hover:shadow-sm hover:drop-shadow-sm md:flex md:flex-col"
       transition={{ duration: 0.15 }}
-      onMouseEnter={() => setIsExpanded(true)}
-      onMouseLeave={() => setIsExpanded(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       initial={{ width: 54 }}
       animate={{ width: isExpanded ? 208 : 54 }}
     >

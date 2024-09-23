@@ -63,7 +63,7 @@
     "@trpc/client": "^11.0.0-rc.482",
     "@trpc/react-query": "next",
     "@trpc/server": "^11.0.0-rc.482",
-    "@uploadthing/react": "^6.7.2",
+    "@uploadthing/react": "^7.0.2",
     "@vercel/speed-insights": "^1.0.10",
     "babel-plugin-react-compiler": "^0.0.0-experimental-4e0eccf-20240830",
     "bcrypt-ts": "^5.0.2",
@@ -100,7 +100,7 @@
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "uploadthing": "^6.13.2",
+    "uploadthing": "^7.0.2",
     "use-deep-compare-effect": "^1.8.1",
     "uuid": "^9.0.1",
     "vaul": "^0.9.1",
@@ -137,5 +137,6 @@
     "es5-ext",
     "esbuild",
     "sharp"
-  ]
+  ],
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

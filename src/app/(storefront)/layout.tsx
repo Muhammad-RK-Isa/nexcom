@@ -1,6 +1,5 @@
 import React from "react"
-
-import Footer from "~/components/footer"
+import { Footer } from "~/features/storefront/components/footer"
 
 import Navbar from "./_components/navbar"
 

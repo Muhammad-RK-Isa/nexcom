@@ -16,7 +16,7 @@ interface ProductClientProps {
   cartItems?: CartItem[] | null
 }
 
-const ProductClient: React.FC<ProductClientProps> = ({
+export const ProductClient: React.FC<ProductClientProps> = ({
   product,
   cartItems,
 }) => {
@@ -28,25 +28,23 @@ const ProductClient: React.FC<ProductClientProps> = ({
     Record<string, string>
   >({})
 
-  // Helper function to get default options
-  const getDefaultOptions = (options: any[]): Record<string, string> => {
-    const defaultOptions: Record<string, string> = {}
-    options.forEach((option) => {
-      const sortedValues = option.values.sort(
-        (a: any, b: any) => a.rank - b.rank
-      )
-      defaultOptions[option.id] = sortedValues[0]?.value || ""
-    })
-    return defaultOptions
-  }
+  // // Helper function to get default options
+  // const getDefaultOptions = (options: PublicProduct["options"]): Record<string, string> => {
+  //   const defaultOptions: Record<string, string> = {}
+  //   options.forEach((option) => {
+  //     const sortedValues = option.values.sort(
+  //       (a: any, b: any) => a.rank - b.rank
+  //     )
+  //     defaultOptions[option.id] = sortedValues[0]?.value || ""
+  //   })
+  //   return defaultOptions
+  // }
 
   // Helper function to find variant by options
   const findVariantByOptions = React.useCallback(
     (options: Record<string, string>): string | undefined => {
-      return variants.find(
-        (variant) =>
-          variant.optionValues &&
-          variant.optionValues.every((ov) => ov.value === options[ov.optionId])
+      return variants.find((v) =>
+        v.optionValues.every((ov) => ov.id === options[ov.optionId])
       )?.id
     },
     [variants]
@@ -64,79 +62,81 @@ const ProductClient: React.FC<ProductClientProps> = ({
       const variant = variants.find((v) => v.id === variantId)
       if (variant && variant.optionValues) {
         variant.optionValues.forEach((ov) => {
-          optionObj[ov.optionId] = ov.value
+          optionObj[ov.optionId] = ov.id
         })
       }
     } else {
-      optionObj = getDefaultOptions(options)
-      const defaultVariantId = findVariantByOptions(optionObj)
-      if (defaultVariantId) {
-        const newUrl = new URL(window.location.href)
-        newUrl.searchParams.set("variant", defaultVariantId)
-        router.replace(newUrl.toString(), { scroll: false })
-      }
+      // optionObj = getDefaultOptions(options)
+      // const defaultVariantId = findVariantByOptions(optionObj)
+      // if (defaultVariantId) {
+      //   const newUrl = new URL(window.location.href)
+      //   newUrl.searchParams.set("variant", defaultVariantId)
+      //   router.replace(newUrl.toString(), { scroll: false })
+      // }
     }
 
     setSelectedOptions(optionObj)
   }, [options, variants, searchParams, router, findVariantByOptions])
 
-  const variantRecord = React.useMemo(() => {
-    const map: Record<string, Record<string, string>> = {}
+  // const variantRecord = variants.find((v) => v.id === selectedVariant?.id)
 
-    for (const variant of variants) {
-      if (!variant.optionValues) continue
+  // const variantRecord = React.useMemo(() => {
+  //   const map: Record<string, Record<string, string>> = {}
 
-      const temp: Record<string, string> = {}
+  //   for (const variant of variants) {
+  //     if (!variant.optionValues) continue
 
-      for (const optionValue of variant.optionValues) {
-        temp[optionValue.optionId] = optionValue.value
-      }
+  //     const temp: Record<string, string> = {}
 
-      map[variant.id] = temp
-    }
+  //     for (const optionValue of variant.optionValues) {
+  //       temp[optionValue.optionId] = optionValue.value
+  //     }
 
-    return map
-  }, [variants])
+  //     map[variant.id] = temp
+  //   }
 
-  const selectedVariant = React.useMemo(() => {
-    let variantId: string | undefined = undefined
+  //   return map
+  // }, [variants])
 
-    for (const [key, value] of Object.entries(variantRecord)) {
-      if (isEqual(value, selectedOptions)) {
-        variantId = key
-        break
-      }
-    }
+  // const selectedVariant = React.useMemo(() => {
+  //   let variantId: string | undefined = undefined
 
-    if (variantId) {
-      const newUrl = new URL(window.location.href)
-      newUrl.searchParams.set("variant", variantId)
-      router.replace(newUrl.toString(), { scroll: false })
-    }
+  //   for (const [key, value] of Object.entries(variantRecord)) {
+  //     if (isEqual(value, selectedOptions)) {
+  //       variantId = key
+  //       break
+  //     }
+  //   }
 
-    return variants.find((v) => v.id === variantId)
-  }, [selectedOptions, variantRecord, variants, router])
+  //   if (variantId) {
+  //     const newUrl = new URL(window.location.href)
+  //     newUrl.searchParams.set("variant", variantId)
+  //     router.replace(newUrl.toString(), { scroll: false })
+  //   }
 
-  const handleOptionChange = (optionId: string, value: string) => {
-    setSelectedOptions((prev) => ({
-      ...prev,
-      [optionId]: value,
-    }))
-  }
+  //   return variants.find((v) => v.id === variantId)
+  // }, [selectedOptions, variantRecord, variants, router])
 
-  const cartQuantity = cartItems?.find(
-    (item) =>
-      item.productId === product.id && item.variantId === selectedVariant?.id
-  )?.quantity
+  // const handleOptionChange = (optionId: string, value: string) => {
+  //   setSelectedOptions((prev) => ({
+  //     ...prev,
+  //     [optionId]: value,
+  //   }))
+  // }
 
-  const inventoryQuantity = product.variants.length
-    ? product.variants.find((variant) => variant.id === selectedVariant?.id)
-        ?.inventoryQuantity ?? 0
-    : product.inventoryQuantity
+  // const cartQuantity = cartItems?.find(
+  //   (item) =>
+  //     item.productId === product.id && item.variantId === selectedVariant?.id
+  // )?.quantity
+
+  // const inventoryQuantity = product.variants.length
+  //   ? product.variants.find((variant) => variant.id === selectedVariant?.id)
+  //     ?.inventoryQuantity ?? 0
+  //   : product.inventoryQuantity
 
   return (
     <>
-      <div className="relative aspect-square w-full max-w-[calc(100vw-2rem)]">
+      {/* <div className="relative aspect-square w-full max-w-[calc(100vw-2rem)]">
         {images[0]?.url ? (
           <ProductImageViewer
             images={product.images}
@@ -172,9 +172,7 @@ const ProductClient: React.FC<ProductClientProps> = ({
           inventoryQuantity={inventoryQuantity}
           allowBackorder={product.allowBackorder}
         />
-      </div>
+      </div>*/}
     </>
   )
 }
-
-export default ProductClient

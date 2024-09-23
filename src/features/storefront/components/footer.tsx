@@ -2,17 +2,16 @@ import React from "react"
 import Link from "next/link"
 
 import { cn } from "~/lib/utils"
-
-import { Icons } from "./icons"
-import { ThemeSelect } from "./theme-select"
-import { Skeleton } from "./ui/skeleton"
+import { Skeleton } from "~/components/ui/skeleton"
+import { Icons } from "~/components/icons"
+import { ThemeSelect } from "~/components/theme-select"
 
 interface FooterProps {
   className?: string
   props?: React.HTMLProps<HTMLDivElement>
 }
 
-const Footer: React.FC<FooterProps> = ({ className, props }) => {
+export const Footer: React.FC<FooterProps> = ({ className, props }) => {
   return (
     <div
       {...props}
@@ -64,5 +63,3 @@ const Footer: React.FC<FooterProps> = ({ className, props }) => {
     </div>
   )
 }
-
-export default Footer
